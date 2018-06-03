@@ -1,0 +1,24 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+    <dimen name="default_dot_diameter">16dp</dimen>
+    <dimen name="default_dot_spacing">8dp</dimen>
+
+
+    <dimen name="default_text_size">20sp</dimen>
+    <dimen name="default_button_size">80dp</dimen>
+    <dimen name="default_delete_button_size">25dp</dimen>
+    <dimen name="default_horizontal_spacing">32dp</dimen>
+    <dimen name="default_vertical_spacing">0dp</dimen>
+
+
+    <dimen name="heading">@dimen/_14sdp</dimen>
+    <dimen name="headingChild">@dimen/_13sdp</dimen>
+</resources>

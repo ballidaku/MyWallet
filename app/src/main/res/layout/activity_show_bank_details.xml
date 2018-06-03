@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="temp"
+            type="ballidaku.mywallet.mainScreens.activities.ShowBankDetails"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrayBackground"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="@dimen/_5sdp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay"
+            app:title="DETAILS"
+            app:titleTextColor="@color/colorWhite"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bank Name"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextBankName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="textCapWords"
+                            android:tag="Bank Name"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Account Holder Name"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextAccountHolderName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="textCapWords"
+                            android:tag="Account Holder Name"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Account Number"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextAccountNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:digits="0123456789 "
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="phone"
+                            android:tag="Account Number"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="IFSC"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/editTextIfscCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="textCapCharacters"
+                            android:tag="IFSC"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ATM Number"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/editTextAtmNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:digits="0123456789 "
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="phone"
+                            android:tag="ATM Number"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CVV"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextCvv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:digits="0123456789"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="phone"
+                            android:maxLength="3"
+                            android:tag="CVV"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"
+                            />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        app:cardUseCompatPadding="true"
+                        card_view:cardCornerRadius="@dimen/_5sdp"
+                        card_view:cardElevation="@dimen/_2sdp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Valid From"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/heading"
+                                android:textStyle="bold"/>
+
+
+                            <EditText
+                                android:id="@+id/editTextValidFrom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:drawableRight="@drawable/ic_check_unselected"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center_vertical"
+                                android:hint=""
+                                android:inputType="datetime"
+                                android:tag="Valid From"
+                                android:textColor="@color/colorEditText"
+                                android:textSize="@dimen/headingChild"
+                                />
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        app:cardUseCompatPadding="true"
+                        card_view:cardCornerRadius="@dimen/_5sdp"
+                        card_view:cardElevation="@dimen/_2sdp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Valid Thru"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/heading"
+                                android:textStyle="bold"/>
+
+
+                            <EditText
+                                android:id="@+id/editTextValidThru"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:drawableRight="@drawable/ic_check_unselected"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center_vertical"
+                                android:hint=""
+                                android:inputType="datetime"
+                                android:tag="Valid Thru"
+                                android:textColor="@color/colorEditText"
+                                android:textSize="@dimen/headingChild"
+                                />
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Net Banking ID"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextNetBankingId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:drawableRight="@drawable/ic_check_unselected"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="textCapSentences"
+                            android:tag="Net Banking ID"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"
+                            />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutAddViews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+</layout>
