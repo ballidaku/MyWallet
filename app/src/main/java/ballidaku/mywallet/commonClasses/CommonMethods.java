@@ -208,7 +208,6 @@ public class CommonMethods
         return check;
     }
 
-
     class MyAsyncTask<T> extends AsyncTask<Void, Void, Void>
     {
         Context context;

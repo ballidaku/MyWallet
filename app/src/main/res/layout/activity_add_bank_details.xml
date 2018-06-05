@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="temp"
+            type="ballidaku.mywallet.mainScreens.activities.AddBankDetails"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="@dimen/_5sdp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay"
+            app:title="ADD DETAILS"
+            app:titleTextColor="@color/colorWhite"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGrayBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bank Name"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextBankName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter bank name"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+
+                    <!-- <android.support.design.widget.TextInputLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:padding="@dimen/_5sdp"
+                         app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                         app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                         <EditText
+                             android:id="@+id/editTextBankName"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:drawableLeft="@drawable/ic_bank_selector"
+                             android:drawablePadding="@dimen/_8sdp"
+                             android:drawableStart="@drawable/ic_bank_selector"
+                             android:hint="Bank Name"
+                             android:inputType="textCapWords"
+                             android:theme="@style/EditTextCustom"/>
+
+                     </android.support.design.widget.TextInputLayout>-->
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Account Holder Name"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextAccountHolderName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter account holder name"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+                    <!--<android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                        app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/editTextAccountHolderName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_user_selector"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableStart="@drawable/ic_user_selector"
+                            android:hint="Account Holder Name"
+                            android:inputType="textCapWords"
+                            android:theme="@style/EditTextCustom"/>
+
+                    </android.support.design.widget.TextInputLayout>-->
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Account Number"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextAccountNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter account number"
+                            android:inputType="phone"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                    <!-- <android.support.design.widget.TextInputLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:padding="@dimen/_5sdp"
+                         app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                         app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                         <EditText
+                             android:id="@+id/editTextAccountNumber"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:digits="0123456789 "
+                             android:drawableLeft="@drawable/ic_account_no_selector"
+                             android:drawablePadding="@dimen/_8sdp"
+                             android:drawableStart="@drawable/ic_account_no_selector"
+                             android:hint="Account Number"
+                             android:inputType="phone"
+                             android:theme="@style/EditTextCustom"/>
+
+                     </android.support.design.widget.TextInputLayout>-->
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="IFSC"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextIfscCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter IFSC"
+                            android:inputType="textCapCharacters"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                    <!-- <android.support.design.widget.TextInputLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:padding="@dimen/_5sdp"
+                         app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                         app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                         <EditText
+                             android:id="@+id/editTextIfscCode"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:drawableLeft="@drawable/ic_ifsc_selector"
+                             android:drawablePadding="@dimen/_8sdp"
+                             android:drawableStart="@drawable/ic_ifsc_selector"
+                             android:hint="IFSC"
+                             android:inputType="textCapCharacters"
+                             android:theme="@style/EditTextCustom"/>
+
+                     </android.support.design.widget.TextInputLayout>-->
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ATM Number"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextAtmNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:digits="0123456789 "
+                            android:hint="Enter ATM number"
+                            android:inputType="phone"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                    <!--<android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                        app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/editTextAtmNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789 "
+                            android:drawableLeft="@drawable/ic_edittext_card_selector"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableStart="@drawable/ic_edittext_card_selector"
+                            android:hint="ATM Number"
+                            android:inputType="phone"
+                            android:theme="@style/EditTextCustom"/>
+
+                    </android.support.design.widget.TextInputLayout>-->
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CVV"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextCvv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter CVV"
+                            android:inputType="phone"
+                            android:maxLength="3"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                    <!--<android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                        app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/editTextCvv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789"
+                            android:drawableLeft="@drawable/ic_edittext_lock_selector"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableStart="@drawable/ic_edittext_lock_selector"
+                            android:hint="CVV"
+                            android:inputType="phone"
+                            android:maxLength="3"
+                            android:theme="@style/EditTextCustom"/>
+
+                    </android.support.design.widget.TextInputLayout>-->
+                </android.support.v7.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        app:cardUseCompatPadding="true"
+                        card_view:cardCornerRadius="@dimen/_5sdp"
+                        card_view:cardElevation="@dimen/_2sdp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Valid From"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/heading"
+                                android:textStyle="bold"/>
+
+
+                            <EditText
+                                android:id="@+id/editTextValidFrom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@android:color/transparent"
+                                android:hint="Enter valid from"
+                                android:inputType="datetime"
+                                android:textColor="@color/colorEditText"
+                                android:textSize="@dimen/headingChild"/>
+                        </LinearLayout>
+
+                        <!-- <android.support.design.widget.TextInputLayout
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:padding="@dimen/_5sdp"
+                             app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                             app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                             <EditText
+                                 android:id="@+id/editTextValidFrom"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:drawableLeft="@drawable/ic_edittext_calendar_selector"
+                                 android:drawablePadding="@dimen/_8sdp"
+                                 android:drawableStart="@drawable/ic_edittext_calendar_selector"
+                                 android:hint="Valid From"
+                                 android:inputType="datetime"
+                                 android:theme="@style/EditTextCustom"/>
+
+                         </android.support.design.widget.TextInputLayout>-->
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        app:cardUseCompatPadding="true"
+                        card_view:cardCornerRadius="@dimen/_5sdp"
+                        card_view:cardElevation="@dimen/_2sdp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Valid Thru"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/heading"
+                                android:textStyle="bold"/>
+
+
+                            <EditText
+                                android:id="@+id/editTextValidThru"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@android:color/transparent"
+                                android:hint="Enter valid thru"
+                                android:inputType="datetime"
+                                android:textColor="@color/colorEditText"
+                                android:textSize="@dimen/headingChild"/>
+                        </LinearLayout>
+
+                        <!--<android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5sdp"
+                            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                            app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                            <EditText
+                                android:id="@+id/editTextValidThru"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_edittext_calendar_selector"
+                                android:drawablePadding="@dimen/_8sdp"
+                                android:drawableStart="@drawable/ic_edittext_calendar_selector"
+                                android:hint="Valid Thru"
+                                android:inputType="datetime"
+                                android:theme="@style/EditTextCustom"/>
+
+                        </android.support.design.widget.TextInputLayout>-->
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    app:cardUseCompatPadding="true"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_2sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Net Banking ID"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/heading"
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/editTextNetBankingId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@android:color/transparent"
+                            android:hint="Enter net banking ID"
+                            android:inputType="textCapSentences"
+                            android:textColor="@color/colorEditText"
+                            android:textSize="@dimen/headingChild"/>
+                    </LinearLayout>
+
+                   <!-- <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                        app:theme="@style/TextAppearence.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/editTextNetBankingId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_net_banking_selector"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableStart="@drawable/ic_net_banking_selector"
+                            android:hint="Net Banking ID"
+                            android:inputType="textCapSentences"
+                            android:theme="@style/EditTextCustom"/>
+
+                    </android.support.design.widget.TextInputLayout>-->
+                </android.support.v7.widget.CardView>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutAddViews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardViewAddMoreFeilds"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    card_view:cardBackgroundColor="@color/colorPrimary"
+                    card_view:cardCornerRadius="@dimen/_15sdp"
+                    card_view:cardElevation="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/_8sdp"
+                        android:text="Add More Feilds"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold"/>
+
+
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+
+
+            <!--  </android.support.v7.widget.CardView>-->
+            <!-- </LinearLayout>-->
+
+
+        </ScrollView>
+    </LinearLayout>
+</layout>
