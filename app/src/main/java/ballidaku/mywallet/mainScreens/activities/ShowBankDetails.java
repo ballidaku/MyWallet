@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,15 +39,18 @@ import ballidaku.mywallet.commonClasses.MyFirebase;
 import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.ActivityShowBankDetailsBinding;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
-public class ShowBankDetails extends AppCompatActivity
+public class ShowBankDetails<D> extends AppCompatActivity
 {
 
     Context context;
 
     String TAG = ShowBankDetails.class.getSimpleName();
 
-    KeyValueModel keyValueModel;
+    AccountDetailsDataModel accountDetailsDataModel;
     UserBankDataModel userBankDataModel;
     String key;
     ArrayList<EditText> editTextList;
@@ -66,9 +70,7 @@ public class ShowBankDetails extends AppCompatActivity
 
         setUpIds();
 
-        keyValueModel = (KeyValueModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
-        userBankDataModel = keyValueModel.getUserBankDataModel();
-        key = keyValueModel.getKey();
+        accountDetailsDataModel = (AccountDetailsDataModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
 
         setData();
     }
@@ -106,19 +108,21 @@ public class ShowBankDetails extends AppCompatActivity
 
     private void refreshData()
     {
-        activityShowBankDetailsBinding.editTextBankName.setText(dTD(userBankDataModel.getBank_name()));
-        activityShowBankDetailsBinding.editTextAccountHolderName.setText(dTD(userBankDataModel.getAccount_holder_name()));
-        activityShowBankDetailsBinding.editTextAccountNumber.setText(dTD(userBankDataModel.getAccount_number()));
-        activityShowBankDetailsBinding.editTextIfscCode.setText(dTD(userBankDataModel.getIfsc()));
-        activityShowBankDetailsBinding.editTextAtmNumber.setText(dTD(userBankDataModel.getAtm_number()));
-        activityShowBankDetailsBinding.editTextCvv.setText(dTD(userBankDataModel.getCvv()));
-        activityShowBankDetailsBinding.editTextValidFrom.setText(dTD(userBankDataModel.getValid_from()));
-        activityShowBankDetailsBinding.editTextValidThru.setText(dTD(userBankDataModel.getValid_thru()));
-        activityShowBankDetailsBinding.editTextNetBankingId.setText(dTD(userBankDataModel.getNet_banking_id()));
 
-        if (userBankDataModel.getAdditional_data() != null && !userBankDataModel.getAdditional_data().isEmpty())
+        activityShowBankDetailsBinding.editTextBankName.setText(accountDetailsDataModel.getBankName());
+        activityShowBankDetailsBinding.editTextAccountHolderName.setText(accountDetailsDataModel.accountHolderName);
+        activityShowBankDetailsBinding.editTextAccountNumber.setText(accountDetailsDataModel.accountNumber);
+        activityShowBankDetailsBinding.editTextIfscCode.setText(accountDetailsDataModel.getIfsc());
+        activityShowBankDetailsBinding.editTextAtmNumber.setText(accountDetailsDataModel.getAtmNumber());
+        activityShowBankDetailsBinding.editTextCvv.setText(accountDetailsDataModel.getCvv());
+        activityShowBankDetailsBinding.editTextValidFrom.setText(accountDetailsDataModel.getValidFrom());
+        activityShowBankDetailsBinding.editTextValidThru.setText(accountDetailsDataModel.getValidThru());
+        activityShowBankDetailsBinding.editTextNetBankingId.setText(accountDetailsDataModel.getNetBankingId());
+
+        if (accountDetailsDataModel.getAdditionalData() != null && !accountDetailsDataModel.getAdditionalData().isEmpty())
         {
-            String json = dTD(userBankDataModel.getAdditional_data());
+
+            String json = accountDetailsDataModel.getAdditionalData();
             activityShowBankDetailsBinding.linearLayoutAddViews.removeAllViews();
 
             try
@@ -186,10 +190,9 @@ public class ShowBankDetails extends AppCompatActivity
 
 
     // Decrypt Data
-    public String dTD(String data)
-    {
-        return CommonMethods.getInstance().decrypt(context, data);
-    }
+   public String dTD(String data)
+   {
+        return CommonMethods.getInstance().decrypt(context, data); }
 
 
     private void setUpIds()
@@ -224,7 +227,7 @@ public class ShowBankDetails extends AppCompatActivity
             case R.id.action_edit:
 
                 Intent intent = new Intent(context, AddBankDetails.class);
-                intent.putExtra(MyConstant.LIST_ITEM_DATA, keyValueModel);
+                intent.putExtra(MyConstant.LIST_ITEM_DATA, (Serializable) accountDetailsDataModel);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
                 startActivityForResult(intent, UPDATE_DETAILS_RESPONSE);
 
@@ -253,6 +256,8 @@ public class ShowBankDetails extends AppCompatActivity
                         deleteData();
                     }
                 });
+
+
 
 
                 break;
@@ -335,20 +340,13 @@ public class ShowBankDetails extends AppCompatActivity
     public void deleteData()
     {
 
-        MyFirebase.getInstance().deleteBankDetails(context, key).addOnCompleteListener(new OnCompleteListener<Void>()
-        {
+        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, new OnResultInterface<D>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task)
-            {
-                if (task.isSuccessful())
-                {
-                    Log.e(TAG, "Deleted Successfully");
-                    finish();
-                }
-                else
-                {
-                    Log.e(TAG, "Deleted Unsuccessfully");
-                }
+            public void OnCompleted(D data) {
+                Log.e(TAG, data + "--");
+
+                finish();
+
             }
         });
     }
@@ -431,7 +429,7 @@ public class ShowBankDetails extends AppCompatActivity
                     (String) map.get(MyConstant.ACCOUNT_NUMBER),
                     (String) map.get(MyConstant.ADDITIONAL_DATA));
 
-            keyValueModel.setUserBankDataModel(userBankDataModel);
+         //   keyValueModel.setUserBankDataModel(userBankDataModel);
 
             refreshData();
 

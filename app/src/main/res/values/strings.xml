@@ -39,6 +39,8 @@
     <string name="phone">PHONE</string>
     <string name="enter_phone_number">Enter phone number</string>
 
+    <string name="saved_success">Saved Successfully</string>
+
     <string-array name="type">
         <item>Text</item>
         <item>Secret</item>

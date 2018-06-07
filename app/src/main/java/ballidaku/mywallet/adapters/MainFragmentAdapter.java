@@ -1,115 +1,102 @@
 package ballidaku.mywallet.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import ballidaku.mywallet.R;
+
 import ballidaku.mywallet.commonClasses.CommonMethods;
-import ballidaku.mywallet.dataModel.KeyValueModel;
+import ballidaku.mywallet.commonClasses.MyConstant;
+
+import ballidaku.mywallet.databinding.InflaterBankAccountsItemBinding;
+import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapter.ViewHolder>
-{
+public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapter.ViewHolder> {
 
-    private String LOG_TAG = MainFragmentAdapter.class.getSimpleName();
+    private ArrayList<AccountDetailsDataModel> userBankDataModelsList;
 
-    private ArrayList<KeyValueModel> userBankDataModelsList;
-    // private ArrayList<Integer> iconList;
     private BankAccountsAdapter.MyClickListener myClickListener;
 
     private Context context;
     int width;
 
-    public MainFragmentAdapter(ArrayList<KeyValueModel> userBankDataModelsList, Context context)
-    {
+    public MainFragmentAdapter(ArrayList<AccountDetailsDataModel> userBankDataModelsList, Context context) {
 
         this.userBankDataModelsList = userBankDataModelsList;
         this.context = context;
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-    {
-        TextView textViewTitle;
-        TextView textViewTitleCount;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        InflaterBankAccountsItemBinding inflaterBankAccountsItemBinding;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(InflaterBankAccountsItemBinding itemView) {
+            super(itemView.getRoot());
+            this.inflaterBankAccountsItemBinding = itemView;
 
-            super(itemView);
-            textViewTitle =  itemView.findViewById(R.id.textViewTitle);
-            textViewTitleCount = itemView.findViewById(R.id.textViewTitleCount);
-
-
-
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View v)
-        {
+        public void onClick(View v) {
             myClickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 
-    public void setOnItemClickListener(BankAccountsAdapter.MyClickListener myClickListener)
-    {
+    public void setOnItemClickListener(BankAccountsAdapter.MyClickListener myClickListener) {
 
         this.myClickListener = myClickListener;
     }
 
 
     @Override
-    public MainFragmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public MainFragmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        InflaterBankAccountsItemBinding inflaterBankAccountsItemBinding = InflaterBankAccountsItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflater_main_fragment_item, parent, false);
-
-        return new MainFragmentAdapter.ViewHolder(view);
+        return new ViewHolder(inflaterBankAccountsItemBinding);
     }
 
     @Override
-    public void onBindViewHolder(MainFragmentAdapter.ViewHolder holder, int position)
-    {
-//        holder.frameLayoutMain.setBackgroundColor(colors[position]);
+    public void onBindViewHolder(MainFragmentAdapter.ViewHolder holder, int position) {
 
-//        UserBankDataModel userBankDataModel = userBankDataModelsList.get(position).getUserBankDataModel();
-//        holder.textView_BankName.setText(dTD(userBankDataModel.getBank_name()));
-//        holder.textView_BankOwner.setText(dTD(userBankDataModel.getAccount_holder_name()));
+
+        AccountDetailsDataModel accountDetailsDataModel = userBankDataModelsList.get(position);
+
+        accountDetailsDataModel.setBankName(accountDetailsDataModel.getBankName());
+        accountDetailsDataModel.setAccountHolderName(accountDetailsDataModel.getAccountHolderName());
+
+        holder.inflaterBankAccountsItemBinding.setDataModel(accountDetailsDataModel);
+
+        holder.inflaterBankAccountsItemBinding.setClickModel(new ClickViewModel(context,accountDetailsDataModel));
     }
-
-//    public void addItem(String dataObj, int index) {
-//
-//        //userBankDataModelsList.add(index, dataObj);
-//
-//        notifyItemInserted(index);
-//    }
 
 
     // Decrypt Data
-    public String dTD(String data)
-    {
+    public String dTD(String data) {
         return CommonMethods.getInstance().decrypt(context, data);
     }
 
 
-    public void addItem(ArrayList<KeyValueModel> userBankDataModelsList)
-    {
+    public void addData(ArrayList<AccountDetailsDataModel> userBankDataModelsList) {
         this.userBankDataModelsList = userBankDataModelsList;
         notifyDataSetChanged();
     }
 
-    public void deleteItem(int index)
-    {
+    public void deleteItem(int index) {
 
         userBankDataModelsList.remove(index);
         notifyItemRemoved(index);
@@ -117,15 +104,35 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
 //        return 5;
         return userBankDataModelsList.size();
     }
 
-    public interface MyClickListener
-    {
+    public interface MyClickListener {
 
         public void onItemClick(int position, View v);
     }
+
+
+    public class ClickViewModel {
+
+        Context context;
+        AccountDetailsDataModel accountDetailsDataModel;
+
+        public ClickViewModel(Context context, AccountDetailsDataModel accountDetailsDataModel) {
+
+            this.context = context;
+            this.accountDetailsDataModel=accountDetailsDataModel;
+        }
+
+        public void handleClick(View view) {
+
+            Intent intent = new Intent(context, ShowBankDetails.class);
+                intent.putExtra(MyConstant.LIST_ITEM_DATA, (Serializable) accountDetailsDataModel);
+                context.startActivity(intent);
+
+        }
+    }
+
 }

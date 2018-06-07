@@ -40,5 +40,9 @@ public interface AccountDetailsDataModelDao
 
     @Delete
     void delete(AccountDetailsDataModel accountTypeDataModel);
+
+
+    @Query("DELETE FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
+    int deleteAccountDetail(int id);
 }
 

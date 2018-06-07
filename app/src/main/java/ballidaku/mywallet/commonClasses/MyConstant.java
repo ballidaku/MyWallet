@@ -18,6 +18,9 @@ public class MyConstant {
 
 
 
+    public static final String INSERT="insert";
+    public static final String DELETE="delete";
+
     public static final String USER_NAME="user_name";
     public static final String USER_EMAIL="user_email";
     public static final String USER_PHONE="user_phone";
@@ -65,4 +68,6 @@ public class MyConstant {
     public static final String CHANGE_MPIN="change_mpin";
     public static final String NEW_PIN_AFTER_CHANGE="new_pin_after_change";
     public static final String CONFIRM_PIN_AFTER_CHANGE="confirm_pin_after_change";
+
+    public static final String GET_ALL = "get_all";
 }

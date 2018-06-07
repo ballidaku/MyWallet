@@ -32,6 +32,10 @@ import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
+import ballidaku.mywallet.mainScreens.activities.MainActivity;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
 
@@ -39,20 +43,18 @@ import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener
-{
+public class MainFragment<D> extends Fragment implements View.OnClickListener {
     String TAG = MainFragment.class.getSimpleName();
     View view = null;
     Context context;
     MainFragmentAdapter mainFragmentAdapter;
-    ArrayList<KeyValueModel> mainList = new ArrayList<>();
+    ArrayList<AccountDetailsDataModel> mainList = new ArrayList<>();
 
 //    public static final int ADD_DETAILS_RESPONSE = 3316;
 
     FragmentMainBinding fragmentMainBinding;
 
-    public MainFragment()
-    {
+    public MainFragment() {
         // Required empty public constructor
     }
 
@@ -61,23 +63,22 @@ public class MainFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        if (view == null)
-        {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (view == null) {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
             view = fragmentMainBinding.getRoot();
 
             context = getActivity();
 
             setUpViews();
+
+            refresh();
 
 //            setListener();
         }
@@ -86,29 +87,36 @@ public class MainFragment extends Fragment implements View.OnClickListener
     }
 
 
+    private void refresh() {
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>() {
+            @Override
+            public void OnCompleted(D data) {
+                Log.e(TAG, data + "--");
 
+                setData((ArrayList<AccountDetailsDataModel>) data);
 
+            }
+        });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
-
-
-
+        refresh();
+    }
 
     // Set Listener
-    public void setListener()
-    {
+    public void setListener() {
         Query query = MyFirebase.getInstance().getMyAccountDetails(context);
 
-        query.addValueEventListener(new ValueEventListener()
-        {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayList<KeyValueModel> userBankDataModelsList = new ArrayList<KeyValueModel>();
 
-                for (DataSnapshot child : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
 
                     Log.e("Subscribers", "" + child.getValue());
 
@@ -130,12 +138,11 @@ public class MainFragment extends Fragment implements View.OnClickListener
 //                        Log.e("getValidFrom", "" +userBankDataModel.getValidFrom());
 //                        Log.e("getValidThru", "" +userBankDataModel.getValidThru());
                 }
-                setData(userBankDataModelsList);
+                // setData(userBankDataModelsList);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -143,15 +150,13 @@ public class MainFragment extends Fragment implements View.OnClickListener
 
 
     // Set Data
-    private void setData(ArrayList<KeyValueModel> userBankDataModelsList)
-    {
+    private void setData(ArrayList<AccountDetailsDataModel> userBankDataModelsList) {
         mainList = userBankDataModelsList;
-        mainFragmentAdapter.addItem(mainList);
+        mainFragmentAdapter.addData(mainList);
     }
 
 
-    public void setUpViews()
-    {
+    public void setUpViews() {
 
         mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
 
@@ -179,10 +184,8 @@ public class MainFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.floatingActionButtonBankDetails:
 
                 fragmentMainBinding.floatingActionMenu.close(true);
@@ -199,9 +202,6 @@ public class MainFragment extends Fragment implements View.OnClickListener
                 break;
         }
     }
-
-
-
 
 
 //    public interface BankDetails
