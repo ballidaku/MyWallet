@@ -1,6 +1,5 @@
 package ballidaku.mywallet.mainScreens.fragments;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -17,8 +16,6 @@ import ballidaku.mywallet.databinding.FragmentSettingBinding;
 import ballidaku.mywallet.frontScreens.LoginActivity;
 import ballidaku.mywallet.mPin.activity.MPINActivity;
 
-
-
 public class SettingFragment extends Fragment implements View.OnClickListener
 {
 
@@ -27,7 +24,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener
     Context context;
 
     FragmentSettingBinding fragmentSettingBinding;
-
 
     public SettingFragment()
     {
@@ -47,8 +43,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener
         if (view == null)
         {
 
-            fragmentSettingBinding = DataBindingUtil.inflate(
-                    inflater, R.layout.fragment_setting, container, false);
+            fragmentSettingBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
             view = fragmentSettingBinding.getRoot();
 
             context = getActivity();
@@ -59,7 +54,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-
     public void setUpIds()
     {
         fragmentSettingBinding.cardViewChangeMPIN.setOnClickListener(this);
@@ -69,7 +63,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        switch(v.getId())
+        switch (v.getId())
         {
             case R.id.cardViewChangeMPIN:
 
@@ -79,7 +73,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener
                 getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
                 break;
-
 
             case R.id.cardViewSignOut:
 
@@ -96,8 +89,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView()
+    {
         super.onDestroyView();
         //unbinder.unbind();
     }

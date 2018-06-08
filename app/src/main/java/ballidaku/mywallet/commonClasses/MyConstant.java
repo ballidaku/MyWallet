@@ -11,6 +11,7 @@ public class MyConstant {
 
     /*Room database TABLES*/
     public static final String ACCOUNT_DETAILS="account_details";
+    public static final String OTHER_DETAILS="other_details";
 
 
 
@@ -20,6 +21,8 @@ public class MyConstant {
 
     public static final String INSERT="insert";
     public static final String DELETE="delete";
+    public static final String UPDATE="update";
+    public static final String GET_ONE_ITEM="get_one_item";
 
     public static final String USER_NAME="user_name";
     public static final String USER_EMAIL="user_email";
@@ -33,6 +36,7 @@ public class MyConstant {
     public static final String PASSWORD="password";
 
     public static final String LIST_ITEM_DATA="list_item_data";
+    public static final String LIST_ITEM_ID="list_item_id";
 
 
     public static final String BANK_NAME="bank_name";
@@ -44,6 +48,9 @@ public class MyConstant {
     public static final String VALID_FROM="valid_from";
     public static final String VALID_THRU="valid_thru";
     public static final String NET_BANKING_ID="net_banking_id";
+
+    public static final String HEADING="heading";
+    public static final String DATA="data";
 
     public static final String FROM_WHERE="from_where";
     public static final String NEW="new";

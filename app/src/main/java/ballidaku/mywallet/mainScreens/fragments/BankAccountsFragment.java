@@ -35,7 +35,6 @@ import ballidaku.mywallet.databinding.FragmentBankAccountsBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
 import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
 
-
 public class BankAccountsFragment extends Fragment implements View.OnClickListener
 {
     String TAG = BankAccountsFragment.class.getSimpleName();
@@ -58,14 +57,12 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
         {
-            fragmentBankAccountsBinding = DataBindingUtil.inflate(
-                    inflater, R.layout.fragment_bank_accounts, container, false);
+            fragmentBankAccountsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bank_accounts, container, false);
             view = fragmentBankAccountsBinding.getRoot();
 
             context = getActivity();
@@ -77,7 +74,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
 
         return view;
     }
-
 
     // Set Listener
     public void setListener()
@@ -100,7 +96,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
                     KeyValueModel keyValueModel = new KeyValueModel();
                     keyValueModel.setKey(child.getKey());
                     keyValueModel.setUserBankDataModel(child.getValue(UserBankDataModel.class));
-
 
                     userBankDataModelsList.add(keyValueModel);
 
@@ -126,14 +121,12 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
         });
     }
 
-
     // Set Data
     private void setData(ArrayList<KeyValueModel> userBankDataModelsList)
     {
         mainList = userBankDataModelsList;
         homeFragmentAdapter.addItem(mainList);
     }
-
 
     public void setUpViews()
     {
@@ -144,7 +137,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
         fragmentBankAccountsBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentBankAccountsBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
         fragmentBankAccountsBinding.recycleViewHome.setAdapter(homeFragmentAdapter);
-
 
         homeFragmentAdapter.setOnItemClickListener(new BankAccountsAdapter.MyClickListener()
         {
@@ -166,7 +158,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
     public void onClick(View v)
     {
 
-
         switch (v.getId())
         {
             case R.id.floatingActionButtonBankDetails:
@@ -185,7 +176,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
         }
     }
 
-
 //    public interface BankDetails
 //    {
 //        public void show_bank_details(HashMap<String, Object> map);
@@ -196,7 +186,6 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if (resultCode == Activity.RESULT_OK && requestCode == ADD_DETAILS_RESPONSE)
         {
             HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
@@ -204,6 +193,5 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
             MyFirebase.getInstance().createBankDetails(context, hashMap);
         }
     }
-
 
 }

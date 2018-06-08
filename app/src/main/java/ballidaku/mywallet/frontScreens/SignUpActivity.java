@@ -38,7 +38,6 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
         super.onCreate(savedInstanceState);
         activitySignUpBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
 
-
         setUpView();
     }
 
@@ -51,7 +50,6 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
         activitySignUpBinding.setHandlers(handlers);
 
     }
-
 
     public class MyClickHandlers
     {
@@ -104,7 +102,6 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
         String confirmPassword = activitySignUpBinding.editTextConfirmPassword.getText().toString().trim();
         final String phoneNumber = activitySignUpBinding.editTextPhone.getText().toString().trim();
 
-
         if (name.isEmpty())
         {
             CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_name));
@@ -139,7 +136,7 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
         }
         else if (confirmPassword.length() < 6)
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context,  getString(R.string.confirm_password_limit));
+            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.confirm_password_limit));
         }
         else if (!password.equals(confirmPassword))
         {
@@ -150,38 +147,36 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
             CommonMethods.getInstance().hideKeypad(this);
             CommonDialogs.getInstance().progressDialog(context);
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task)
+                {
+                    if (task.isSuccessful())
                     {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.e(TAG, "createUserWithEmail:success");
-                                // FirebaseUser user = mAuth.getCurrentUser();
-                                HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                                hashMap.put(MyConstant.USER_NAME, name);
-                                hashMap.put(MyConstant.USER_EMAIL, email);
-                                hashMap.put(MyConstant.USER_PHONE, phoneNumber);
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.e(TAG, "createUserWithEmail:success");
+                        // FirebaseUser user = mAuth.getCurrentUser();
+                        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                        hashMap.put(MyConstant.USER_NAME, name);
+                        hashMap.put(MyConstant.USER_EMAIL, email);
+                        hashMap.put(MyConstant.USER_PHONE, phoneNumber);
 
-                                MyFirebase.getInstance().createUser(context, hashMap);
+                        MyFirebase.getInstance().createUser(context, hashMap);
 
-                            }
-                            else
-                            {
-                                CommonDialogs.getInstance().dialog.dismiss();
+                    }
+                    else
+                    {
+                        CommonDialogs.getInstance().dialog.dismiss();
 
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure  ", task.getException());
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure  ", task.getException());
 
-                                CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, task.getException().getMessage());
-                            }
+                        CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, task.getException().getMessage());
+                    }
 
-
-                        }
-                    });
+                }
+            });
         }
     }
 }

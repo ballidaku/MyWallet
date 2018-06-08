@@ -3,9 +3,11 @@ package ballidaku.mywallet.roomDatabase;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 @SuppressLint("StaticFieldLeak")
 public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
@@ -39,11 +41,25 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             {
                 return (T) MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData();
             }
-
             else if (type.equalsIgnoreCase(MyConstant.DELETE))
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().deleteAccountDetail(((AccountDetailsDataModel) data).getId()));
+            }
+            else if (type.equalsIgnoreCase(MyConstant.UPDATE))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().update((AccountDetailsDataModel) data));
+            }
+            else if (type.equalsIgnoreCase(MyConstant.GET_ONE_ITEM))
+            {
+                return (T) MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAccountDetailsDataModelData(((AccountDetailsDataModel) data).getId());
+            }
+        }
 
+        else if (data instanceof OtherDetailsDataModel)
+        {
+            if (type.equalsIgnoreCase(MyConstant.INSERT))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().insert((OtherDetailsDataModel) data));
             }
         }
 

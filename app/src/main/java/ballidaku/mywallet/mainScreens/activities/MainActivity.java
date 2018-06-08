@@ -21,8 +21,7 @@ import ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
 import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
 
     String TAG = MainActivity.class.getSimpleName();
@@ -38,25 +37,23 @@ public class MainActivity extends AppCompatActivity
         setUpViews();
     }
 
-
     public void setUpViews()
     {
-        Toolbar toolbar =findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer =findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView =findViewById(R.id.navigationView);
+        NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerLayout =navigationView.getHeaderView(0);;
+        View headerLayout = navigationView.getHeaderView(0);
+        ;
         TextView textViewName = headerLayout.findViewById(R.id.textViewName);
-        TextView textViewEmail =headerLayout.findViewById(R.id.textViewEmail);
-
+        TextView textViewEmail = headerLayout.findViewById(R.id.textViewEmail);
 
         textViewName.setText(MySharedPreference.getInstance().getUserName(context));
         textViewEmail.setText(MySharedPreference.getInstance().getUserEmail(context));
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity
 
         }*/
 
-        DrawerLayout drawer =findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

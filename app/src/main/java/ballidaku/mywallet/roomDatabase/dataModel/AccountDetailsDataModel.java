@@ -53,11 +53,13 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     @ColumnInfo(name = MyConstant.ADDITIONAL_DATA)
     public String additionalData;
 
-    public String getAdditionalData() {
+    public String getAdditionalData()
+    {
         return additionalData;
     }
 
-    public void setAdditionalData(String additionalData) {
+    public void setAdditionalData(String additionalData)
+    {
         this.additionalData = additionalData;
     }
 
@@ -164,6 +166,5 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     {
         this.netBankingId = netBankingId;
     }
-
 
 }

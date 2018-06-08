@@ -32,10 +32,12 @@ import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
+import ballidaku.mywallet.mainScreens.activities.AddOtherDetail;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
 
@@ -43,34 +45,40 @@ import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment<D> extends Fragment implements View.OnClickListener {
+public class MainFragment<D> extends Fragment implements View.OnClickListener
+{
     String TAG = MainFragment.class.getSimpleName();
     View view = null;
     Context context;
     MainFragmentAdapter mainFragmentAdapter;
-    ArrayList<AccountDetailsDataModel> mainList = new ArrayList<>();
+  //  ArrayList<AccountDetailsDataModel> mainList = new ArrayList<>();
+    ArrayList<D> mainList = new ArrayList<>();
 
 //    public static final int ADD_DETAILS_RESPONSE = 3316;
 
     FragmentMainBinding fragmentMainBinding;
 
-    public MainFragment() {
+    public MainFragment()
+    {
         // Required empty public constructor
     }
 
-    static {
+    static
+    {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (view == null) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        if (view == null)
+        {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
             view = fragmentMainBinding.getRoot();
 
@@ -86,44 +94,67 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
-    private void refresh() {
-        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>() {
+    private void refresh()
+    {
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+        {
             @Override
-            public void OnCompleted(D data) {
+            public void OnCompleted(D data)
+            {
                 Log.e(TAG, data + "--");
 
-                setData((ArrayList<AccountDetailsDataModel>) data);
+
+               // setData((ArrayList<D>) data);
+
+                mainList.addAll((ArrayList<D>) data);
+
+                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+                {
+                    @Override
+                    public void OnCompleted(D data)
+                    {
+                        Log.e(TAG, data + "--");
+
+                        mainList.addAll((ArrayList<D>) data);
+
+                        setData();
+
+                    }
+                });
 
             }
         });
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
 
         refresh();
     }
 
     // Set Listener
-    public void setListener() {
+    public void setListener()
+    {
         Query query = MyFirebase.getInstance().getMyAccountDetails(context);
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
 
                 ArrayList<KeyValueModel> userBankDataModelsList = new ArrayList<KeyValueModel>();
 
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                {
 
                     Log.e("Subscribers", "" + child.getValue());
 
                     KeyValueModel keyValueModel = new KeyValueModel();
                     keyValueModel.setKey(child.getKey());
                     keyValueModel.setUserBankDataModel(child.getValue(UserBankDataModel.class));
-
 
                     userBankDataModelsList.add(keyValueModel);
 
@@ -142,21 +173,28 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
 
             }
         });
     }
 
+  /*  // Set Data
+    private void setData(ArrayList<D> userBankDataModelsList)
+    {
+        mainList = userBankDataModelsList;
+        mainFragmentAdapter.addData(mainList);
+    }*/
 
     // Set Data
-    private void setData(ArrayList<AccountDetailsDataModel> userBankDataModelsList) {
-        mainList = userBankDataModelsList;
+    private void setData()
+    {
         mainFragmentAdapter.addData(mainList);
     }
 
-
-    public void setUpViews() {
+    public void setUpViews()
+    {
 
         mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
 
@@ -165,7 +203,6 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
         fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
-
 
 //        mainFragmentAdapter.setOnItemClickListener(new BankAccountsAdapter.MyClickListener()
 //        {
@@ -184,8 +221,10 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
             case R.id.floatingActionButtonBankDetails:
 
                 fragmentMainBinding.floatingActionMenu.close(true);
@@ -199,10 +238,12 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
             case R.id.floatingActionButtonOtherDetails:
                 fragmentMainBinding.floatingActionMenu.close(true);
 
+                Intent intentOther = new Intent(context, AddOtherDetail.class);
+                startActivity(intentOther);
+
                 break;
         }
     }
-
 
 //    public interface BankDetails
 //    {
@@ -222,6 +263,5 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
 //            MyFirebase.getInstance().createBankDetails(context, hashMap);
         }
     }*/
-
 
 }

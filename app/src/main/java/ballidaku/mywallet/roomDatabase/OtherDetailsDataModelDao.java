@@ -10,33 +10,28 @@ import java.util.List;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 20/02/18.
  */
 
 @Dao
-public interface AccountDetailsDataModelDao
+public interface OtherDetailsDataModelDao
 {
-/* @Query("SELECT * FROM user WHERE uid IN (:userIds)")
-    List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE first_name LIKE :first AND "
-           + "last_name LIKE :last LIMIT 1")
-    User findByName(String first, String last);
-*/
 
     @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS)
     List<AccountDetailsDataModel> getAllData();
 
     @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
-    AccountDetailsDataModel getAccountDetailsDataModelData(int id);
+    AccountDetailsDataModel getAAccountDetailsDataModelllData(int id);
 
     @Insert
-    long insert(AccountDetailsDataModel accountTypeDataModel);
+    long insert(OtherDetailsDataModel otherDetailsDataModel);
 
     @Update
-    int update(AccountDetailsDataModel accountTypeDataModel);
+    int update(OtherDetailsDataModel otherDetailsDataModel);
 
     @Delete
     void delete(AccountDetailsDataModel accountTypeDataModel);

@@ -21,7 +21,6 @@
     <string name="password_confirm_not_matched">Password &amp; confirm password didn\'t match.</string>
 
 
-
     <string name="password">PASSWORD</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="enter_password">Enter password</string>
@@ -40,6 +39,7 @@
     <string name="enter_phone_number">Enter phone number</string>
 
     <string name="saved_success">Saved Successfully</string>
+    <string name="update_success">Details updated successfully</string>
 
     <string-array name="type">
         <item>Text</item>
