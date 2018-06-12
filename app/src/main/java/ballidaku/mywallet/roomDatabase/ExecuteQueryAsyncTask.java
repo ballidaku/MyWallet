@@ -61,6 +61,11 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().insert((OtherDetailsDataModel) data));
             }
+
+            else if (type.equalsIgnoreCase(MyConstant.GET_ALL))
+            {
+                return (T) MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().getAllData();
+            }
         }
 
         return null;
