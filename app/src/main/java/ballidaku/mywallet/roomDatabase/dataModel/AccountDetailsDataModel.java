@@ -3,6 +3,12 @@ package ballidaku.mywallet.roomDatabase.dataModel;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.databinding.BaseObservable;
+import android.view.View;
+import android.widget.Toast;
+
+import java.io.Serializable;
+import java.util.Observable;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
 
@@ -11,7 +17,7 @@ import ballidaku.mywallet.commonClasses.MyConstant;
  */
 
 @Entity(tableName = MyConstant.ACCOUNT_DETAILS)
-public class AccountDetailsDataModel
+public class AccountDetailsDataModel extends BaseObservable implements Serializable
 {
 
     @PrimaryKey(autoGenerate = true)
@@ -44,7 +50,18 @@ public class AccountDetailsDataModel
     @ColumnInfo(name = MyConstant.NET_BANKING_ID)
     public String netBankingId;
 
+    @ColumnInfo(name = MyConstant.ADDITIONAL_DATA)
+    public String additionalData;
 
+    public String getAdditionalData()
+    {
+        return additionalData;
+    }
+
+    public void setAdditionalData(String additionalData)
+    {
+        this.additionalData = additionalData;
+    }
 
     public int getId()
     {
@@ -64,6 +81,8 @@ public class AccountDetailsDataModel
     public void setBankName(String bankName)
     {
         this.bankName = bankName;
+
+        notifyChange();
     }
 
     public String getAccountHolderName()
@@ -74,6 +93,8 @@ public class AccountDetailsDataModel
     public void setAccountHolderName(String accountHolderName)
     {
         this.accountHolderName = accountHolderName;
+
+        notifyChange();
     }
 
     public String getAccountNumber()
@@ -145,4 +166,5 @@ public class AccountDetailsDataModel
     {
         this.netBankingId = netBankingId;
     }
+
 }

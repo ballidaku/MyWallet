@@ -22,7 +22,6 @@ public class Splash extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         context = this;
 
         c.start();
@@ -64,7 +63,6 @@ public class Splash extends AppCompatActivity
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 finish();
             }*/
-
 
         }
     };

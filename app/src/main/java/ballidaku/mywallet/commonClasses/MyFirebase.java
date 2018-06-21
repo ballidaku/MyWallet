@@ -248,7 +248,7 @@ public class MyFirebase
         });
     }
 
-    public void updateBankDetails(final Context context, String itemID, final HashMap<String, Object> map, final MyInterfaces.UpdateDetails updateDetails)
+/*    public void updateBankDetails(final Context context, String itemID, final HashMap<String, Object> map, final MyInterfaces.UpdateDetails updateDetails)
     {
 
         String userID = MySharedPreference.getInstance().getUserID(context);
@@ -265,7 +265,7 @@ public class MyFirebase
                 }
             }
         });
-    }
+    }*/
 
     public Task<Void> deleteBankDetails(Context context, String key)
     {

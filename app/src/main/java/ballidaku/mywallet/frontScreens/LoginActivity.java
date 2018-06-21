@@ -49,9 +49,10 @@ public class LoginActivity extends AppCompatActivity
     public class MyClickHandlers
     {
         Context context;
+
         MyClickHandlers(Context context)
         {
-            this.context= context;
+            this.context = context;
         }
 
         public void onSignInClicked(View view)
@@ -69,7 +70,6 @@ public class LoginActivity extends AppCompatActivity
 
         }
     }
-
 
     private void check()
     {
@@ -98,29 +98,27 @@ public class LoginActivity extends AppCompatActivity
             CommonMethods.getInstance().hideKeypad(this);
             CommonDialogs.getInstance().progressDialog(context);
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
-                        {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task)
+                {
 
-                            if (task.isSuccessful())
-                            {
-                                Log.e(TAG, "signInWithEmail:success");
-                                MyFirebase.getInstance().logInUser(context, email);
-                            }
-                            else
-                            {
-                                CommonDialogs.getInstance().dialog.dismiss();
-                                // If sign in fails, display a message to the user.
-                                Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
-                                CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
-                            }
-                        }
-                    });
+                    if (task.isSuccessful())
+                    {
+                        Log.e(TAG, "signInWithEmail:success");
+                        MyFirebase.getInstance().logInUser(context, email);
+                    }
+                    else
+                    {
+                        CommonDialogs.getInstance().dialog.dismiss();
+                        // If sign in fails, display a message to the user.
+                        Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
+                        CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
+                    }
+                }
+            });
         }
     }
-
 
 }

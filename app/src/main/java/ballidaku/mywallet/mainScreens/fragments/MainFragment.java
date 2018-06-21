@@ -15,11 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
@@ -27,11 +22,13 @@ import ballidaku.mywallet.adapters.MainFragmentAdapter;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.GridSpacingItemDecoration;
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MyFirebase;
-import ballidaku.mywallet.dataModel.KeyValueModel;
-import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
+import ballidaku.mywallet.mainScreens.activities.AddOtherDetail;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
 
@@ -39,16 +36,14 @@ import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener
+public class MainFragment<D> extends Fragment implements View.OnClickListener
 {
     String TAG = MainFragment.class.getSimpleName();
+
     View view = null;
     Context context;
-    MainFragmentAdapter mainFragmentAdapter;
-    ArrayList<KeyValueModel> mainList = new ArrayList<>();
 
-//    public static final int ADD_DETAILS_RESPONSE = 3316;
-
+    MainFragmentAdapter<D> mainFragmentAdapter;
     FragmentMainBinding fragmentMainBinding;
 
     public MainFragment()
@@ -56,16 +51,10 @@ public class MainFragment extends Fragment implements View.OnClickListener
         // Required empty public constructor
     }
 
-    static {
+    static
+    {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -78,101 +67,60 @@ public class MainFragment extends Fragment implements View.OnClickListener
             context = getActivity();
 
             setUpViews();
-
-//            setListener();
         }
 
         return view;
     }
 
-
-
-
-
-
-
-
-
-
-    // Set Listener
-    public void setListener()
+    private void refresh()
     {
-        Query query = MyFirebase.getInstance().getMyAccountDetails(context);
+        final ArrayList<D> mainList = new ArrayList<>();
 
-        query.addValueEventListener(new ValueEventListener()
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void OnCompleted(D data)
             {
+                Log.e(TAG, data + "--");
+                mainList.addAll((ArrayList<D>) data);
 
-                ArrayList<KeyValueModel> userBankDataModelsList = new ArrayList<KeyValueModel>();
-
-                for (DataSnapshot child : dataSnapshot.getChildren())
+                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
                 {
-
-                    Log.e("Subscribers", "" + child.getValue());
-
-                    KeyValueModel keyValueModel = new KeyValueModel();
-                    keyValueModel.setKey(child.getKey());
-                    keyValueModel.setUserBankDataModel(child.getValue(UserBankDataModel.class));
-
-
-                    userBankDataModelsList.add(keyValueModel);
-
-//                        UserBankDataModel userBankDataModel= child.getValue(UserBankDataModel.class);
-//                        Log.e("Account_holder_name", "" +userBankDataModel.getAccountHolderName());
-//                        Log.e("getAccountNumber", "" +userBankDataModel.getAccountNumber());
-//                        Log.e("getAtmNumber", "" +userBankDataModel.getAtmNumber());
-//                        Log.e("getBankName", "" +userBankDataModel.getBankName());
-//                        Log.e("getCvv", "" +userBankDataModel.getCvv());
-//                        Log.e("getIfsc", "" +userBankDataModel.getIfsc());
-//                        Log.e("getNetBankingId", "" +userBankDataModel.getNetBankingId());
-//                        Log.e("getValidFrom", "" +userBankDataModel.getValidFrom());
-//                        Log.e("getValidThru", "" +userBankDataModel.getValidThru());
-                }
-                setData(userBankDataModelsList);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
+                    @Override
+                    public void OnCompleted(D data)
+                    {
+                        Log.e(TAG, data + "--");
+                        mainList.addAll((ArrayList<D>) data);
+                        setData(mainList);
+                    }
+                });
             }
         });
     }
 
-
-    // Set Data
-    private void setData(ArrayList<KeyValueModel> userBankDataModelsList)
+    @Override
+    public void onResume()
     {
-        mainList = userBankDataModelsList;
-        mainFragmentAdapter.addItem(mainList);
+        super.onResume();
+        refresh();
     }
 
+    // Set Data
+    private void setData(ArrayList<D> mainList)
+    {
+        mainFragmentAdapter.addData(mainList);
+    }
 
     public void setUpViews()
     {
-
-        mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
+        ArrayList<D> mainList = new ArrayList<>();
+        mainFragmentAdapter = new MainFragmentAdapter<>(mainList, getContext());
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
         fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
-
-
-//        mainFragmentAdapter.setOnItemClickListener(new BankAccountsAdapter.MyClickListener()
-//        {
-//            @Override
-//            public void onItemClick(int position, View v)
-//            {
-//
-//                Intent intent = new Intent(getActivity(), ShowBankDetails.class);
-//                intent.putExtra(MyConstant.LIST_ITEM_DATA, mainList.get(position));
-//                startActivity(intent);
-//            }
-//        });
 
         fragmentMainBinding.floatingActionButtonBankDetails.setOnClickListener(this);
         fragmentMainBinding.floatingActionButtonOtherDetails.setOnClickListener(this);
@@ -194,34 +142,14 @@ public class MainFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.floatingActionButtonOtherDetails:
+
                 fragmentMainBinding.floatingActionMenu.close(true);
+
+                Intent intentOther = new Intent(context, AddOtherDetail.class);
+                startActivity(intentOther);
 
                 break;
         }
     }
-
-
-
-
-
-//    public interface BankDetails
-//    {
-//        public void show_bank_details(HashMap<String, Object> map);
-//    }
-
- /*   @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode == Activity.RESULT_OK && requestCode == ADD_DETAILS_RESPONSE)
-        {
-            HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
-
-//            MyFirebase.getInstance().createBankDetails(context, hashMap);
-        }
-    }*/
-
 
 }

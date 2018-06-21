@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -19,13 +18,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,25 +31,25 @@ import ballidaku.mywallet.commonClasses.CommonDialogs;
 import ballidaku.mywallet.commonClasses.CommonInterfaces;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MyFirebase;
-import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.ActivityShowBankDetailsBinding;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
-public class ShowBankDetails extends AppCompatActivity
+public class ShowBankDetails<D> extends AppCompatActivity
 {
 
     Context context;
 
     String TAG = ShowBankDetails.class.getSimpleName();
 
-    KeyValueModel keyValueModel;
+    AccountDetailsDataModel accountDetailsDataModel;
     UserBankDataModel userBankDataModel;
-    String key;
+    int id;
     ArrayList<EditText> editTextList;
 
     int UPDATE_DETAILS_RESPONSE = 3317;
-
 
     ActivityShowBankDetailsBinding activityShowBankDetailsBinding;
 
@@ -66,17 +63,15 @@ public class ShowBankDetails extends AppCompatActivity
 
         setUpIds();
 
-        keyValueModel = (KeyValueModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
-        userBankDataModel = keyValueModel.getUserBankDataModel();
-        key = keyValueModel.getKey();
+        id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
 
         setData();
     }
 
     private void setData()
     {
-        refreshData();
 
+        selectData();
 
         activityShowBankDetailsBinding.editTextBankName.setOnTouchListener(new MyTouchListener(activityShowBankDetailsBinding.editTextBankName));
         activityShowBankDetailsBinding.editTextAccountHolderName.setOnTouchListener(new MyTouchListener(activityShowBankDetailsBinding.editTextAccountHolderName));
@@ -87,7 +82,6 @@ public class ShowBankDetails extends AppCompatActivity
         activityShowBankDetailsBinding.editTextValidFrom.setOnTouchListener(new MyTouchListener(activityShowBankDetailsBinding.editTextValidFrom));
         activityShowBankDetailsBinding.editTextValidThru.setOnTouchListener(new MyTouchListener(activityShowBankDetailsBinding.editTextValidThru));
         activityShowBankDetailsBinding.editTextNetBankingId.setOnTouchListener(new MyTouchListener(activityShowBankDetailsBinding.editTextNetBankingId));
-
 
         editTextList = new ArrayList<>();
 
@@ -101,24 +95,43 @@ public class ShowBankDetails extends AppCompatActivity
         editTextList.add(activityShowBankDetailsBinding.editTextValidThru);
         editTextList.add(activityShowBankDetailsBinding.editTextNetBankingId);
 
+    }
 
+    private void selectData()
+    {
+        final AccountDetailsDataModel data = new AccountDetailsDataModel();
+        data.setId(id);
+
+        new ExecuteQueryAsyncTask<>(context, data, MyConstant.GET_ONE_ITEM, new OnResultInterface<D>()
+        {
+            @Override
+            public void OnCompleted(D data)
+            {
+
+                accountDetailsDataModel = (AccountDetailsDataModel) data;
+                refreshData();
+
+            }
+        });
     }
 
     private void refreshData()
     {
-        activityShowBankDetailsBinding.editTextBankName.setText(dTD(userBankDataModel.getBank_name()));
-        activityShowBankDetailsBinding.editTextAccountHolderName.setText(dTD(userBankDataModel.getAccount_holder_name()));
-        activityShowBankDetailsBinding.editTextAccountNumber.setText(dTD(userBankDataModel.getAccount_number()));
-        activityShowBankDetailsBinding.editTextIfscCode.setText(dTD(userBankDataModel.getIfsc()));
-        activityShowBankDetailsBinding.editTextAtmNumber.setText(dTD(userBankDataModel.getAtm_number()));
-        activityShowBankDetailsBinding.editTextCvv.setText(dTD(userBankDataModel.getCvv()));
-        activityShowBankDetailsBinding.editTextValidFrom.setText(dTD(userBankDataModel.getValid_from()));
-        activityShowBankDetailsBinding.editTextValidThru.setText(dTD(userBankDataModel.getValid_thru()));
-        activityShowBankDetailsBinding.editTextNetBankingId.setText(dTD(userBankDataModel.getNet_banking_id()));
 
-        if (userBankDataModel.getAdditional_data() != null && !userBankDataModel.getAdditional_data().isEmpty())
+        activityShowBankDetailsBinding.editTextBankName.setText(accountDetailsDataModel.getBankName());
+        activityShowBankDetailsBinding.editTextAccountHolderName.setText(accountDetailsDataModel.accountHolderName);
+        activityShowBankDetailsBinding.editTextAccountNumber.setText(accountDetailsDataModel.accountNumber);
+        activityShowBankDetailsBinding.editTextIfscCode.setText(accountDetailsDataModel.getIfsc());
+        activityShowBankDetailsBinding.editTextAtmNumber.setText(accountDetailsDataModel.getAtmNumber());
+        activityShowBankDetailsBinding.editTextCvv.setText(accountDetailsDataModel.getCvv());
+        activityShowBankDetailsBinding.editTextValidFrom.setText(accountDetailsDataModel.getValidFrom());
+        activityShowBankDetailsBinding.editTextValidThru.setText(accountDetailsDataModel.getValidThru());
+        activityShowBankDetailsBinding.editTextNetBankingId.setText(accountDetailsDataModel.getNetBankingId());
+
+        if (accountDetailsDataModel.getAdditionalData() != null && !accountDetailsDataModel.getAdditionalData().isEmpty())
         {
-            String json = dTD(userBankDataModel.getAdditional_data());
+
+            String json = accountDetailsDataModel.getAdditionalData();
             activityShowBankDetailsBinding.linearLayoutAddViews.removeAllViews();
 
             try
@@ -174,23 +187,21 @@ public class ShowBankDetails extends AppCompatActivity
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
-
                     activityShowBankDetailsBinding.linearLayoutAddViews.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
     }
 
-
     // Decrypt Data
     public String dTD(String data)
     {
         return CommonMethods.getInstance().decrypt(context, data);
     }
-
 
     private void setUpIds()
     {
@@ -201,14 +212,12 @@ public class ShowBankDetails extends AppCompatActivity
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.show_bank_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -224,12 +233,11 @@ public class ShowBankDetails extends AppCompatActivity
             case R.id.action_edit:
 
                 Intent intent = new Intent(context, AddBankDetails.class);
-                intent.putExtra(MyConstant.LIST_ITEM_DATA, keyValueModel);
+                intent.putExtra(MyConstant.LIST_ITEM_DATA, (Serializable) accountDetailsDataModel);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
                 startActivityForResult(intent, UPDATE_DETAILS_RESPONSE);
 
                 break;
-
 
             case R.id.action_copy:
 
@@ -254,7 +262,6 @@ public class ShowBankDetails extends AppCompatActivity
                     }
                 });
 
-
                 break;
 
             default:
@@ -264,12 +271,10 @@ public class ShowBankDetails extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     public String getData()
     {
 
         String copiedContent = "";
-
 
         for (int i = 0; i < editTextList.size(); i++)
         {
@@ -291,7 +296,6 @@ public class ShowBankDetails extends AppCompatActivity
         return copiedContent;
     }
 
-
     public void copyContent()
     {
         String copiedContent = getData();
@@ -312,7 +316,6 @@ public class ShowBankDetails extends AppCompatActivity
         //Log.e(TAG, copiedContent);
     }
 
-
     public void shareContent()
     {
         String sharedContent = getData();
@@ -331,28 +334,21 @@ public class ShowBankDetails extends AppCompatActivity
         }
     }
 
-
     public void deleteData()
     {
 
-        MyFirebase.getInstance().deleteBankDetails(context, key).addOnCompleteListener(new OnCompleteListener<Void>()
+        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, new OnResultInterface<D>()
         {
             @Override
-            public void onComplete(@NonNull Task<Void> task)
+            public void OnCompleted(D data)
             {
-                if (task.isSuccessful())
-                {
-                    Log.e(TAG, "Deleted Successfully");
-                    finish();
-                }
-                else
-                {
-                    Log.e(TAG, "Deleted Unsuccessfully");
-                }
+                Log.e(TAG, data + "--");
+
+                finish();
+
             }
         });
     }
-
 
     class MyTouchListener implements View.OnTouchListener
     {
@@ -384,7 +380,6 @@ public class ShowBankDetails extends AppCompatActivity
                     Drawable left = editText.getCompoundDrawables()[DRAWABLE_LEFT];
                     Drawable right;
 
-
                     Drawable alreadyRight = editText.getCompoundDrawables()[DRAWABLE_RIGHT];
                     Drawable unSelected = getResources().getDrawable(R.drawable.ic_check_unselected);
 
@@ -397,7 +392,6 @@ public class ShowBankDetails extends AppCompatActivity
                         right = unSelected;
                     }
 
-
                     editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
 
                     // Log.e("hello", "hello2");
@@ -409,32 +403,29 @@ public class ShowBankDetails extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_DETAILS_RESPONSE)
         {
             HashMap<String, Object> map = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
 
-            userBankDataModel = new UserBankDataModel((String) map.get(MyConstant.VALID_THRU),
-                    (String) map.get(MyConstant.ACCOUNT_HOLDER_NAME),
-                    (String) map.get(MyConstant.VALID_FROM),
-                    (String) map.get(MyConstant.CVV),
-                    (String) map.get(MyConstant.IFSC),
-                    (String) map.get(MyConstant.BANK_NAME),
-                    (String) map.get(MyConstant.NET_BANKING_ID),
-                    (String) map.get(MyConstant.ATM_NUMBER),
-                    (String) map.get(MyConstant.ACCOUNT_NUMBER),
-                    (String) map.get(MyConstant.ADDITIONAL_DATA));
+            userBankDataModel = new UserBankDataModel((String) map.get(MyConstant.VALID_THRU), (String) map.get(MyConstant.ACCOUNT_HOLDER_NAME), (String) map.get(MyConstant.VALID_FROM), (String) map.get(MyConstant.CVV), (String) map.get(MyConstant.IFSC), (String) map.get(MyConstant.BANK_NAME), (String) map.get(MyConstant.NET_BANKING_ID), (String) map.get(MyConstant.ATM_NUMBER), (String) map.get(MyConstant.ACCOUNT_NUMBER), (String) map.get(MyConstant.ADDITIONAL_DATA));
 
-            keyValueModel.setUserBankDataModel(userBankDataModel);
+            //   keyValueModel.setUserBankDataModel(userBankDataModel);
 
             refreshData();
 
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        selectData();
     }
 }

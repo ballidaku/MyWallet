@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ballidaku.mywallet">
+    package="ballidaku.mywallet">
 
     <application
         android:name=".commonClasses.MyApplication"
@@ -12,41 +12,42 @@
         <activity
             android:name=".frontScreens.Splash"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/MyNoActionBarTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".frontScreens.LoginActivity"
-            android:theme="@style/MyNoActionBarTheme"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/MyNoActionBarTheme" />
         <activity
             android:name=".mainScreens.activities.MainActivity"
-            android:theme="@style/AppTheme"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".frontScreens.SignUpActivity"
-            android:theme="@style/MyNoActionBarTheme"
-            android:label=""/>
-
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/MyNoActionBarTheme" />
         <activity
             android:name=".mainScreens.activities.AddBankDetails"
-            android:windowSoftInputMode="stateHidden"/>
-
-        <activity android:name=".mainScreens.activities.ShowBankDetails"/>
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".mainScreens.activities.ShowBankDetails" />
         <activity
             android:name=".mPin.activity.MPINActivity"
-            android:theme="@style/MyNoActionBarTheme"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/MyNoActionBarTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts"/>
+            android:resource="@array/preloaded_fonts" />
 
+        <activity android:name=".mainScreens.activities.AddOtherDetail"></activity>
     </application>
 
 </manifest>

@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
 
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.github.nipun-birla:BoxLoaderView:0.0.1'

@@ -15,7 +15,6 @@ import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
  * Created by sharanpalsingh on 20/02/18.
  */
 
-
 @Dao
 public interface AccountDetailsDataModelDao
 {
@@ -27,18 +26,25 @@ public interface AccountDetailsDataModelDao
     User findByName(String first, String last);
 */
 
-
-
-    @Query("SELECT * FROM "+ MyConstant.ACCOUNT_DETAILS)
+    @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS)
     List<AccountDetailsDataModel> getAllData();
+
+    @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
+    AccountDetailsDataModel getAccountDetailsDataModelData(int id);
 
     @Insert
     long insert(AccountDetailsDataModel accountTypeDataModel);
 
     @Update
-    void update(AccountDetailsDataModel accountTypeDataModel);
+    int update(AccountDetailsDataModel accountTypeDataModel);
 
     @Delete
     void delete(AccountDetailsDataModel accountTypeDataModel);
+
+    @Query("DELETE FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
+    int deleteAccountDetail(int id);
+
+
+
 }
 
