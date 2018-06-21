@@ -4,7 +4,6 @@
 
     <application
         android:name=".commonClasses.MyApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -20,24 +19,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".frontScreens.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyNoActionBarTheme" />
+
         <activity
             android:name=".mainScreens.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".frontScreens.SignUpActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/MyNoActionBarTheme" />
+            android:theme="@style/MyNoActionBarTheme"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".mainScreens.activities.AddBankDetails"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".mainScreens.activities.ShowBankDetails" />
+
+        <activity android:name=".mainScreens.activities.ShowBankDetails"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+
         <activity
             android:name=".mPin.activity.MPINActivity"
             android:screenOrientation="portrait"
@@ -47,7 +56,15 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".mainScreens.activities.AddOtherDetail"></activity>
+        <activity
+            android:name=".mainScreens.activities.AddOtherDetail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".mainScreens.activities.ShowOtherDetail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+
     </application>
 
 </manifest>

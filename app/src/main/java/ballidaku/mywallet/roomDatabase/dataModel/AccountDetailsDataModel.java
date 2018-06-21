@@ -4,14 +4,10 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.databinding.BaseObservable;
-import android.view.View;
-import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.Observable;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
-
 /**
  * Created by sharanpalsingh on 20/02/18.
  */
@@ -19,7 +15,6 @@ import ballidaku.mywallet.commonClasses.MyConstant;
 @Entity(tableName = MyConstant.ACCOUNT_DETAILS)
 public class AccountDetailsDataModel extends BaseObservable implements Serializable
 {
-
     @PrimaryKey(autoGenerate = true)
     public int id;
 
@@ -53,6 +48,18 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     @ColumnInfo(name = MyConstant.ADDITIONAL_DATA)
     public String additionalData;
 
+    public String type;
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
     public String getAdditionalData()
     {
         return additionalData;
@@ -81,7 +88,6 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     public void setBankName(String bankName)
     {
         this.bankName = bankName;
-
         notifyChange();
     }
 
@@ -93,7 +99,6 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     public void setAccountHolderName(String accountHolderName)
     {
         this.accountHolderName = accountHolderName;
-
         notifyChange();
     }
 

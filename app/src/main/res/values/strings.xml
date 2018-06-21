@@ -40,6 +40,9 @@
 
     <string name="saved_success">Saved Successfully</string>
     <string name="update_success">Details updated successfully</string>
+    <string name="heading_name">Heading</string>
+    <string name="bank_detail">Bank Details</string>
+    <string name="other_detail">Other Details</string>
 
     <string-array name="type">
         <item>Text</item>

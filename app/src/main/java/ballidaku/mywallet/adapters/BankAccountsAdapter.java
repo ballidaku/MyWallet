@@ -42,9 +42,9 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
         {
 
             super(itemView);
-            textView_BankName = (TextView) itemView.findViewById(R.id.textView_BankName);
-            textView_BankOwner = (TextView) itemView.findViewById(R.id.textView_BankOwner);
-            textView_BankAtm = (TextView) itemView.findViewById(R.id.textView_BankAtm);
+          //  textView_BankName = (TextView) itemView.findViewById(R.id.textView_BankName);
+         //   textView_BankOwner = (TextView) itemView.findViewById(R.id.textView_BankOwner);
+       //     textView_BankAtm = (TextView) itemView.findViewById(R.id.textView_BankAtm);
 
             itemView.setOnClickListener(this);
         }
@@ -73,7 +73,7 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflater_bank_accounts_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflater_main_fragment_item, parent, false);
 
         return new ViewHolder(view);
     }

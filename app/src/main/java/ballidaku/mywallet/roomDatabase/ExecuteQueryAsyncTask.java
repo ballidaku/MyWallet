@@ -3,7 +3,6 @@ package ballidaku.mywallet.roomDatabase;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
@@ -65,6 +64,21 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             else if (type.equalsIgnoreCase(MyConstant.GET_ALL))
             {
                 return (T) MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().getAllData();
+            }
+
+            else if (type.equalsIgnoreCase(MyConstant.GET_ONE_ITEM))
+            {
+                return (T) MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().getOtherDataDetail(((OtherDetailsDataModel) data).getId());
+            }
+
+            else if (type.equalsIgnoreCase(MyConstant.DELETE))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().deleteOtherDetail(((OtherDetailsDataModel) data).getId()));
+            }
+
+            else if (type.equalsIgnoreCase(MyConstant.UPDATE))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().update((OtherDetailsDataModel) data));
             }
         }
 

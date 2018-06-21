@@ -2,8 +2,9 @@ package ballidaku.mywallet.mainScreens.activities;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,6 @@ import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.databinding.ActivityAddOtherDetailBinding;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
-import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClickListener
@@ -35,6 +35,10 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
     String[] typeArray;
 
     Context context;
+
+    String fromWhere;
+
+    OtherDetailsDataModel otherDetailsDataModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,13 +63,94 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        addMoreFeilds();
+        fromWhere = getIntent().getStringExtra(MyConstant.FROM_WHERE);
+
+        if (fromWhere.equals(MyConstant.EDIT))
+        {
+            activityAddOtherDetailBinding.toolbarOther.setTitle("UPDATE OTHER DETAILS");
+            otherDetailsDataModel = (OtherDetailsDataModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
+
+            setData();
+        }
+        else if (fromWhere.equals(MyConstant.NEW))
+        {
+            activityAddOtherDetailBinding.toolbarOther.setTitle("ADD OTHER DETAILS");
+            addMoreFeilds();
+        }
+
+
     }
 
     private void setListener()
     {
         activityAddOtherDetailBinding.cardViewAddMoreFields.setOnClickListener(this);
     }
+
+
+    private void setData()
+    {
+
+        activityAddOtherDetailBinding.editTextValue.setText(otherDetailsDataModel.getHeading());
+
+        if (otherDetailsDataModel.getData() != null && !otherDetailsDataModel.getData().isEmpty())
+        {
+            String json = otherDetailsDataModel.getData();
+
+            try
+            {
+                JSONArray jsonArray = new JSONArray(json);
+
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String title = jsonObject.getString(MyConstant.TITLE);
+                    String value = jsonObject.getString(MyConstant.VALUE);
+                    String type = jsonObject.getString(MyConstant.TYPE);
+
+                    final View view = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
+
+                    EditText editTextTitle = view.findViewById(R.id.editTextTitle);
+                    EditText editTextValue = view.findViewById(R.id.editTextValue);
+                    ImageView imageViewCancel = view.findViewById(R.id.imageViewCancel);
+
+                    if(type.equalsIgnoreCase("Text"))
+                    {
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    }
+                    else
+                    {
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+
+                    MaterialSpinner spinnerType = view.findViewById(R.id.spinnerType);
+
+                    spinnerType.setItems(typeArray);
+
+                    spinnerType.setSelectedIndex(type.equals(typeArray[0]) ? 0 : 1);
+
+                    editTextTitle.setText(title);
+                    editTextValue.setText(value);
+
+                    imageViewCancel.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View views)
+                        {
+                            activityAddOtherDetailBinding.lineraLayoutAddView.removeView(view);
+                        }
+                    });
+
+                    activityAddOtherDetailBinding.lineraLayoutAddView.addView(view);
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
     private void addMoreFeilds()
     {
@@ -136,24 +221,44 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
         }
 
-        OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
-        otherDetailsDataModel.setHeading(headingName);
-        otherDetailsDataModel.setData(jsonArray.toString());
-
-        /*When we insert the data*/
-        new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.INSERT, new OnResultInterface<D>()
+        OtherDetailsDataModel otherDetailsValueDataModel = new OtherDetailsDataModel();
+        otherDetailsValueDataModel.setHeading(headingName);
+        otherDetailsValueDataModel.setData(jsonArray.toString());
+        if (fromWhere.equals(MyConstant.EDIT))
         {
-            @Override
-            public void OnCompleted(D data)
+            otherDetailsValueDataModel.setId(otherDetailsDataModel.getId());
+
+            new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.UPDATE, new OnResultInterface<D>()
             {
-                Log.e(TAG, (String) data + "--");
+                @Override
+                public void OnCompleted(D data)
+                {
 
-                CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.saved_success));
-                CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
-                finish();
+                    CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.update_success));
+                    CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
 
-            }
-        });
+                    finish();
+
+                }
+            });
+        }
+        else
+        {
+            /*When we insert the data*/
+            new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.INSERT, new OnResultInterface<D>()
+            {
+                @Override
+                public void OnCompleted(D data)
+                {
+                    Log.e(TAG, (String) data + "--");
+
+                    CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.saved_success));
+                    CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
+                    finish();
+
+                }
+            });
+        }
     }
 
     @Override
