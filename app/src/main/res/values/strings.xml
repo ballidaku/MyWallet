@@ -7,6 +7,11 @@
     <string name="action_settings">Settings</string>
 
 
+    <string-array name="type">
+        <item>Text</item>
+        <item>Secret</item>
+    </string-array>
+
     <string name="email">EMAIL</string>
     <string name="enter_email">Enter email</string>
     <string name="please_enter_email">Please enter email.</string>
@@ -43,9 +48,16 @@
     <string name="heading_name">Heading</string>
     <string name="bank_detail">Bank Details</string>
     <string name="other_detail">Other Details</string>
+    <string name="select_atleast_single">Please select atleast single item</string>
 
-    <string-array name="type">
-        <item>Text</item>
-        <item>Secret</item>
-    </string-array>
+    <string name="share_using">Share Using</string>
+    <string name="data_copied">Data Copied</string>
+    <string name="copied_text">Copied Text</string>
+    <string name="account_details">Account Details</string>
+    <string name="update_details">UPDATE DETAILS</string>
+    <string name="add_details">ADD DETAILS</string>
+
+    <string name="title_value_validation">Title or Value data should not be empty</string>
+
+
 </resources>

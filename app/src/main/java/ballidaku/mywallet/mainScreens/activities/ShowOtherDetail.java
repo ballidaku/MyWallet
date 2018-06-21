@@ -40,14 +40,12 @@ public class ShowOtherDetail<D> extends AppCompatActivity
     String TAG = ShowOtherDetail.class.getSimpleName();
 
     OtherDetailsDataModel otherDetailsDataModel;
+    ActivityShowOtherDetailBinding activityShowOtherDetailsBinding;
 
-    int id;
-    String type;
     ArrayList<EditText> editTextList=new ArrayList<>();
 
     int UPDATE_DETAILS_RESPONSE = 3327;
-
-    ActivityShowOtherDetailBinding activityShowOtherDetailsBinding;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,9 +56,17 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         context = this;
         setUpIds();
 
-        id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
-        type = getIntent().getStringExtra(MyConstant.TYPE);
+       id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
+//       String type = getIntent().getStringExtra(MyConstant.TYPE);
 
+    }
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        selectData();
     }
 
     private void selectData()
@@ -74,13 +80,10 @@ public class ShowOtherDetail<D> extends AppCompatActivity
             @Override
             public void OnCompleted(D data)
             {
-
                 otherDetailsDataModel = (OtherDetailsDataModel) data;
                 refreshData();
-
             }
         });
-
     }
 
     private void refreshData()
@@ -89,7 +92,6 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
         if (otherDetailsDataModel.getData() != null && !otherDetailsDataModel.getData().isEmpty())
         {
-
             String json = otherDetailsDataModel.getData();
             activityShowOtherDetailsBinding.linearLayoutAddViews.removeAllViews();
 
@@ -104,7 +106,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     String value = jsonObject.getString(MyConstant.VALUE);
                     String type = jsonObject.getString(MyConstant.TYPE);
 
-                    final View view = getLayoutInflater().inflate(R.layout.custom_view_more_feilds, null);
+                    final View view = getLayoutInflater().inflate(R.layout.inflater_view_more_feilds, null);
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
@@ -365,11 +367,4 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        selectData();
-    }
 }
