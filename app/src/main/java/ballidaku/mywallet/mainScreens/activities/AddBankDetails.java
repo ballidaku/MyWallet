@@ -1,9 +1,7 @@
 package ballidaku.mywallet.mainScreens.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,8 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.FourDigitsCardTextWatcher;
@@ -29,11 +25,12 @@ import ballidaku.mywallet.commonClasses.TwoDigitsCardTextWatcher;
 import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.ActivityAddBankDetailsBinding;
-import ballidaku.mywallet.roomDatabase.MyRoomDatabase;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 
-public class AddBankDetails extends AppCompatActivity
+public class AddBankDetails<D> extends AppCompatActivity
 {
 
     String TAG = AddBankDetails.class.getSimpleName();
@@ -182,7 +179,8 @@ public class AddBankDetails extends AppCompatActivity
 
                     activityAddBankDetailsBinding.linearLayoutAddViews.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -203,7 +201,6 @@ public class AddBankDetails extends AppCompatActivity
         String netBankingId = activityAddBankDetailsBinding.editTextNetBankingId.getText().toString().trim();
 
 
-
         AccountDetailsDataModel accountTypeDataModel = new AccountDetailsDataModel();
         accountTypeDataModel.setBankName(bankName);
         accountTypeDataModel.setAccountHolderName(accountHolderName);
@@ -215,7 +212,17 @@ public class AddBankDetails extends AppCompatActivity
         accountTypeDataModel.setValidThru(validThru);
         accountTypeDataModel.setNetBankingId(netBankingId);
 
-        addDetails(accountTypeDataModel);
+
+        new ExecuteQueryAsyncTask<>(context, accountTypeDataModel, MyConstant.INSERT, new OnResultInterface<D>()
+        {
+            @Override
+            public void OnCompleted(D data)
+            {
+                Log.e(TAG,(String)data);
+            }
+        });
+
+
 
         /*final HashMap<String, Object> map = new HashMap<>();
         map.put(MyConstant.BANK_NAME, dTE(bankName));
@@ -300,45 +307,6 @@ public class AddBankDetails extends AppCompatActivity
             setResult(RESULT_OK, intent);
             finish();
         }*/
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    void addDetails(final AccountDetailsDataModel accountTypeDataModel)
-    {
-        new AsyncTask<Void, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(Void... params)
-            {
-                MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().insert(accountTypeDataModel);
-
-                List<AccountDetailsDataModel> list = MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData();
-
-                for (int i = 0; i < list.size(); i++)
-                {
-
-                    Log.e(TAG, "" + list.get(i).getId());
-                }
-
-
-                return null;
-            }
-
-          /*  @Override
-            protected void onPostExecute(Integer agentsCount) {
-                if (agentsCount > 0) {
-                    //2: If it already exists then prompt user
-                    Toast.makeText(Activity.this, "Agent already exists!", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(Activity.this, "Agent does not exist! Hurray :)", Toast.LENGTH_LONG).show();
-                    onBackPressed();
-                }
-            }*/
-        }.execute();
-
-
     }
 
     @Override

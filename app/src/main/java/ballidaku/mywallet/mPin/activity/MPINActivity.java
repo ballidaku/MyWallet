@@ -77,7 +77,7 @@ public class MPINActivity extends AppCompatActivity
         mPinLockView.setPinLength(4);
         mPinLockView.setTextColor(ContextCompat.getColor(this, R.color.colorWhite));
 
-        mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FILL_WITH_ANIMATION);
+        mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
 
 
         setHeading();
@@ -90,20 +90,20 @@ public class MPINActivity extends AppCompatActivity
 
             case MyConstant.FIRST_TIME:
             case MyConstant.NEW_PIN_AFTER_CHANGE:
-                profile_name.setText("Enter your new MPIN");
+                profile_name.setText("Enter New Passcode");
                 break;
 
             case MyConstant.CONFIRM_FIRST_TIME:
             case MyConstant.CONFIRM_PIN_AFTER_CHANGE:
-                profile_name.setText("Confirm your new MPIN");
+                profile_name.setText("Confirm New Passcode");
                 break;
 
             case MyConstant.CHECK_MPIN:
-                profile_name.setText("Enter your MPIN");
+                profile_name.setText("Enter Passcode");
                 break;
 
             case MyConstant.CHANGE_MPIN:
-                profile_name.setText("Enter your current MPIN");
+                profile_name.setText("Enter Current Passcode");
                 break;
         }
     }

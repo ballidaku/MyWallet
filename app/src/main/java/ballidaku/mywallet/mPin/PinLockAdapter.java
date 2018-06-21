@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -117,7 +118,7 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    Log.e("POS IN ",""+position);
                     holder.mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
                 }
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mCustomizationOptionsBundle.getButtonSize(),mCustomizationOptionsBundle.getButtonSize());
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mCustomizationOptionsBundle.getButtonSize(),mCustomizationOptionsBundle.getButtonSize());
                 holder.mNumberButton.setLayoutParams(params);
             }
         }

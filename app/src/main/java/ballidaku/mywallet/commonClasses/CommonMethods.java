@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,12 +17,9 @@ import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import ballidaku.mywallet.R;
-import ballidaku.mywallet.roomDatabase.MyRoomDatabase;
-import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 05/03/17.
@@ -191,15 +186,7 @@ public class CommonMethods
         boolean check = false;
         if (!Pattern.matches("[a-zA-Z]+", phone))
         {
-//            if(phone.length() < 6 || phone.length() > 13) {
-            if (phone.length() != 10)
-            {
-                check = false;
-            }
-            else
-            {
-                check = true;
-            }
+          check = phone.length() == 10;
         }
         else
         {
@@ -208,40 +195,6 @@ public class CommonMethods
         return check;
     }
 
-    class MyAsyncTask<T> extends AsyncTask<Void, Void, Void>
-    {
-        Context context;
-        T data;
-        public MyAsyncTask(Context context,T data)
-        {
-            this.context=context;
-            this.data=data;
-            execute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params)
-        {
-            MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().insert((AccountDetailsDataModel) data);
-
-            List<AccountDetailsDataModel> list = MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData();
-
-            for (int i = 0; i < list.size(); i++)
-            {
-
-                Log.e(TAG, "" + list.get(i).getId());
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-
-        }
-    }
 
 
 }
