@@ -1,6 +1,7 @@
 package ballidaku.mywallet.mainScreens.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -44,19 +45,17 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         activityAddOtherDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_other_detail);
 
         context = this;
 
         setUpViews();
-
-        setListener();
-
     }
 
     private void setUpViews()
     {
+        activityAddOtherDetailBinding.cardViewAddMoreFields.setOnClickListener(this);
+
         typeArray = getResources().getStringArray(R.array.type);
         setSupportActionBar(activityAddOtherDetailBinding.toolbarOther);
 
@@ -77,29 +76,18 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
             activityAddOtherDetailBinding.toolbarOther.setTitle("ADD OTHER DETAILS");
             addMoreFeilds();
         }
-
-
-    }
-
-    private void setListener()
-    {
-        activityAddOtherDetailBinding.cardViewAddMoreFields.setOnClickListener(this);
     }
 
 
     private void setData()
     {
-
         activityAddOtherDetailBinding.editTextValue.setText(otherDetailsDataModel.getHeading());
-
         if (otherDetailsDataModel.getData() != null && !otherDetailsDataModel.getData().isEmpty())
         {
             String json = otherDetailsDataModel.getData();
-
             try
             {
                 JSONArray jsonArray = new JSONArray(json);
-
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -110,26 +98,47 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                     final View view = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
-                    EditText editTextValue = view.findViewById(R.id.editTextValue);
+                    final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewCancel = view.findViewById(R.id.imageViewCancel);
 
-                    if(type.equalsIgnoreCase("Text"))
+                    if (type.equalsIgnoreCase(MyConstant.TEXT))
                     {
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editTextValue.setMaxLines(6);
                     }
                     else
                     {
-                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                        editTextValue.setMinLines(1);
+                        editTextValue.setMaxLines(1);
                     }
 
                     MaterialSpinner spinnerType = view.findViewById(R.id.spinnerType);
-
                     spinnerType.setItems(typeArray);
-
                     spinnerType.setSelectedIndex(type.equals(typeArray[0]) ? 0 : 1);
 
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
+
+                    spinnerType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener()
+                    {
+                        @Override
+                        public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
+                        {
+                            if (position == 0)//Text
+                            {
+                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                                editTextValue.setMaxLines(6);
+                            }
+                            else
+                            {
+                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                                editTextValue.getText().clear();
+                                editTextValue.setMinLines(1);
+                                editTextValue.setMaxLines(1);
+                            }
+                        }
+                    });
 
                     imageViewCancel.setOnClickListener(new View.OnClickListener()
                     {
@@ -142,21 +151,43 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
                     activityAddOtherDetailBinding.lineraLayoutAddView.addView(view);
                 }
-            }
-            catch (JSONException e)
+            } catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
-
     }
-
 
     private void addMoreFeilds()
     {
         final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
         MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
         spinnerType.setItems(typeArray);
+
+        final EditText editTextValue = child.findViewById(R.id.editTextValue);
+        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editTextValue.setMaxLines(6);
+
+        spinnerType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
+            {
+                if(position==0)//Text
+                {
+                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    editTextValue.setMaxLines(6);
+                }
+                else
+                {
+                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                    editTextValue.getText().clear();
+                    editTextValue.setMinLines(1);
+                    editTextValue.setMaxLines(1);
+                }
+            }
+        });
+
 
         ImageView imageViewCancel = child.findViewById(R.id.imageViewCancel);
         imageViewCancel.setOnClickListener(new View.OnClickListener()
@@ -212,8 +243,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
                 jsonArray.put(jsonObject);
 
-            }
-            catch (JSONException e)
+            } catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -227,18 +257,17 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
         if (fromWhere.equals(MyConstant.EDIT))
         {
             otherDetailsValueDataModel.setId(otherDetailsDataModel.getId());
-
             new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.UPDATE, new OnResultInterface<D>()
             {
                 @Override
                 public void OnCompleted(D data)
                 {
-
                     CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.update_success));
                     CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
 
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
-
                 }
             });
         }
@@ -250,8 +279,6 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                 @Override
                 public void OnCompleted(D data)
                 {
-                    Log.e(TAG, (String) data + "--");
-
                     CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.saved_success));
                     CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
                     finish();

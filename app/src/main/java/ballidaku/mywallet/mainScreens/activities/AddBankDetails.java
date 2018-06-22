@@ -91,6 +91,30 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
         spinnerType.setItems(typeArray);
 
+        final EditText editTextValue = child.findViewById(R.id.editTextValue);
+        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editTextValue.setMaxLines(6);
+
+        spinnerType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
+            {
+                if(position==0)//Text
+                {
+                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    editTextValue.setMaxLines(6);
+                }
+                else
+                {
+                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                    editTextValue.getText().clear();
+                    editTextValue.setMinLines(1);
+                    editTextValue.setMaxLines(1);
+                }
+            }
+        });
+
         ImageView imageViewCancel = child.findViewById(R.id.imageViewCancel);
         imageViewCancel.setOnClickListener(new View.OnClickListener()
         {
@@ -138,12 +162,15 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewCancel = view.findViewById(R.id.imageViewCancel);
 
-                    if(type.equalsIgnoreCase("Text"))
+                    if(type.equalsIgnoreCase(MyConstant.TEXT))
                     {
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editTextValue.setMaxLines(6);
                     }
                     else
                     {
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                        editTextValue.setMinLines(1);
                         editTextValue.setMaxLines(1);
                     }
 
@@ -159,21 +186,20 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
                         {
-                            if(position==1) //Text
+                            if(position==0)//Text
                             {
-                                editTextValue.getText().clear();
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                                editTextValue.setMaxLines(4);
+                                editTextValue.setMaxLines(6);
                             }
                             else
                             {
+                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                                editTextValue.getText().clear();
+                                editTextValue.setMinLines(1);
                                 editTextValue.setMaxLines(1);
                             }
                         }
                     });
-
-
-
 
                     imageViewCancel.setOnClickListener(new View.OnClickListener()
                     {

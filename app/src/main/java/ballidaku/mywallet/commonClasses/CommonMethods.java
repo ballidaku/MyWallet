@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ballidaku.mywallet.R;
@@ -181,7 +182,6 @@ public class CommonMethods {
 
     /**********************************************************************************************/
     /*Share Content*/
-
     /**********************************************************************************************/
     public void shareContent(Context context, String data) {
 
@@ -199,7 +199,6 @@ public class CommonMethods {
 
     /**********************************************************************************************/
     /*Copy Content*/
-
     /**********************************************************************************************/
     public class MyTouchListener implements View.OnTouchListener {
         EditText editText;
@@ -239,6 +238,34 @@ public class CommonMethods {
             }
             return false;
         }
+    }
+
+    /**********************************************************************************************/
+    /*Content to share and copy*/
+    /**********************************************************************************************/
+
+
+    public String getData(Context context,ArrayList<EditText> editTextArrayList)
+    {
+        String copiedContent = "";
+        for (int i = 0; i < editTextArrayList.size(); i++)
+        {
+            if (editTextArrayList.get(i).getCompoundDrawables()[2].getConstantState().equals(context.getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
+            {
+                String content = editTextArrayList.get(i).getTag().toString() + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
+                copiedContent += copiedContent.isEmpty() ? content : "\n" + content;
+            }
+        }
+
+        //for copying single item
+        if (!copiedContent.isEmpty() && !copiedContent.contains("\n"))
+        {
+            String[] singleContent = copiedContent.split(":");
+//            copiedContent = singleContent[1].replaceAll(" ", "");
+            copiedContent = singleContent[1];
+        }
+
+        return copiedContent;
     }
 
 }

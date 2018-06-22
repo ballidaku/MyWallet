@@ -146,15 +146,17 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewShow = view.findViewById(R.id.imageViewShow);
 
-                    Log.e(TAG, "type  " + type);
+
                     if (type.equals(MyConstant.TEXT))
                     {
                         imageViewShow.setVisibility(View.GONE);
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                     }
                     else
                     {
                         editTextValue.setTag(MyConstant.INVISIBLE);
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        editTextValue.setMaxLines(1);
                     }
 
                     imageViewShow.setOnClickListener(new View.OnClickListener()
@@ -230,13 +232,13 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
             case R.id.action_copy:
 
-                CommonMethods.getInstance().copyContent(context, getData());
+                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context,editTextList));
 
                 break;
 
             case R.id.action_share:
 
-                CommonMethods.getInstance().shareContent(context, getData());
+                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context,editTextList));
 
                 break;
 
@@ -258,30 +260,6 @@ public class ShowBankDetails<D> extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public String getData()
-    {
-
-        String copiedContent = "";
-
-        for (int i = 0; i < editTextList.size(); i++)
-        {
-            if (editTextList.get(i).getCompoundDrawables()[2].getConstantState().equals(getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
-            {
-                String content = editTextList.get(i).getTag().toString() + MyConstant.SPACE + editTextList.get(i).getText().toString();
-                copiedContent += copiedContent.isEmpty() ? content : "\n" + content;
-            }
-        }
-
-        //for copying single item
-        if (!copiedContent.isEmpty() && !copiedContent.contains("\n"))
-        {
-            String[] singleContent = copiedContent.split(":");
-            copiedContent = singleContent[1].replaceAll(" ", "");
-        }
-
-        return copiedContent;
     }
 
     public void deleteData()

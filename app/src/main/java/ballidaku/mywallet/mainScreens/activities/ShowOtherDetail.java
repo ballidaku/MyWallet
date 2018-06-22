@@ -1,18 +1,15 @@
 package ballidaku.mywallet.mainScreens.activities;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
@@ -54,22 +50,24 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
         activityShowOtherDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_show_other_detail);
         context = this;
-        setUpIds();
+        setUpViews();
 
        id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
 //       String type = getIntent().getStringExtra(MyConstant.TYPE);
 
+        getDataFromDatabase();
+
     }
 
-
-    @Override
-    protected void onResume()
+    private void setUpViews()
     {
-        super.onResume();
-        selectData();
+        setSupportActionBar(activityShowOtherDetailsBinding.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void selectData()
+
+    private void getDataFromDatabase()
     {
 
         final OtherDetailsDataModel data = new OtherDetailsDataModel();
@@ -86,6 +84,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void refreshData()
     {
         activityShowOtherDetailsBinding.editTextHeadingValue.setText(otherDetailsDataModel.getHeading());
@@ -112,8 +111,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewShow = view.findViewById(R.id.imageViewShow);
 
-                    editTextTitle.setOnTouchListener(new MyTouchListener(editTextValue));
-                    Log.e(TAG, "type  " + type);
+
                     if (type.equals(MyConstant.TEXT))
                     {
                         imageViewShow.setVisibility(View.GONE);
@@ -123,6 +121,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     {
                         editTextValue.setTag(MyConstant.INVISIBLE);
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        editTextValue.setMaxLines(1);
 
                     }
 
@@ -151,6 +150,11 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
+                    editTextValue.setTag(title);
+                    editTextList.add(editTextValue);
+
+                    editTextValue.setOnTouchListener(CommonMethods.getInstance().new MyTouchListener(context, editTextValue));
+
                     activityShowOtherDetailsBinding.linearLayoutAddViews.addView(view);
                 }
             }
@@ -167,14 +171,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         return CommonMethods.getInstance().decrypt(context, data);
     }
 
-    private void setUpIds()
-    {
-        setSupportActionBar(activityShowOtherDetailsBinding.toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -197,7 +194,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
             case R.id.action_edit:
 
                 Intent intent = new Intent(context, AddOtherDetail.class);
-                intent.putExtra(MyConstant.LIST_ITEM_DATA, (Serializable) otherDetailsDataModel);
+                intent.putExtra(MyConstant.LIST_ITEM_DATA,otherDetailsDataModel);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
                 startActivityForResult(intent, UPDATE_DETAILS_RESPONSE);
 
@@ -205,13 +202,13 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
             case R.id.action_copy:
 
-                copyContent();
+                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context,editTextList));
 
                 break;
 
             case R.id.action_share:
 
-                shareContent();
+                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context,editTextList));
 
                 break;
 
@@ -235,135 +232,25 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public String getData()
-    {
-
-        String copiedContent = "";
-
-        for (int i = 0; i < editTextList.size(); i++)
-        {
-            if (editTextList.get(i).getCompoundDrawables()[2].getConstantState().equals(getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
-            {
-                String content = editTextList.get(i).getTag().toString() + MyConstant.SPACE + editTextList.get(i).getText().toString();
-                copiedContent += copiedContent.isEmpty() ? content : "\n" + content;
-
-            }
-        }
-
-        //for copying single item
-        if (!copiedContent.isEmpty() && !copiedContent.contains("\n"))
-        {
-            String[] singleContent = copiedContent.split(":");
-            copiedContent = singleContent[1].replaceAll(" ", "");
-        }
-
-        return copiedContent;
-    }
-
-    public void copyContent()
-    {
-        String copiedContent = getData();
-
-        if (!copiedContent.isEmpty())
-        {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Copied Text", copiedContent);
-            clipboard.setPrimaryClip(clip);
-
-            CommonMethods.getInstance().show_Toast(context, "Data Copied");
-        }
-        else
-        {
-            CommonMethods.getInstance().show_Toast(context, "Please select atleast single item");
-        }
-
-        //Log.e(TAG, copiedContent);
-    }
-
-    public void shareContent()
-    {
-        String sharedContent = getData();
-
-        if (!sharedContent.isEmpty())
-        {
-            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Account Details");
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, sharedContent);
-            startActivity(Intent.createChooser(sharingIntent, "Share Using"));
-        }
-        else
-        {
-            CommonMethods.getInstance().show_Toast(context, "Please select atleast single item");
-        }
-    }
-
     public void deleteData()
     {
-
         new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.DELETE, new OnResultInterface<D>()
         {
             @Override
             public void OnCompleted(D data)
             {
-                Log.e(TAG, data + "--");
-
                 finish();
-
             }
         });
     }
 
-    class MyTouchListener implements View.OnTouchListener
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-
-        EditText editText;
-
-        public MyTouchListener(EditText editText)
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_DETAILS_RESPONSE)
         {
-            this.editText = editText;
-            // this.editText.setEnabled(false);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
-            final int DRAWABLE_LEFT = 0;
-            final int DRAWABLE_TOP = 1;
-            final int DRAWABLE_RIGHT = 2;
-            final int DRAWABLE_BOTTOM = 3;
-
-            //  Log.e("hello", "hello1");
-
-            if (event.getAction() == MotionEvent.ACTION_UP)
-            {
-//                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-                if (!editText.getText().toString().trim().isEmpty())
-                {
-
-                    Drawable left = editText.getCompoundDrawables()[DRAWABLE_LEFT];
-                    Drawable right;
-
-                    Drawable alreadyRight = editText.getCompoundDrawables()[DRAWABLE_RIGHT];
-                    Drawable unSelected = getResources().getDrawable(R.drawable.ic_check_unselected);
-
-                    if (unSelected.getConstantState().equals(alreadyRight.getConstantState()))
-                    {
-                        right = getResources().getDrawable(R.drawable.ic_check_selected);
-                    }
-                    else
-                    {
-                        right = unSelected;
-                    }
-
-                    editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
-
-                    // Log.e("hello", "hello2");
-
-                    return true;
-                }
-            }
-            return false;
+            getDataFromDatabase();
         }
     }
 

@@ -64,6 +64,7 @@
                     android:background="@android:color/transparent"
                     android:hint="Value"
                     android:inputType="text"
+                    android:drawablePadding="@dimen/_5sdp"
                     android:maxLines="1"
                     android:minLines="1"
                     android:textColor="@color/colorEditText"
