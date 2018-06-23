@@ -58,6 +58,10 @@
     <string name="add_details">ADD DETAILS</string>
 
     <string name="title_value_validation">Title or Value data should not be empty</string>
+    <string name="change_passcode">Change Passcode</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
 
 
 </resources>

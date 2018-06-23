@@ -23,21 +23,68 @@
             android:id="@+id/cardViewChangeMPIN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_5sdp"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="3dp">
+            card_view:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_10sdp"
-                android:text="Change MPIN"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold"/>
+                android:text="@string/change_passcode"
+                android:textSize="@dimen/heading"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewExportData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/export_data"
+                android:textSize="@dimen/heading"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewImportData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/import_data"
+                android:textSize="@dimen/heading"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"/>
         </android.support.v7.widget.CardView>
 
 
@@ -45,18 +92,22 @@
             android:id="@+id/cardViewSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="3dp">
+            card_view:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_10sdp"
-                android:text="Sign Out"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold"/>
+                android:text="@string/sign_out"
+                android:textSize="@dimen/heading"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"/>
         </android.support.v7.widget.CardView>
 
 

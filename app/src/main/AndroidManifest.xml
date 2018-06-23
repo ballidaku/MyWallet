@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ballidaku.mywallet">
 
+
     <application
         android:name=".commonClasses.MyApplication"
         android:icon="@mipmap/ic_app_logo"
@@ -43,9 +44,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".mainScreens.activities.ShowBankDetails"
+        <activity
+            android:name=".mainScreens.activities.ShowBankDetails"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".mPin.activity.MPINActivity"
@@ -59,11 +61,25 @@
         <activity
             android:name=".mainScreens.activities.AddOtherDetail"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".mainScreens.activities.ShowOtherDetail"
+        <activity
+            android:name=".mainScreens.activities.ShowOtherDetail"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ballidaku.mywallet"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+
+        </provider>
 
     </application>
 

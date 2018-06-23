@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="0dp"
-    android:background="@android:color/white"
+    app:cardBackgroundColor="@color/colorPrimary"
     android:padding="0dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
+    app:cardCornerRadius="@dimen/_14sdp"
+    app:cardMaxElevation="@dimen/_2sdp"
     card_view:cardPreventCornerOverlap="false">
 
     <LinearLayout
@@ -27,7 +29,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:text="Bank Details"
-            android:textColor="@color/colorEditText"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/headingChild"
             android:textStyle="bold" />
 

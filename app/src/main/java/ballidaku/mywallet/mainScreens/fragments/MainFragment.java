@@ -30,40 +30,42 @@ import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
-import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
 
 /**
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment<D> extends Fragment implements View.OnClickListener {
+public class MainFragment<D> extends Fragment implements View.OnClickListener
+{
     String TAG = MainFragment.class.getSimpleName();
     View view = null;
     Context context;
     MainFragmentAdapter mainFragmentAdapter;
-    //  ArrayList<AccountDetailsDataModel> mainList = new ArrayList<>();
     ArrayList<D> mainList = new ArrayList<>();
-
-//    public static final int ADD_DETAILS_RESPONSE = 3316;
 
     FragmentMainBinding fragmentMainBinding;
 
-    public MainFragment() {
+    public MainFragment()
+    {
         // Required empty public constructor
     }
 
-    static {
+    static
+    {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (view == null) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        if (view == null)
+        {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
             view = fragmentMainBinding.getRoot();
             context = getActivity();
@@ -74,22 +76,27 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         refresh();
     }
 
-    public void setUpViews() {
+    public void setUpViews()
+    {
         mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
         fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
             @Override
-            public int getSpanSize(int position) {
-                switch (mainFragmentAdapter.getItemViewType(position)) {
+            public int getSpanSize(int position)
+            {
+                switch (mainFragmentAdapter.getItemViewType(position))
+                {
                     case MainFragmentAdapter.TYPE_HEADER_BANK_DETAILS:
                         return 2;
 
@@ -106,32 +113,23 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
             }
         });
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
-
-//        mainFragmentAdapter.setOnItemClickListener(new BankAccountsAdapter.MyClickListener()
-//        {
-//            @Override
-//            public void onItemClick(int position, View v)
-//            {
-//
-//                Intent intent = new Intent(getActivity(), ShowBankDetails.class);
-//                intent.putExtra(MyConstant.LIST_ITEM_DATA, mainList.get(position));
-//                startActivity(intent);
-//            }
-//        });
-
         fragmentMainBinding.floatingActionButtonBankDetails.setOnClickListener(this);
         fragmentMainBinding.floatingActionButtonOtherDetails.setOnClickListener(this);
     }
 
 
-    private void refresh() {
+    private void refresh()
+    {
         mainList.clear();
-        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>() {
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+        {
             @Override
-            public void OnCompleted(D data) {
+            public void OnCompleted(D data)
+            {
                 Log.e(TAG, data + "--");
 
-                if (((ArrayList<D>) data).size() > 0) {
+                if (((ArrayList<D>) data).size() > 0)
+                {
                     final AccountDetailsDataModel accountDetailsDataModel = new AccountDetailsDataModel();
                     accountDetailsDataModel.setType(getResources().getString(R.string.bank_detail));
                     ((ArrayList<D>) data).add(0, (D) accountDetailsDataModel);
@@ -139,12 +137,15 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
                 }
                 mainList.addAll((ArrayList<D>) data);
 
-                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>() {
+                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+                {
                     @Override
-                    public void OnCompleted(D data) {
+                    public void OnCompleted(D data)
+                    {
                         Log.e(TAG, data + "--");
 
-                        if (((ArrayList<D>) data).size() > 0) {
+                        if (((ArrayList<D>) data).size() > 0)
+                        {
                             final OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
                             otherDetailsDataModel.setType(getResources().getString(R.string.other_detail));
                             ((ArrayList<D>) data).add(0, (D) otherDetailsDataModel);
@@ -159,15 +160,16 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
             case R.id.floatingActionButtonBankDetails:
-
                 fragmentMainBinding.floatingActionMenu.close(true);
 
                 Intent intent = new Intent(context, AddBankDetails.class);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-                startActivityForResult(intent, ADD_DETAILS_RESPONSE);
+                startActivity(intent);
 
                 break;
 
@@ -181,24 +183,4 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-//    public interface BankDetails
-//    {
-//        public void show_bank_details(HashMap<String, Object> map);
-//    }
-
- /*   @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode == Activity.RESULT_OK && requestCode == ADD_DETAILS_RESPONSE)
-        {
-            HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
-
-//            MyFirebase.getInstance().createBankDetails(context, hashMap);
-        }
-    }*/
-
 }

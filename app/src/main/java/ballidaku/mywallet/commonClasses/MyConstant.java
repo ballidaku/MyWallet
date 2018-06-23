@@ -19,6 +19,11 @@ public class MyConstant {
 
 
 
+    public static final String HOME="Home";
+    public static final String SETTINGS="Settings";
+
+
+
     public static final String INSERT="insert";
     public static final String DELETE="delete";
     public static final String UPDATE="update";
@@ -77,4 +82,7 @@ public class MyConstant {
     public static final String CONFIRM_PIN_AFTER_CHANGE="confirm_pin_after_change";
 
     public static final String GET_ALL = "get_all";
+
+
+    public static final int ADD_DETAILS_RESPONSE = 3316;
 }

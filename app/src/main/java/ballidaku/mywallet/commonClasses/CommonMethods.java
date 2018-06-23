@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,17 +25,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ballidaku.mywallet.R;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 05/03/17.
  */
-public class CommonMethods {
+public class CommonMethods<D>
+{
     private String TAG = "CommonMethods";
 
     public static Toast toast;
@@ -40,13 +53,16 @@ public class CommonMethods {
 
     private static CommonMethods instance = new CommonMethods();
 
-    public static CommonMethods getInstance() {
+    public static CommonMethods getInstance()
+    {
         return instance;
     }
 
 
-    public void show_Toast(Context context, String text) {
-        if (toast != null) {
+    public void show_Toast(Context context, String text)
+    {
+        if (toast != null)
+        {
             toast.cancel();
         }
         toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
@@ -57,9 +73,11 @@ public class CommonMethods {
 
     /*TO SHOW SNACKBAR*/
 
-    public void show_snackbar(View view, Context context, String message) {
+    public void show_snackbar(View view, Context context, String message)
+    {
 
-        if (snackbar != null) {
+        if (snackbar != null)
+        {
             snackbar.dismiss();
         }
 
@@ -73,7 +91,8 @@ public class CommonMethods {
     }
 
 
-    public void switchfragment(Fragment fromWhere, Fragment toWhere) {
+    public void switchfragment(Fragment fromWhere, Fragment toWhere)
+    {
         FragmentTransaction fragmentTransaction = fromWhere.getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container_body, toWhere);
         fragmentTransaction.addToBackStack(null);
@@ -81,7 +100,8 @@ public class CommonMethods {
 
     }
 
-    public void switchfragment(Context context, Fragment toWhere) {
+    public void switchfragment(Context context, Fragment toWhere)
+    {
 
         FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container_body, toWhere);
@@ -90,9 +110,11 @@ public class CommonMethods {
 
     }
 
-    public void hideKeypad(Activity activity) {
+    public void hideKeypad(Activity activity)
+    {
         View view = activity.getCurrentFocus();
-        if (view != null) {
+        if (view != null)
+        {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
@@ -101,18 +123,23 @@ public class CommonMethods {
     /**
      * Converting dp to pixel
      */
-    public int dpToPx(Context context, int dp) {
+    public int dpToPx(Context context, int dp)
+    {
         Resources r = context.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    public String setSpaceFormat(String value) {
+    public String setSpaceFormat(String value)
+    {
         value = value.replaceAll(" ", "");
         DecimalFormat df;
 
-        if (value.length() == 19) {
+        if (value.length() == 19)
+        {
             df = new DecimalFormat("####,####,####,####,###");
-        } else {
+        }
+        else
+        {
             df = new DecimalFormat("####,####,####,####,####,####");
         }
 
@@ -120,15 +147,19 @@ public class CommonMethods {
 
     }
 
-    public String encrypt(Context context, String message) {
+    public String encrypt(Context context, String message)
+    {
         return encrypt(message, MySharedPreference.getInstance().getUserEmail(context));
     }
 
-    public String encrypt(String message, String password) {
+    public String encrypt(String message, String password)
+    {
         String encryptedMsg = "";
-        try {
+        try
+        {
             encryptedMsg = AESCrypt.encrypt(password, message);
-        } catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException e)
+        {
             //handle error
         }
 
@@ -136,27 +167,33 @@ public class CommonMethods {
     }
 
 
-    public String decrypt(Context context, String message) {
+    public String decrypt(Context context, String message)
+    {
         return decrypt(message, MySharedPreference.getInstance().getUserEmail(context));
     }
 
-    public String decrypt(String encryptedMsg, String password) {
+    public String decrypt(String encryptedMsg, String password)
+    {
         String messageAfterDecrypt = "";
 
-        try {
+        try
+        {
             messageAfterDecrypt = AESCrypt.decrypt(password, encryptedMsg);
-        } catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException e)
+        {
             //handle error - could be due to incorrect password or tampered encryptedMsg
         }
 
         return messageAfterDecrypt;
     }
 
-    public boolean isValidEmail(CharSequence target) {
+    public boolean isValidEmail(CharSequence target)
+    {
         return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    public boolean isValidMobile(String phone) {
+    public boolean isValidMobile(String phone)
+    {
         boolean check = false;
         check = !Pattern.matches("[a-zA-Z]+", phone) && phone.length() == 10;
         return check;
@@ -167,31 +204,40 @@ public class CommonMethods {
     /*Copy Content*/
 
     /**********************************************************************************************/
-    public void copyContent(Context context, String data) {
+    public void copyContent(Context context, String data)
+    {
 
-        if (!data.isEmpty()) {
+        if (!data.isEmpty())
+        {
             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip2 = ClipData.newPlainText(context.getString(R.string.copied_text), data);
             clipboard.setPrimaryClip(clip2);
 
             CommonMethods.getInstance().show_Toast(context, context.getString(R.string.data_copied));
-        } else {
+        }
+        else
+        {
             CommonMethods.getInstance().show_Toast(context, context.getString(R.string.select_atleast_single));
         }
     }
 
     /**********************************************************************************************/
     /*Share Content*/
-    /**********************************************************************************************/
-    public void shareContent(Context context, String data) {
 
-        if (!data.isEmpty()) {
+    /**********************************************************************************************/
+    public void shareContent(Context context, String data)
+    {
+
+        if (!data.isEmpty())
+        {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, context.getString(R.string.account_details));
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, data);
             context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.share_using)));
-        } else {
+        }
+        else
+        {
             CommonMethods.getInstance().show_Toast(context, context.getString(R.string.select_atleast_single));
         }
     }
@@ -199,27 +245,33 @@ public class CommonMethods {
 
     /**********************************************************************************************/
     /*Copy Content*/
+
     /**********************************************************************************************/
-    public class MyTouchListener implements View.OnTouchListener {
+    public class MyTouchListener implements View.OnTouchListener
+    {
         EditText editText;
         Context context;
 
-        public MyTouchListener(Context context, EditText editText) {
+        public MyTouchListener(Context context, EditText editText)
+        {
             this.editText = editText;
             this.context = context;
         }
 
         @SuppressLint("ClickableViewAccessibility")
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        public boolean onTouch(View v, MotionEvent event)
+        {
             final int DRAWABLE_LEFT = 0;
             final int DRAWABLE_TOP = 1;
             final int DRAWABLE_RIGHT = 2;
             final int DRAWABLE_BOTTOM = 3;
 
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_UP)
+            {
 //                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-                if (!editText.getText().toString().trim().isEmpty()) {
+                if (!editText.getText().toString().trim().isEmpty())
+                {
 
                     Drawable left = editText.getCompoundDrawables()[DRAWABLE_LEFT];
                     Drawable right;
@@ -227,9 +279,12 @@ public class CommonMethods {
                     Drawable alreadyRight = editText.getCompoundDrawables()[DRAWABLE_RIGHT];
                     Drawable unSelected = context.getResources().getDrawable(R.drawable.ic_check_unselected);
 
-                    if (unSelected.getConstantState().equals(alreadyRight.getConstantState())) {
+                    if (unSelected.getConstantState().equals(alreadyRight.getConstantState()))
+                    {
                         right = context.getResources().getDrawable(R.drawable.ic_check_selected);
-                    } else {
+                    }
+                    else
+                    {
                         right = unSelected;
                     }
                     editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
@@ -242,10 +297,9 @@ public class CommonMethods {
 
     /**********************************************************************************************/
     /*Content to share and copy*/
+
     /**********************************************************************************************/
-
-
-    public String getData(Context context,ArrayList<EditText> editTextArrayList)
+    public String getData(Context context, ArrayList<EditText> editTextArrayList)
     {
         String copiedContent = "";
         for (int i = 0; i < editTextArrayList.size(); i++)
@@ -265,7 +319,100 @@ public class CommonMethods {
             copiedContent = singleContent[1];
         }
 
-        return copiedContent;
+        return copiedContent.trim();
+    }
+
+    /**********************************************************************************************/
+    /*Get all database in json format*/
+
+    /**********************************************************************************************/
+
+    public void getAllDatabaseData(final Context context)
+    {
+
+        final Gson gson = new Gson();
+
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+        {
+            @Override
+            public void OnCompleted(D data)
+            {
+                if (((ArrayList<D>) data).size() > 0)
+                {
+                    final AccountDetailsDataModel accountDetailsDataModel = new AccountDetailsDataModel();
+                    accountDetailsDataModel.setType(context.getString(R.string.bank_detail));
+                    ((ArrayList<D>) data).add(0, (D) accountDetailsDataModel);
+
+                }
+
+
+                final String bankDetails = gson.toJson(data);
+
+
+                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+                {
+                    @Override
+                    public void OnCompleted(D data)
+                    {
+
+                        if (((ArrayList<D>) data).size() > 0)
+                        {
+                            final OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
+                            otherDetailsDataModel.setType(context.getString(R.string.other_detail));
+                            ((ArrayList<D>) data).add(0, (D) otherDetailsDataModel);
+                        }
+
+                        String otherDetails = gson.toJson(data);
+
+
+                        writeToFile(context, bankDetails + "----------" + otherDetails);
+
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void writeToFile(Context context, String data)
+    {
+        try
+        {
+            String fileName = context.getString(R.string.app_name) + ".txt";
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+
+            File directory = context.getFilesDir();
+            File file = new File(directory, fileName);
+
+            Log.e(TAG, "" + file.getAbsolutePath());
+
+            shareFileToGoogleDrive(context,file);
+
+        } catch (IOException e)
+        {
+            Log.e(TAG, "Exception File write failed: " + e.toString());
+        }
+    }
+
+    private void shareFileToGoogleDrive(Context context, File path)
+    {
+        Log.e(TAG, "" + "file://" + path.getAbsolutePath());
+
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        if (path.exists())
+        {
+            intentShareFile.setType("text/*");
+
+            Uri fileUri = FileProvider.getUriForFile(context, "ballidaku.mywallet", path);
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri);
+//            intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File...");
+//            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+            intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
+        }
     }
 
 }

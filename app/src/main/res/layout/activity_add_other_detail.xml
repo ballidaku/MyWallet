@@ -29,9 +29,8 @@
             android:layout_marginLeft="@dimen/_3sdp"
             android:layout_marginRight="@dimen/_3sdp"
             app:cardUseCompatPadding="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            card_view:cardCornerRadius="@dimen/_5sdp"
-            card_view:cardElevation="@dimen/_2sdp">
+            card_view:cardCornerRadius="@dimen/_20sdp"
+            card_view:cardMaxElevation="@dimen/_2sdp">
 
 
             <EditText
@@ -46,8 +45,8 @@
                 android:minLines="1"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/headingChild"
-                android:textColor="@color/colorEditText"
+                android:textSize="@dimen/heading"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_vertical"/>
 
 

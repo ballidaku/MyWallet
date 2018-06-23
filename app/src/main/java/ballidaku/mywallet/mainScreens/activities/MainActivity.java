@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
+import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
-import ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
 import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
 
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String TAG = MainActivity.class.getSimpleName();
     Context context;
     DrawerLayout drawer;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void setUpViews()
     {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -46,18 +47,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
+
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerLayout = navigationView.getHeaderView(0);
-        ;
         TextView textViewName = headerLayout.findViewById(R.id.textViewName);
         TextView textViewEmail = headerLayout.findViewById(R.id.textViewEmail);
 
         textViewName.setText(MySharedPreference.getInstance().getUserName(context));
         textViewEmail.setText(MySharedPreference.getInstance().getUserEmail(context));
 
-        CommonMethods.getInstance().switchfragment(context, new MainFragment());
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
     }
 
     @Override
@@ -84,30 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-  /*  @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }*/
-
-  /*  @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
@@ -117,28 +95,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home)
         {
-            CommonMethods.getInstance().switchfragment(context, new BankAccountsFragment());
-        }
-        /*else if (id == R.id.nav_gallery)
-        {
+            toolbar.setTitle(MyConstant.HOME);
 
+            CommonMethods.getInstance().switchfragment(context, new MainFragment());
         }
-        else if (id == R.id.nav_slideshow)
-        {
-
-        }*/
         else if (id == R.id.nav_settings)
         {
+            toolbar.setTitle(MyConstant.SETTINGS);
             CommonMethods.getInstance().switchfragment(context, new SettingFragment());
         }
-       /* else if (id == R.id.nav_share)
-        {
-
-        }
-        else if (id == R.id.nav_send)
-        {
-
-        }*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
