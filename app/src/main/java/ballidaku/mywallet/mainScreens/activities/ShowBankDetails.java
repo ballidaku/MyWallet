@@ -144,8 +144,9 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
-                    ImageView imageViewShow = view.findViewById(R.id.imageViewShow);
-
+                    final ImageView imageViewShow = view.findViewById(R.id.imageViewShow);
+                    imageViewShow.setImageResource(R.drawable.ic_visibility_off);
+                    imageViewShow.setTag(MyConstant.HIDDEN);
 
                     if (type.equals(MyConstant.TEXT))
                     {
@@ -154,7 +155,6 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     }
                     else
                     {
-                        editTextValue.setTag(MyConstant.INVISIBLE);
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         editTextValue.setMaxLines(1);
                     }
@@ -164,16 +164,18 @@ public class ShowBankDetails<D> extends AppCompatActivity
                         @Override
                         public void onClick(View view)
                         {
-                            String tag = (String) editTextValue.getTag();
-                            if (tag.equals(MyConstant.INVISIBLE))
+                            String tag = (String) imageViewShow.getTag();
+                            if (tag.equals(MyConstant.HIDDEN))
                             {
-                                editTextValue.setTag(MyConstant.VISIBLE);
+                                imageViewShow.setTag(MyConstant.VISIBLE);
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                                imageViewShow.setImageResource(R.drawable.ic_visibility_on);
                             }
                             else
                             {
-                                editTextValue.setTag(MyConstant.INVISIBLE);
+                                imageViewShow.setTag(MyConstant.HIDDEN);
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                imageViewShow.setImageResource(R.drawable.ic_visibility_off);
                             }
                         }
                     });

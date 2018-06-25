@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -106,14 +105,14 @@ public class LoginActivity extends AppCompatActivity
 
                     if (task.isSuccessful())
                     {
-                        Log.e(TAG, "signInWithEmail:success");
+                       // Log.e(TAG, "signInWithEmail:success");
                         MyFirebase.getInstance().logInUser(context, email);
                     }
                     else
                     {
                         CommonDialogs.getInstance().dialog.dismiss();
                         // If sign in fails, display a message to the user.
-                        Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
+                        //Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
                         CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
                     }
                 }

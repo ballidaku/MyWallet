@@ -3,7 +3,7 @@ package ballidaku.mywallet.mPin;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,6 +26,7 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private static final int VIEW_TYPE_NUMBER = 0;
     private static final int VIEW_TYPE_DELETE = 1;
+    private static final int VIEW_TYPE_RESET = 2;
 
     private Context mContext;
     private CustomizationOptionsBundle mCustomizationOptionsBundle;
@@ -36,14 +37,15 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private int[] mKeyValues;
 
-    public PinLockAdapter(Context context)
+    PinLockAdapter(Context context)
     {
         this.mContext = context;
         this.mKeyValues = getAdjustKeyValues(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0});
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -53,16 +55,21 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = inflater.inflate(R.layout.layout_number_item, parent, false);
             viewHolder = new NumberViewHolder(view);
         }
-        else
+        else  if (viewType == VIEW_TYPE_DELETE)
         {
             View view = inflater.inflate(R.layout.layout_delete_item, parent, false);
             viewHolder = new DeleteViewHolder(view);
+        }
+        else
+        {
+            View view = inflater.inflate(R.layout.layout_delete_item, parent, false);
+            viewHolder = new ResetViewHolder(view);
         }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
     {
 
         if (holder.getItemViewType() == VIEW_TYPE_NUMBER)
@@ -75,51 +82,62 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             DeleteViewHolder vh2 = (DeleteViewHolder) holder;
             configureDeleteButtonHolder(vh2);
         }
+        else if (holder.getItemViewType() == VIEW_TYPE_RESET)
+        {
+            ResetViewHolder vh3 = (ResetViewHolder) holder;
+            configureResetButtonHolder(vh3);
+        }
     }
 
     private void configureNumberButtonHolder(NumberViewHolder holder, int position)
     {
         if (holder != null)
         {
-            if (position == 9)
-            {
-//                holder.mNumberButton.setVisibility(View.GONE);
-                holder.mNumberButton.setText("Reset");
-                holder.mNumberButton.setTag("reset");
-            }
-            else
-            {
+//            if (position == 9)
+//            {
+////                holder.mNumberButton.setVisibility(View.GONE);
+//                holder.mNumberButton.setText("Reset");
+//                holder.mNumberButton.setTag("reset");
+//            }
+//            else
+//            {
                 holder.mNumberButton.setText(String.valueOf(mKeyValues[position]));
                 holder.mNumberButton.setVisibility(View.VISIBLE);
                 holder.mNumberButton.setTag(mKeyValues[position]);
-            }
+//            }
 
             if (mCustomizationOptionsBundle != null)
             {
                 holder.mNumberButton.setTextColor(mCustomizationOptionsBundle.getTextColor());
                 if (mCustomizationOptionsBundle.getButtonBackgroundDrawable() != null)
                 {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-                    {
-                        holder.mNumberButton.setBackgroundDrawable(mCustomizationOptionsBundle.getButtonBackgroundDrawable());
-                    }
-                    else
-                    {
-                        holder.mNumberButton.setBackground(mCustomizationOptionsBundle.getButtonBackgroundDrawable());
-                    }
+                    holder.mNumberButton.setBackground(mCustomizationOptionsBundle.getButtonBackgroundDrawable());
                 }
 
                 holder.mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCustomizationOptionsBundle.getTextSize());
 
 
 //                Log.e("POS ",""+position);
-                if (position == 9)
-                {
-//                    Log.e("POS IN ",""+position);
-                    holder.mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
-                }
+//                if (position == 9)
+//                {
+////                    Log.e("POS IN ",""+position);
+//                    holder.mNumberButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
+//                }
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mCustomizationOptionsBundle.getButtonSize(),mCustomizationOptionsBundle.getButtonSize());
                 holder.mNumberButton.setLayoutParams(params);
+            }
+        }
+    }
+
+    private void configureResetButtonHolder(ResetViewHolder holder)
+    {
+        if (holder != null)
+        {
+
+            if (mCustomizationOptionsBundle != null)
+            {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,80);
+                holder.mButtonImage.setLayoutParams(params);
             }
         }
     }
@@ -137,7 +155,7 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 holder.mButtonImage.setColorFilter(mCustomizationOptionsBundle.getTextColor(),PorterDuff.Mode.SRC_ATOP);
 //                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mCustomizationOptionsBundle.getDeleteButtonSize(),mCustomizationOptionsBundle.getDeleteButtonSize());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,80);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(90,90);
 
 //                Log.e("getDeleteButtonSize ",""+mCustomizationOptionsBundle.getDeleteButtonSize());
                 holder.mButtonImage.setLayoutParams(params);
@@ -161,6 +179,10 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (position == getItemCount() - 1)
         {
             return VIEW_TYPE_DELETE;
+        }
+        else if(position== getItemCount()-3)
+        {
+            return VIEW_TYPE_RESET;
         }
         return VIEW_TYPE_NUMBER;
     }
@@ -247,7 +269,7 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public NumberViewHolder(final View itemView)
         {
             super(itemView);
-            mNumberButton = (Button) itemView.findViewById(R.id.button);
+            mNumberButton =  itemView.findViewById(R.id.button);
             mNumberButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -256,20 +278,52 @@ public class PinLockAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (mOnNumberClickListener != null)
                     {
 
-                        if (v.getTag().equals("reset"))
+                       /* if (v.getTag().equals("reset"))
                         {
 
                             onResetClickListener.onResetClicked();
                         }
                         else
-                        {
+                        {*/
                             mOnNumberClickListener.onNumberClicked((Integer) v.getTag());
-                        }
+//                        }
                     }
                 }
             });
         }
     }
+
+    public class ResetViewHolder extends RecyclerView.ViewHolder
+    {
+        LinearLayout mDeleteButton;
+        ImageView mButtonImage;
+
+        public ResetViewHolder(final View itemView)
+        {
+            super(itemView);
+            mDeleteButton = itemView.findViewById(R.id.button);
+            mButtonImage = itemView.findViewById(R.id.buttonImage);
+            mButtonImage.setImageResource(R.drawable.ic_reset);
+
+//            if (mCustomizationOptionsBundle.isShowDeleteButton() && mPinLength > 0)
+//            {
+                mDeleteButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Log.e("DELETE Adapter", "setOnClickListener");
+
+                        if (onResetClickListener != null)
+                        {
+                            onResetClickListener.onResetClicked();
+                        }
+                    }
+                });
+//            }
+        }
+    }
+
 
     public class DeleteViewHolder extends RecyclerView.ViewHolder
     {

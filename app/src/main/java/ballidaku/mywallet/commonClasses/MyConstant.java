@@ -73,6 +73,7 @@ public class MyConstant {
     public static final String TEXT="Text";
     public static final String VISIBLE="visible";
     public static final String INVISIBLE="invisible";
+    public static final String HIDDEN="hidden";
 
 
     public static final String MPIN="mpin";

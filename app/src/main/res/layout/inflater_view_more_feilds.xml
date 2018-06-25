@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:padding="@dimen/_5sdp"
-                        app:srcCompat="@drawable/ic_view" />
+                        app:srcCompat="@drawable/ic_visibility_on" />
 
                 </LinearLayout>
 
