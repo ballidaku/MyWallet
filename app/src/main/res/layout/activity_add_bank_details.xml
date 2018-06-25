@@ -58,7 +58,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Bank Name"
+                            android:text="@string/bank_name"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter bank name"
+                            android:hint="@string/enter_bank_name"
                             android:inputType="textCapWords"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -118,7 +118,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Account Holder Name"
+                            android:text="@string/account_holder_name"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -130,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter account holder name"
+                            android:hint="@string/enter_account_holder_name"
                             android:inputType="textCapWords"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -177,7 +177,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Account Number"
+                            android:text="@string/account_number"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter account number"
+                            android:hint="@string/enter_account_number"
                             android:inputType="phone"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -237,7 +237,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="IFSC"
+                            android:text="@string/ifsc"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -249,7 +249,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter IFSC"
+                            android:hint="@string/enter_ifsc"
                             android:inputType="textCapCharacters"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -296,7 +296,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="ATM Number"
+                            android:text="@string/atm_number"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -309,7 +309,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
                             android:digits="0123456789 "
-                            android:hint="Enter ATM number"
+                            android:hint="@string/enter_atm_number"
                             android:inputType="phone"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -357,7 +357,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="CVV"
+                            android:text="@string/cvv"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -369,7 +369,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter CVV"
+                            android:hint="@string/enter_cvv"
                             android:inputType="phone"
                             android:maxLength="3"
                             android:textColor="@color/colorEditText"
@@ -424,7 +424,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Valid From"
+                                android:text="@string/valid_from"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/heading"
                                 android:textStyle="bold"/>
@@ -436,7 +436,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@android:color/transparent"
-                                android:hint="Enter valid from"
+                                android:hint="@string/enter_valid_from"
                                 android:inputType="datetime"
                                 android:textColor="@color/colorEditText"
                                 android:textSize="@dimen/headingChild"/>
@@ -483,7 +483,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Valid Thru"
+                                android:text="@string/valid_thru"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/heading"
                                 android:textStyle="bold"/>
@@ -495,7 +495,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@android:color/transparent"
-                                android:hint="Enter valid thru"
+                                android:hint="@string/enter_valid_thru"
                                 android:inputType="datetime"
                                 android:textColor="@color/colorEditText"
                                 android:textSize="@dimen/headingChild"/>
@@ -543,7 +543,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Net Banking ID"
+                            android:text="@string/net_banking_id"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
                             android:textStyle="bold"/>
@@ -555,7 +555,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter net banking ID"
+                            android:hint="@string/enter_net_banking_id"
                             android:inputType="textCapSentences"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"/>
@@ -610,7 +610,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/_8sdp"
-                        android:text="Add More Feilds"
+                        android:text="@string/add_more"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_13sdp"
                         android:textStyle="bold"/>

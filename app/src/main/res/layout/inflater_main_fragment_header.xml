@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:text="Bank Details"
+            android:text="@string/bank_detail"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/headingChild"
             android:textStyle="bold" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
@@ -8,7 +8,7 @@
 
         <variable
             name="temp"
-            type="ballidaku.mywallet.mainScreens.activities.ShowOtherDetail"/>
+            type="ballidaku.mywallet.mainScreens.activities.ShowOtherDetail" />
     </data>
 
     <LinearLayout
@@ -27,7 +27,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/AppTheme.AppBarOverlay"
             app:title="DETAILS"
-            app:titleTextColor="@color/colorWhite"/>
+            app:titleTextColor="@color/colorWhite" />
 
 
         <ScrollView
@@ -55,30 +55,28 @@
                         android:id="@+id/editTextHeadingValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:background="@android:color/transparent"
-                        android:hint="Enter Heading"
-                        android:textStyle="bold"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="@string/enter_heading"
                         android:inputType="textCapWords"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:enabled="false"
-                        android:gravity="center"
                         android:padding="@dimen/_10sdp"
-                        android:textSize="@dimen/heading"
                         android:textColor="@color/colorPrimary"
-                        android:layout_gravity="center_vertical"/>
+                        android:textSize="@dimen/heading"
+                        android:textStyle="bold" />
 
 
                 </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    android:id="@+id/linearLayoutAddViews"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
-
-                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linearLayoutAddViews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
 
             </LinearLayout>
