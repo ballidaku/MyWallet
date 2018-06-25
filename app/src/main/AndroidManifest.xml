@@ -3,6 +3,8 @@
     package="ballidaku.mywallet">
 
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".commonClasses.MyApplication"
         android:icon="@mipmap/ic_app_logo"
@@ -71,7 +73,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="ballidaku.mywallet"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
 

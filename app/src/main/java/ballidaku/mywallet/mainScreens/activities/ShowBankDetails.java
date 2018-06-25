@@ -42,7 +42,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
     int id;
     ArrayList<EditText> editTextList;
 
-    int UPDATE_DETAILS_RESPONSE = 3317;
+
 
     ActivityShowBankDetailsBinding activityShowBankDetailsBinding;
 
@@ -226,7 +226,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                 Intent intent = new Intent(context, AddBankDetails.class);
                 intent.putExtra(MyConstant.LIST_ITEM_DATA, accountDetailsDataModel);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
-                startActivityForResult(intent, UPDATE_DETAILS_RESPONSE);
+                startActivityForResult(intent, MyConstant.UPDATE_DETAILS_RESPONSE);
 
                 break;
 
@@ -281,7 +281,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_DETAILS_RESPONSE)
+        if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.UPDATE_DETAILS_RESPONSE)
         {
             getDataFromDatabase();
         }

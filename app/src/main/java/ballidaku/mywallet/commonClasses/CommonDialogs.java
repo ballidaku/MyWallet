@@ -63,11 +63,31 @@ public class CommonDialogs
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Delete Entry")
-                .setMessage("Are you sure you want to delete this entry?")
+        builder.setTitle(context.getString(R.string.delete_entry))
+                .setMessage(context.getString(R.string.delete_confirmation))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteDetail.onDelete();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public void showImportAlertDialog(Context context, final CommonInterfaces.importData importData)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle(context.getString(R.string.import_data))
+                .setMessage(context.getString(R.string.import_confirmation))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        importData.onImportConfirmation();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

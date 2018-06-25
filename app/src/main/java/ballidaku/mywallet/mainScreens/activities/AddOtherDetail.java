@@ -209,7 +209,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
         if (headingName.isEmpty())
         {
-            CommonMethods.getInstance().show_Toast(context, "Header should not be empty");
+            CommonMethods.getInstance().showToast(context, "Header should not be empty");
             return;
         }
 
@@ -230,7 +230,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
             if (title.isEmpty() || value.isEmpty())
             {
-                CommonMethods.getInstance().show_Toast(context, "Title or Value data should not be empty");
+                CommonMethods.getInstance().showToast(context, "Title or Value data should not be empty");
                 return;
             }
 
@@ -262,7 +262,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                 @Override
                 public void OnCompleted(D data)
                 {
-                    CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.update_success));
+                    CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.update_success));
                     CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
 
                     Intent intent = new Intent();
@@ -279,7 +279,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                 @Override
                 public void OnCompleted(D data)
                 {
-                    CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.saved_success));
+                    CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
                     CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
                     finish();
 

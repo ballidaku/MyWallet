@@ -9,7 +9,6 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 /**
@@ -35,6 +34,10 @@ public interface OtherDetailsDataModelDao
 
     @Delete
     void delete(OtherDetailsDataModel accountTypeDataModel);
+
+
+    @Query("DELETE FROM "+MyConstant.OTHER_DETAILS)
+    int deleteAllOtherDetail();
 
     @Query("DELETE FROM " + MyConstant.OTHER_DETAILS + " WHERE id = :id")
     int deleteOtherDetail(int id);

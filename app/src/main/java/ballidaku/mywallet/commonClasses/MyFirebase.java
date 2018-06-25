@@ -72,7 +72,7 @@ public class MyFirebase
 
                     //MySharedPreference.getInstance().saveUser(context, map);
 
-                    CommonMethods.getInstance().show_Toast(context, "User created successfully");
+                    CommonMethods.getInstance().showToast(context, "User created successfully");
 
                   /*  Intent intent = new Intent(context, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

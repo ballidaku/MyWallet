@@ -40,7 +40,6 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
     ArrayList<EditText> editTextList=new ArrayList<>();
 
-    int UPDATE_DETAILS_RESPONSE = 3327;
     int id;
 
     @Override
@@ -196,7 +195,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                 Intent intent = new Intent(context, AddOtherDetail.class);
                 intent.putExtra(MyConstant.LIST_ITEM_DATA,otherDetailsDataModel);
                 intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
-                startActivityForResult(intent, UPDATE_DETAILS_RESPONSE);
+                startActivityForResult(intent, MyConstant.UPDATE_OTHER_DETAILS_RESPONSE);
 
                 break;
 
@@ -248,7 +247,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_DETAILS_RESPONSE)
+        if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.UPDATE_OTHER_DETAILS_RESPONSE)
         {
             getDataFromDatabase();
         }

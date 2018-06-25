@@ -23,9 +23,13 @@ public class MyConstant {
     public static final String SETTINGS="Settings";
 
 
+    public static final String SEPRATER="----------";
+
+
 
     public static final String INSERT="insert";
     public static final String DELETE="delete";
+    public static final String DELETE_ALL="delete_all";
     public static final String UPDATE="update";
     public static final String GET_ONE_ITEM="get_one_item";
 
@@ -85,4 +89,8 @@ public class MyConstant {
 
 
     public static final int ADD_DETAILS_RESPONSE = 3316;
+    public static final int UPDATE_DETAILS_RESPONSE = 3317;
+    public static final int UPDATE_OTHER_DETAILS_RESPONSE = 3318;
+    public static final int PICKFILE_REQUEST_CODE = 3319;
+    public static final int READ_FILE_REQUEST = 3320;
 }

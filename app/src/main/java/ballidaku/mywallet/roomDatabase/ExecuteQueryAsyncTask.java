@@ -44,6 +44,10 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().deleteAccountDetail(((AccountDetailsDataModel) data).getId()));
             }
+            else if (type.equalsIgnoreCase(MyConstant.DELETE_ALL))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().deleteAllAccountDetail());
+            }
             else if (type.equalsIgnoreCase(MyConstant.UPDATE))
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().update((AccountDetailsDataModel) data));
@@ -75,7 +79,10 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().deleteOtherDetail(((OtherDetailsDataModel) data).getId()));
             }
-
+            else if (type.equalsIgnoreCase(MyConstant.DELETE_ALL))
+            {
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().deleteAllOtherDetail());
+            }
             else if (type.equalsIgnoreCase(MyConstant.UPDATE))
             {
                 return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().update((OtherDetailsDataModel) data));

@@ -1,5 +1,6 @@
 package ballidaku.mywallet.mainScreens.fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ballidaku.mywallet.R;
+import ballidaku.mywallet.commonClasses.CommonDialogs;
+import ballidaku.mywallet.commonClasses.CommonInterfaces;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
@@ -62,13 +65,26 @@ public class SettingFragment extends Fragment implements View.OnClickListener
                 Intent intent = new Intent(context, MPINActivity.class);
                 intent.putExtra(MyConstant.MPIN, MyConstant.CHANGE_MPIN);
                 startActivity(intent);
-                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 
                 break;
 
 
             case R.id.cardViewExportData:
                 CommonMethods.getInstance().getAllDatabaseData(context);
+                break;
+
+
+            case R.id.cardViewImportData:
+                CommonDialogs.getInstance().showImportAlertDialog(context, new CommonInterfaces.importData()
+                {
+                    @Override
+                    public void onImportConfirmation()
+                    {
+                        String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.READ_FILE_REQUEST);
+                    }
+                });
                 break;
 
             case R.id.cardViewSignOut:
@@ -79,8 +95,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener
                 Intent intentSignOut = new Intent(context, LoginActivity.class);
                 intentSignOut.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentSignOut);
-                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-                ((MainActivity)context).finish();
+                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                ((MainActivity) context).finish();
 
                 break;
         }

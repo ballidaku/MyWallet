@@ -104,43 +104,43 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
 
         if (name.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_name));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_name));
         }
         else if (email.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_email));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_email));
         }
         else if (!CommonMethods.getInstance().isValidEmail(email))
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_valid_email));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_valid_email));
         }
         else if (phoneNumber.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_phone_number));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_phone_number));
         }
         else if (!CommonMethods.getInstance().isValidMobile(phoneNumber))
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.number_limit));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.number_limit));
         }
         else if (password.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_password));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_password));
         }
         else if (password.length() < 6)
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.password_limit));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.password_limit));
         }
         else if (confirmPassword.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_confirm_password));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.please_enter_confirm_password));
         }
         else if (confirmPassword.length() < 6)
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.confirm_password_limit));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.confirm_password_limit));
         }
         else if (!password.equals(confirmPassword))
         {
-            CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, getString(R.string.password_confirm_not_matched));
+            CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, getString(R.string.password_confirm_not_matched));
         }
         else
         {
@@ -172,7 +172,7 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure  ", task.getException());
 
-                        CommonMethods.getInstance().show_snackbar(activitySignUpBinding.getRoot(), context, task.getException().getMessage());
+                        CommonMethods.getInstance().showSnackbar(activitySignUpBinding.getRoot(), context, task.getException().getMessage());
                     }
 
                 }

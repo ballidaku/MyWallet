@@ -79,19 +79,19 @@ public class LoginActivity extends AppCompatActivity
 
         if (email.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_email));
+            CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_email));
         }
         else if (!CommonMethods.getInstance().isValidEmail(email))
         {
-            CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_valid_email));
+            CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_valid_email));
         }
         else if (password.isEmpty())
         {
-            CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_password));
+            CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, getString(R.string.please_enter_password));
         }
         else if (password.length() < 6)
         {
-            CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, getString(R.string.password_limit));
+            CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, getString(R.string.password_limit));
         }
         else
         {
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity
                         CommonDialogs.getInstance().dialog.dismiss();
                         // If sign in fails, display a message to the user.
                         Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
-                        CommonMethods.getInstance().show_snackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
+                        CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
                     }
                 }
             });

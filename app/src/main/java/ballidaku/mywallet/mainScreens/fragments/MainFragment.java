@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +125,7 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
             @Override
             public void OnCompleted(D data)
             {
-                Log.e(TAG, data + "--");
+//                Log.e(TAG, data + "--");
 
                 if (((ArrayList<D>) data).size() > 0)
                 {
@@ -142,7 +141,7 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
                     @Override
                     public void OnCompleted(D data)
                     {
-                        Log.e(TAG, data + "--");
+//                        Log.e(TAG, data + "--");
 
                         if (((ArrayList<D>) data).size() > 0)
                         {

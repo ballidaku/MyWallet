@@ -10,4 +10,9 @@ public interface CommonInterfaces
     {
         void onDelete();
     }
+
+    public interface importData
+    {
+        void onImportConfirmation();
+    }
 }

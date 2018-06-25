@@ -252,7 +252,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
 
             if (title.isEmpty() || value.isEmpty())
             {
-                CommonMethods.getInstance().show_Toast(context, getString(R.string.title_value_validation));
+                CommonMethods.getInstance().showToast(context, getString(R.string.title_value_validation));
                 return;
             }
 
@@ -292,7 +292,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                 @Override
                 public void OnCompleted(D data)
                 {
-                    CommonMethods.getInstance().show_Toast(context, context.getString(R.string.update_success));
+                    CommonMethods.getInstance().showToast(context, context.getString(R.string.update_success));
                     CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
 
                     Intent intent = new Intent();
@@ -308,7 +308,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                 @Override
                 public void OnCompleted(D data)
                 {
-                    CommonMethods.getInstance().show_Toast(context, context.getResources().getString(R.string.saved_success));
+                    CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
                     CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
                     finish();
 
