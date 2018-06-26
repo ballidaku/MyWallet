@@ -16,5 +16,7 @@
     <color name="colorGrayDark">#9d9e9e</color>
     <color name="colorBlack">#000000</color>
     <color name="colorUnselected">#B7B7B7</color>
+    <color name="colorDivider">#cacaca</color>
+    <color name="colorText">#1e1e1e</color>
 
 </resources>

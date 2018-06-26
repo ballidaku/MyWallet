@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity
     {
         context = this;
         mAuth = FirebaseAuth.getInstance();
+
+        activityLoginBinding.imageViewPasswordShowHide.setTag(false);
         MyClickHandlers handlers = new MyClickHandlers(this);
         activityLoginBinding.setHandlers(handlers);
     }
@@ -66,7 +69,26 @@ public class LoginActivity extends AppCompatActivity
 
         public void onForgotClicked(View view)
         {
+            CommonDialogs.getInstance().showForgotPasswordDialog(context, LoginActivity.this::forgotPassword);
+        }
 
+        public void onPasswordShowHideClicked(View view)
+        {
+            boolean isVisible = (boolean) activityLoginBinding.imageViewPasswordShowHide.getTag();
+            if (isVisible)
+            {
+                activityLoginBinding.editTextPassword.setInputType( InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                activityLoginBinding.imageViewPasswordShowHide.setTag(false);
+                activityLoginBinding.imageViewPasswordShowHide.setImageResource(R.drawable.ic_visibility_off);
+
+            }
+            else
+            {
+                activityLoginBinding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                activityLoginBinding.imageViewPasswordShowHide.setTag(true);
+                activityLoginBinding.imageViewPasswordShowHide.setImageResource(R.drawable.ic_visibility_on);
+            }
+            activityLoginBinding.editTextPassword.setTextAppearance(context, R.style.EditTextTheme);
         }
     }
 
@@ -105,7 +127,7 @@ public class LoginActivity extends AppCompatActivity
 
                     if (task.isSuccessful())
                     {
-                       // Log.e(TAG, "signInWithEmail:success");
+                        // Log.e(TAG, "signInWithEmail:success");
                         MyFirebase.getInstance().logInUser(context, email);
                     }
                     else
@@ -118,6 +140,28 @@ public class LoginActivity extends AppCompatActivity
                 }
             });
         }
+    }
+
+
+    public void forgotPassword(String email)
+    {
+
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.email_reset));
+                        }
+                        else
+                        {
+                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.retry_again));
+                        }
+                    }
+                });
     }
 
 }

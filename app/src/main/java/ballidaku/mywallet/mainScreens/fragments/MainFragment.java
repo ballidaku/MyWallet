@@ -18,8 +18,6 @@ import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.adapters.MainFragmentAdapter;
-import ballidaku.mywallet.commonClasses.CommonMethods;
-import ballidaku.mywallet.commonClasses.GridSpacingItemDecoration;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
@@ -87,7 +85,7 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
-        fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
+       // fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
         {

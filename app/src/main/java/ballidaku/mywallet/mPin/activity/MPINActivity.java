@@ -35,7 +35,7 @@ public class MPINActivity extends AppCompatActivity
 
     Context context;
 
-    String savedMPIN="";
+    String savedMPIN = "";
 
 
     @Override
@@ -49,19 +49,19 @@ public class MPINActivity extends AppCompatActivity
 
         context = this;
 
-        if(getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.EMPTY))
+        if (getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.EMPTY))
         {
             TYPE = MyConstant.FIRST_TIME;
         }
-        else if(getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.CHECK_MPIN))
+        else if (getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.CHECK_MPIN))
         {
             TYPE = MyConstant.CHECK_MPIN;
-            savedMPIN=MySharedPreference.getInstance().getMPIN(context);
+            savedMPIN = MySharedPreference.getInstance().getMPIN(context);
         }
-        else if(getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.CHANGE_MPIN))
+        else if (getIntent().getStringExtra(MyConstant.MPIN).equals(MyConstant.CHANGE_MPIN))
         {
             TYPE = MyConstant.CHANGE_MPIN;
-            savedMPIN=MySharedPreference.getInstance().getMPIN(context);
+            savedMPIN = MySharedPreference.getInstance().getMPIN(context);
         }
 
         profile_name = (TextView) findViewById(R.id.profile_name);
@@ -140,7 +140,7 @@ public class MPINActivity extends AppCompatActivity
             case MyConstant.NEW_PIN_AFTER_CHANGE:
             case MyConstant.CONFIRM_PIN_AFTER_CHANGE:
 
-                resetTime="";
+                resetTime = "";
                 TYPE = MyConstant.NEW_PIN_AFTER_CHANGE;
                 setHeading();
 
@@ -155,8 +155,6 @@ public class MPINActivity extends AppCompatActivity
         @Override
         public void onComplete(String pin)
         {
-            Log.e(TAG, "Pin complete: " + pin);
-
             if (TYPE.equals(MyConstant.FIRST_TIME))
             {
                 firstTime = pin;
@@ -167,13 +165,9 @@ public class MPINActivity extends AppCompatActivity
             else if (TYPE.equals(MyConstant.CONFIRM_FIRST_TIME) && firstTime.equals(pin))
             {
                 Toast.makeText(context, "MPIN saved successfully", Toast.LENGTH_SHORT).show();
-                MySharedPreference.getInstance().saveMPIN(context,pin);
+                MySharedPreference.getInstance().saveMPIN(context, pin);
 
                 goToMainActivity();
-
-
-               /* TYPE = MyConstant.CHECK_MPIN;
-                setReset();*/
             }
             else if (TYPE.equals(MyConstant.CONFIRM_FIRST_TIME) && !firstTime.equals(pin))
             {
@@ -182,12 +176,7 @@ public class MPINActivity extends AppCompatActivity
             }
             else if (TYPE.equals(MyConstant.CHECK_MPIN) && savedMPIN.equals(pin))
             {
-                //Toast.makeText(context, "Successfully Loged IN", Toast.LENGTH_SHORT).show();
-
-               /* TYPE = MyConstant.CHAMGE_PIN;
-                setReset();*/
-
-               goToMainActivity();
+                goToMainActivity();
 
             }
             else if (TYPE.equals(MyConstant.CHECK_MPIN) && !savedMPIN.equals(pin))
@@ -215,11 +204,11 @@ public class MPINActivity extends AppCompatActivity
             else if (TYPE.equals(MyConstant.CONFIRM_PIN_AFTER_CHANGE) && resetTime.equals(pin))
             {
                 Toast.makeText(context, "MPIN changed successfully", Toast.LENGTH_SHORT).show();
-                MySharedPreference.getInstance().saveMPIN(context,pin);
+                MySharedPreference.getInstance().saveMPIN(context, pin);
                /* firstTime = pin;
                 TYPE = MyConstant.CHECK_MPIN;
                 setReset();*/
-               finish();
+                finish();
 
             }
             else if (TYPE.equals(MyConstant.CONFIRM_PIN_AFTER_CHANGE) && !resetTime.equals(pin))
@@ -229,7 +218,7 @@ public class MPINActivity extends AppCompatActivity
         }
 
 
-       public void goToMainActivity()
+        public void goToMainActivity()
         {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);

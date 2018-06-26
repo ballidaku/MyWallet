@@ -8,7 +8,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,8 +42,9 @@ public class ShowBankDetails<D> extends AppCompatActivity
     ArrayList<EditText> editTextList;
 
 
-
     ActivityShowBankDetailsBinding activityShowBankDetailsBinding;
+
+    boolean isPasscodeVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,14 +87,10 @@ public class ShowBankDetails<D> extends AppCompatActivity
         final AccountDetailsDataModel data = new AccountDetailsDataModel();
         data.setId(id);
 
-        new ExecuteQueryAsyncTask<>(context, data, MyConstant.GET_ONE_ITEM, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, data, MyConstant.GET_ONE_ITEM, (OnResultInterface<D>) data1 ->
         {
-            @Override
-            public void OnCompleted(D data)
-            {
-                accountDetailsDataModel = (AccountDetailsDataModel) data;
-                refreshData();
-            }
+            accountDetailsDataModel = (AccountDetailsDataModel) data1;
+            refreshData();
         });
     }
 
@@ -140,7 +136,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     String value = jsonObject.getString(MyConstant.VALUE);
                     String type = jsonObject.getString(MyConstant.TYPE);
 
-                    final View view = getLayoutInflater().inflate(R.layout.inflater_view_more_feilds, null);
+                    @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.inflater_view_more_feilds, null);
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
@@ -159,13 +155,13 @@ public class ShowBankDetails<D> extends AppCompatActivity
                         editTextValue.setMaxLines(1);
                     }
 
-                    imageViewShow.setOnClickListener(new View.OnClickListener()
+                    imageViewShow.setOnClickListener(view1 ->
                     {
-                        @Override
-                        public void onClick(View view)
+                        String tag = (String) imageViewShow.getTag();
+                        if (tag.equals(MyConstant.HIDDEN))
                         {
-                            String tag = (String) imageViewShow.getTag();
-                            if (tag.equals(MyConstant.HIDDEN))
+
+                            if (isPasscodeVerified)
                             {
                                 imageViewShow.setTag(MyConstant.VISIBLE);
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -173,10 +169,30 @@ public class ShowBankDetails<D> extends AppCompatActivity
                             }
                             else
                             {
-                                imageViewShow.setTag(MyConstant.HIDDEN);
-                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                                imageViewShow.setImageResource(R.drawable.ic_visibility_off);
+                                CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
+                                {
+                                    @Override
+                                    public void onSuccess()
+                                    {
+                                        isPasscodeVerified = true;
+                                        imageViewShow.setTag(MyConstant.VISIBLE);
+                                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                                        imageViewShow.setImageResource(R.drawable.ic_visibility_on);
+                                    }
+
+                                    @Override
+                                    public void onFailure()
+                                    {
+                                        CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
+                                    }
+                                });
                             }
+                        }
+                        else
+                        {
+                            imageViewShow.setTag(MyConstant.HIDDEN);
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewShow.setImageResource(R.drawable.ic_visibility_off);
                         }
                     });
 
@@ -193,19 +209,13 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
                     activityShowBankDetailsBinding.linearLayoutAddViews.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
     }
-
-    // Decrypt Data
-    public String dTD(String data)
-    {
-        return CommonMethods.getInstance().decrypt(context, data);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -225,35 +235,25 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
             case R.id.action_edit:
 
-                Intent intent = new Intent(context, AddBankDetails.class);
-                intent.putExtra(MyConstant.LIST_ITEM_DATA, accountDetailsDataModel);
-                intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
-                startActivityForResult(intent, MyConstant.UPDATE_DETAILS_RESPONSE);
+                editDetails();
 
                 break;
 
             case R.id.action_copy:
 
-                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context,editTextList));
+                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context, editTextList));
 
                 break;
 
             case R.id.action_share:
 
-                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context,editTextList));
+                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context, editTextList));
 
                 break;
 
             case R.id.action_delete:
 
-                CommonDialogs.getInstance().showDeleteAlertDialog(context, new CommonInterfaces.deleteDetail()
-                {
-                    @Override
-                    public void onDelete()
-                    {
-                        deleteData();
-                    }
-                });
+                CommonDialogs.getInstance().showDeleteAlertDialog(context, this::deleteData);
 
                 break;
 
@@ -264,17 +264,47 @@ public class ShowBankDetails<D> extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void editDetails()
+    {
+        if (isPasscodeVerified)
+        {
+            editIntent();
+        }
+        else
+        {
+            CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
+            {
+                @Override
+                public void onSuccess()
+                {
+                    isPasscodeVerified = true;
+                    editIntent();
+                }
+
+                @Override
+                public void onFailure()
+                {
+                    CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
+                }
+            });
+        }
+    }
+
+
+    void editIntent()
+    {
+        Intent intent = new Intent(context, AddBankDetails.class);
+        intent.putExtra(MyConstant.LIST_ITEM_DATA, accountDetailsDataModel);
+        intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
+        startActivityForResult(intent, MyConstant.UPDATE_DETAILS_RESPONSE);
+    }
+
     public void deleteData()
     {
 
-        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data ->
         {
-            @Override
-            public void OnCompleted(D data)
-            {
-                Log.e(TAG, data + "--");
-                finish();
-            }
+            finish();
         });
     }
 

@@ -31,7 +31,7 @@
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_confirm_password">Enter confirm password</string>
-    <string name="forgot">Forgot ?</string>
+    <string name="forgot">Forgot Password?</string>
     <string name="signin">Sign In</string>
     <string name="dont_have_account">DON\'T HAVE AN ACCOUNT?</string>
     <string name="already_have_account">ALREADY HAVE AN ACCOUNT?</string>
@@ -94,6 +94,13 @@
     <string name="title">Title</string>
     <string name="value">Value</string>
     <string name="please_wait">Please wait loading...</string>
+    <string name="email_reset">Email is sent to your mail to reset password.</string>
+    <string name="retry_again">Please retry again.</string>
+    <string name="enter_forgot_password">We just need your registered Email Id to send your password reset instructions.</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="enter_passcode">Enter Passcode</string>
+    <string name="passcode_mismatch">Passcode did not match</string>
 
 
 </resources>

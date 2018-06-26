@@ -51,7 +51,7 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
         {
             super(itemView);
             View = itemView;
-            textViewHeaderName = (TextView) View.findViewById(R.id.textViewHeaderName);
+            textViewHeaderName =  View.findViewById(R.id.textViewHeaderName);
 
         }
     }

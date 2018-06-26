@@ -38,9 +38,10 @@ public class ShowOtherDetail<D> extends AppCompatActivity
     OtherDetailsDataModel otherDetailsDataModel;
     ActivityShowOtherDetailBinding activityShowOtherDetailsBinding;
 
-    ArrayList<EditText> editTextList=new ArrayList<>();
+    ArrayList<EditText> editTextList = new ArrayList<>();
 
     int id;
+    boolean isPasscodeVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,7 +52,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         context = this;
         setUpViews();
 
-       id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
+        id = getIntent().getIntExtra(MyConstant.LIST_ITEM_ID, 0);
 //       String type = getIntent().getStringExtra(MyConstant.TYPE);
 
         getDataFromDatabase();
@@ -72,14 +73,10 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         final OtherDetailsDataModel data = new OtherDetailsDataModel();
         data.setId(id);
 
-        new ExecuteQueryAsyncTask<>(context, data, MyConstant.GET_ONE_ITEM, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, data, MyConstant.GET_ONE_ITEM, (OnResultInterface<D>) data1 ->
         {
-            @Override
-            public void OnCompleted(D data)
-            {
-                otherDetailsDataModel = (OtherDetailsDataModel) data;
-                refreshData();
-            }
+            otherDetailsDataModel = (OtherDetailsDataModel) data1;
+            refreshData();
         });
     }
 
@@ -104,7 +101,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     String value = jsonObject.getString(MyConstant.VALUE);
                     String type = jsonObject.getString(MyConstant.TYPE);
 
-                    final View view = getLayoutInflater().inflate(R.layout.inflater_view_more_feilds, null);
+                    @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.inflater_view_more_feilds, null);
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
@@ -125,13 +122,12 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
                     }
 
-                    imageViewShow.setOnClickListener(new View.OnClickListener()
+                    imageViewShow.setOnClickListener(view1 ->
                     {
-                        @Override
-                        public void onClick(View view)
+                        String tag = (String) imageViewShow.getTag();
+                        if (tag.equals(MyConstant.HIDDEN))
                         {
-                            String tag = (String) imageViewShow.getTag();
-                            if (tag.equals(MyConstant.HIDDEN))
+                            if (isPasscodeVerified)
                             {
                                 imageViewShow.setTag(MyConstant.VISIBLE);
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -139,10 +135,30 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                             }
                             else
                             {
-                                imageViewShow.setTag(MyConstant.HIDDEN);
-                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                                imageViewShow.setImageResource(R.drawable.ic_visibility_off);
+                                CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
+                                {
+                                    @Override
+                                    public void onSuccess()
+                                    {
+                                        isPasscodeVerified = true;
+                                        imageViewShow.setTag(MyConstant.VISIBLE);
+                                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                                        imageViewShow.setImageResource(R.drawable.ic_visibility_on);
+                                    }
+
+                                    @Override
+                                    public void onFailure()
+                                    {
+                                        CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
+                                    }
+                                });
                             }
+                        }
+                        else
+                        {
+                            imageViewShow.setTag(MyConstant.HIDDEN);
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewShow.setImageResource(R.drawable.ic_visibility_off);
                         }
                     });
 
@@ -187,35 +203,25 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
             case R.id.action_edit:
 
-                Intent intent = new Intent(context, AddOtherDetail.class);
-                intent.putExtra(MyConstant.LIST_ITEM_DATA,otherDetailsDataModel);
-                intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
-                startActivityForResult(intent, MyConstant.UPDATE_OTHER_DETAILS_RESPONSE);
+                editDetails();
 
                 break;
 
             case R.id.action_copy:
 
-                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context,editTextList));
+                CommonMethods.getInstance().copyContent(context, CommonMethods.getInstance().getData(context, editTextList));
 
                 break;
 
             case R.id.action_share:
 
-                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context,editTextList));
+                CommonMethods.getInstance().shareContent(context, CommonMethods.getInstance().getData(context, editTextList));
 
                 break;
 
             case R.id.action_delete:
 
-                CommonDialogs.getInstance().showDeleteAlertDialog(context, new CommonInterfaces.deleteDetail()
-                {
-                    @Override
-                    public void onDelete()
-                    {
-                        deleteData();
-                    }
-                });
+                CommonDialogs.getInstance().showDeleteAlertDialog(context, this::deleteData);
 
                 break;
 
@@ -226,16 +232,43 @@ public class ShowOtherDetail<D> extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void editDetails()
+    {
+        if (isPasscodeVerified)
+        {
+            editIntent();
+        }
+        else
+        {
+            CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
+            {
+                @Override
+                public void onSuccess()
+                {
+                    isPasscodeVerified = true;
+                    editIntent();
+                }
+
+                @Override
+                public void onFailure()
+                {
+                    CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
+                }
+            });
+        }
+    }
+
+    private void editIntent()
+    {
+        Intent intent = new Intent(context, AddOtherDetail.class);
+        intent.putExtra(MyConstant.LIST_ITEM_DATA, otherDetailsDataModel);
+        intent.putExtra(MyConstant.FROM_WHERE, MyConstant.EDIT);
+        startActivityForResult(intent, MyConstant.UPDATE_OTHER_DETAILS_RESPONSE);
+    }
+
     public void deleteData()
     {
-        new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.DELETE, new OnResultInterface<D>()
-        {
-            @Override
-            public void OnCompleted(D data)
-            {
-                finish();
-            }
-        });
+        new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data -> finish());
     }
 
     @Override

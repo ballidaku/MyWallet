@@ -6,13 +6,25 @@ package ballidaku.mywallet.commonClasses;
 
 public interface CommonInterfaces
 {
-    public interface deleteDetail
+    interface deleteDetail
     {
         void onDelete();
     }
 
-    public interface importData
+    interface importData
     {
         void onImportConfirmation();
+    }
+
+    interface forgotPassword
+    {
+        void onSend(String email);
+    }
+
+    interface checkPasscode
+    {
+        void onSuccess();
+
+        void onFailure();
     }
 }
