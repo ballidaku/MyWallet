@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
@@ -15,6 +16,7 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
     private T data;
     private String type;
     private OnResultInterface onResultInterface;
+    String userId;
 
     public ExecuteQueryAsyncTask(Context context, T data, String type, OnResultInterface onResultInterface)
     {
@@ -22,7 +24,7 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
         this.data = data;
         this.type = type;
         this.onResultInterface = onResultInterface;
-
+        userId= MySharedPreference.getInstance().getUserID(context);
         execute();
     }
 
@@ -38,11 +40,12 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
             }
             else if (type.equalsIgnoreCase(MyConstant.GET_ALL))
             {
-                return (T) MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData();
+                return (T) MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData(userId);
+//                return (T) MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().getAllData();
             }
             else if (type.equalsIgnoreCase(MyConstant.DELETE))
             {
-                return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().deleteAccountDetail(((AccountDetailsDataModel) data).getId()));
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).accountDetailsDataModelDao().delete((AccountDetailsDataModel)data));
             }
             else if (type.equalsIgnoreCase(MyConstant.DELETE_ALL))
             {
@@ -67,7 +70,7 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
 
             else if (type.equalsIgnoreCase(MyConstant.GET_ALL))
             {
-                return (T) MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().getAllData();
+                return (T) MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().getAllData(userId);
             }
 
             else if (type.equalsIgnoreCase(MyConstant.GET_ONE_ITEM))
@@ -77,7 +80,7 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
 
             else if (type.equalsIgnoreCase(MyConstant.DELETE))
             {
-                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().deleteOtherDetail(((OtherDetailsDataModel) data).getId()));
+                return (T) String.valueOf(MyRoomDatabase.getInstance(context).otherDetailsDataModelDao().delete((OtherDetailsDataModel) data));
             }
             else if (type.equalsIgnoreCase(MyConstant.DELETE_ALL))
             {

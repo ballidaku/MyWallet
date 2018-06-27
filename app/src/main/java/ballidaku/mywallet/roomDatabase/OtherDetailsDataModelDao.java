@@ -20,8 +20,8 @@ public interface OtherDetailsDataModelDao
 {
 
 
-    @Query("SELECT * FROM " + MyConstant.OTHER_DETAILS)
-    List<OtherDetailsDataModel> getAllData();
+    @Query("SELECT * FROM " + MyConstant.OTHER_DETAILS + " WHERE user_id = :userId")
+    List<OtherDetailsDataModel> getAllData(String userId);
 
     @Query("SELECT * FROM " + MyConstant.OTHER_DETAILS + " WHERE id = :id")
     OtherDetailsDataModel getOtherDataDetail(int id);
@@ -33,14 +33,14 @@ public interface OtherDetailsDataModelDao
     int update(OtherDetailsDataModel otherDetailsDataModel);
 
     @Delete
-    void delete(OtherDetailsDataModel accountTypeDataModel);
+    int delete(OtherDetailsDataModel accountTypeDataModel);
 
 
     @Query("DELETE FROM "+MyConstant.OTHER_DETAILS)
     int deleteAllOtherDetail();
 
-    @Query("DELETE FROM " + MyConstant.OTHER_DETAILS + " WHERE id = :id")
-    int deleteOtherDetail(int id);
+  /*  @Query("DELETE FROM " + MyConstant.OTHER_DETAILS + " WHERE id = :id")
+    int deleteOtherDetail(int id);*/
 
 
 

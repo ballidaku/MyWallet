@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonDialogs;
-import ballidaku.mywallet.commonClasses.CommonInterfaces;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
@@ -76,14 +75,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener
 
 
             case R.id.cardViewImportData:
-                CommonDialogs.getInstance().showImportAlertDialog(context, new CommonInterfaces.importData()
+                CommonDialogs.getInstance().showImportAlertDialog(context, () ->
                 {
-                    @Override
-                    public void onImportConfirmation()
-                    {
-                        String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                        ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.READ_FILE_REQUEST);
-                    }
+                    String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.READ_FILE_REQUEST);
                 });
                 break;
 

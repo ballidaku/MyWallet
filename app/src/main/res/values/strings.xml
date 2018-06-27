@@ -22,7 +22,7 @@
     <string name="confirm_password_limit">Confirm password must be of 6 digits.</string>
     <string name="please_enter_name">Please enter name.</string>
     <string name="please_enter_phone_number">Please enter phone number.</string>
-    <string name="number_limit">Please enter phone number of 10 digits.</string>
+    <string name="number_limit">Please enter phone number minimum of 6 digits.</string>
     <string name="please_enter_confirm_password">Please enter confirm password.</string>
     <string name="password_confirm_not_matched">Password &amp; confirm password didn\'t match.</string>
 
@@ -100,7 +100,15 @@
     <string name="cancel">Cancel</string>
     <string name="send">Send</string>
     <string name="enter_passcode">Enter Passcode</string>
-    <string name="passcode_mismatch">Passcode did not match</string>
+    <string name="passcode_mismatch">Passcode didn\'t match</string>
+    <string name="passcode_mismatch_with_old">Your passcode didn\'t match with old one</string>
+    <string name="passcode_saved">Passcode saved successfully</string>
+    <string name="passcode_changed">Passcode changed successfully</string>
+
+    <string name="enter_new_passcode">Enter New Passcode</string>
+    <string name="confirm_new_passcode">Confirm New Passcode</string>
+    <string name="enter_current_passcode">Enter Current Passcode</string>
+    <string name="not_relevant_data">No relevant data found in this file, Please use your last exported file.</string>
 
 
 </resources>

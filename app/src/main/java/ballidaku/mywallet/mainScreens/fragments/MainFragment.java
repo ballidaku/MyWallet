@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.adapters.MainFragmentAdapter;
+import ballidaku.mywallet.commonClasses.CommonMethods;
+import ballidaku.mywallet.commonClasses.GridSpacingItemDecoration;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
@@ -85,7 +87,7 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
-       // fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
+        fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
         {
@@ -114,45 +116,33 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
         fragmentMainBinding.floatingActionButtonOtherDetails.setOnClickListener(this);
     }
 
-
+    @SuppressWarnings("unchecked")
     private void refresh()
     {
         mainList.clear();
-        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data ->
         {
-            @Override
-            public void OnCompleted(D data)
+            if (((ArrayList<D>) data).size() > 0)
             {
-//                Log.e(TAG, data + "--");
+                final AccountDetailsDataModel accountDetailsDataModel = new AccountDetailsDataModel();
+                accountDetailsDataModel.setType(getResources().getString(R.string.bank_detail));
+                ((ArrayList<D>) data).add(0, (D) accountDetailsDataModel);
 
-                if (((ArrayList<D>) data).size() > 0)
-                {
-                    final AccountDetailsDataModel accountDetailsDataModel = new AccountDetailsDataModel();
-                    accountDetailsDataModel.setType(getResources().getString(R.string.bank_detail));
-                    ((ArrayList<D>) data).add(0, (D) accountDetailsDataModel);
-
-                }
-                mainList.addAll((ArrayList<D>) data);
-
-                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
-                {
-                    @Override
-                    public void OnCompleted(D data)
-                    {
-//                        Log.e(TAG, data + "--");
-
-                        if (((ArrayList<D>) data).size() > 0)
-                        {
-                            final OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
-                            otherDetailsDataModel.setType(getResources().getString(R.string.other_detail));
-                            ((ArrayList<D>) data).add(0, (D) otherDetailsDataModel);
-                        }
-
-                        mainList.addAll((ArrayList<D>) data);
-                        mainFragmentAdapter.addData(mainList);
-                    }
-                });
             }
+            mainList.addAll((ArrayList<D>) data);
+
+            new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data1 ->
+            {
+                if (((ArrayList<D>) data1).size() > 0)
+                {
+                    final OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
+                    otherDetailsDataModel.setType(getResources().getString(R.string.other_detail));
+                    ((ArrayList<D>) data1).add(0, (D) otherDetailsDataModel);
+                }
+
+                mainList.addAll((ArrayList<D>) data1);
+                mainFragmentAdapter.addData(mainList);
+            });
         });
     }
 

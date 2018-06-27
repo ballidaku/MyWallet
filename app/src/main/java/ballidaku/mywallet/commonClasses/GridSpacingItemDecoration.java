@@ -10,6 +10,8 @@ import android.view.View;
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration
 {
 
+    String TAG= GridSpacingItemDecoration.class.getSimpleName();
+
     private int spanCount;
     private int spacing;
     private boolean includeEdge;
@@ -25,18 +27,30 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
     {
         int position = parent.getChildAdapterPosition(view); // item position
+
         int column = position % spanCount; // item column
 
         if (includeEdge)
         {
-            outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-            outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+//            outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+//            outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+
+            outRect.right = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+            outRect.left = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
 
             if (position < spanCount)
             { // top edge
-                outRect.top = spacing;
+               // outRect.top = spacing;
+            }
+
+            if (position == 0)
+            {
+                 outRect.top = spacing;
             }
             outRect.bottom = spacing; // item bottom
+
+//            Log.e(TAG,"Position "+position+" Dimen L : "+outRect.left +" R : "+outRect.right+" T : "+outRect.top+" B : "+outRect.bottom);
         }
         else
         {
@@ -47,6 +61,8 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration
                 outRect.top = spacing; // item top
             }
         }
+
+
     }
 }
 

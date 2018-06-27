@@ -5,17 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ballidaku.mywallet.R;
+import ballidaku.mywallet.commonClasses.CommonMethods;
+import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.mPin.IndicatorDots;
 import ballidaku.mywallet.mPin.PinLockListener;
 import ballidaku.mywallet.mPin.PinLockView;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
-import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MySharedPreference;
 
 
 public class MPINActivity extends AppCompatActivity
@@ -42,9 +41,6 @@ public class MPINActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-       /* requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                  WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
         setContentView(R.layout.activity_mpin);
 
         context = this;
@@ -64,18 +60,15 @@ public class MPINActivity extends AppCompatActivity
             savedMPIN = MySharedPreference.getInstance().getMPIN(context);
         }
 
-        profile_name = (TextView) findViewById(R.id.profile_name);
-
-        mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
-        mIndicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
+        profile_name = findViewById(R.id.profile_name);
+        mPinLockView = findViewById(R.id.pin_lock_view);
+        mIndicatorDots = findViewById(R.id.indicator_dots);
 
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLockListener(mPinLockListener);
-        //mPinLockView.setCustomKeySet(new int[]{2, 3, 1, 5, 9, 6, 7, 0, 8, 4});
-        //mPinLockView.enableLayoutShuffling();
 
         mPinLockView.setPinLength(4);
-        mPinLockView.setTextColor(ContextCompat.getColor(this, R.color.colorWhite));
+        mPinLockView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
 
         mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
 
@@ -90,20 +83,20 @@ public class MPINActivity extends AppCompatActivity
 
             case MyConstant.FIRST_TIME:
             case MyConstant.NEW_PIN_AFTER_CHANGE:
-                profile_name.setText("Enter New Passcode");
+                profile_name.setText(getString(R.string.enter_new_passcode));
                 break;
 
             case MyConstant.CONFIRM_FIRST_TIME:
             case MyConstant.CONFIRM_PIN_AFTER_CHANGE:
-                profile_name.setText("Confirm New Passcode");
+                profile_name.setText(getString(R.string.confirm_new_passcode));
                 break;
 
             case MyConstant.CHECK_MPIN:
-                profile_name.setText("Enter Passcode");
+                profile_name.setText(getString(R.string.enter_passcode));
                 break;
 
             case MyConstant.CHANGE_MPIN:
-                profile_name.setText("Enter Current Passcode");
+                profile_name.setText(R.string.enter_current_passcode);
                 break;
         }
     }
@@ -164,25 +157,21 @@ public class MPINActivity extends AppCompatActivity
             }
             else if (TYPE.equals(MyConstant.CONFIRM_FIRST_TIME) && firstTime.equals(pin))
             {
-                Toast.makeText(context, "MPIN saved successfully", Toast.LENGTH_SHORT).show();
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_saved));
                 MySharedPreference.getInstance().saveMPIN(context, pin);
-
                 goToMainActivity();
             }
             else if (TYPE.equals(MyConstant.CONFIRM_FIRST_TIME) && !firstTime.equals(pin))
             {
-                Toast.makeText(context, "Password didn't match", Toast.LENGTH_SHORT).show();
-
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
             }
             else if (TYPE.equals(MyConstant.CHECK_MPIN) && savedMPIN.equals(pin))
             {
                 goToMainActivity();
-
             }
             else if (TYPE.equals(MyConstant.CHECK_MPIN) && !savedMPIN.equals(pin))
             {
-                Toast.makeText(context, "Password didn't match", Toast.LENGTH_SHORT).show();
-
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
             }
             else if (TYPE.equals(MyConstant.CHANGE_MPIN) && savedMPIN.equals(pin))
             {
@@ -191,11 +180,10 @@ public class MPINActivity extends AppCompatActivity
             }
             else if (TYPE.equals(MyConstant.CHANGE_MPIN) && !savedMPIN.equals(pin))
             {
-                Toast.makeText(context, "Your password didn't match with old one", Toast.LENGTH_SHORT).show();
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch_with_old));
             }
             else if (TYPE.equals(MyConstant.NEW_PIN_AFTER_CHANGE))
             {
-
                 resetTime = pin;
                 TYPE = MyConstant.CONFIRM_PIN_AFTER_CHANGE;
                 setHeading();
@@ -203,22 +191,18 @@ public class MPINActivity extends AppCompatActivity
             }
             else if (TYPE.equals(MyConstant.CONFIRM_PIN_AFTER_CHANGE) && resetTime.equals(pin))
             {
-                Toast.makeText(context, "MPIN changed successfully", Toast.LENGTH_SHORT).show();
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_changed));
                 MySharedPreference.getInstance().saveMPIN(context, pin);
-               /* firstTime = pin;
-                TYPE = MyConstant.CHECK_MPIN;
-                setReset();*/
                 finish();
-
             }
             else if (TYPE.equals(MyConstant.CONFIRM_PIN_AFTER_CHANGE) && !resetTime.equals(pin))
             {
-                Toast.makeText(context, "Your password didn't match", Toast.LENGTH_SHORT).show();
+                CommonMethods.getInstance().showToast(context, getString(R.string.passcode_mismatch));
             }
         }
 
 
-        public void goToMainActivity()
+        void goToMainActivity()
         {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
@@ -229,19 +213,19 @@ public class MPINActivity extends AppCompatActivity
         @Override
         public void onEmpty()
         {
-            Log.e(TAG, "Pin empty");
+            //Log.e(TAG, "Pin empty");
         }
 
         @Override
         public void onPinChange(int pinLength, String intermediatePin)
         {
-            Log.e(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
+            //Log.e(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
 
         @Override
         public void onReset()
         {
-            Log.e("Reset", "Hello");
+            //Log.e("Reset", "Hello");
             setReset();
 
         }

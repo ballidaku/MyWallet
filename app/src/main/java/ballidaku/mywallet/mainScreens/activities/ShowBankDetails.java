@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -304,6 +305,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
         new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data ->
         {
+            Log.e(TAG,"onDelete "+data);
             finish();
         });
     }

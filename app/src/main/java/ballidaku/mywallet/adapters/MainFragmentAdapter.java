@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
-import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
 import ballidaku.mywallet.mainScreens.activities.ShowOtherDetail;
@@ -26,6 +25,8 @@ import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
+
+    String TAG= MainFragmentAdapter.class.getSimpleName();
     private ArrayList<T> arrayList;
     private Context context;
 
@@ -36,10 +37,8 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
 
     public MainFragmentAdapter(ArrayList<T> arrayList, Context context)
     {
-
         this.arrayList = arrayList;
         this.context = context;
-
     }
 
     class HeaderViewHolder<T> extends RecyclerView.ViewHolder
@@ -47,12 +46,11 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
         public View View;
         private final TextView textViewHeaderName;
 
-        public HeaderViewHolder(View itemView)
+        HeaderViewHolder(View itemView)
         {
             super(itemView);
             View = itemView;
             textViewHeaderName =  View.findViewById(R.id.textViewHeaderName);
-
         }
     }
 
@@ -64,7 +62,7 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
         private final TextView textViewBankHeader;
         private final TextView textViewAccountHeader;
 
-        public ItemViewHolder(View itemView)
+        ItemViewHolder(View itemView)
         {
             super(itemView);
             View = itemView;
@@ -114,6 +112,7 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
             if (arrayList.get(position) instanceof AccountDetailsDataModel)
             {
                 AccountDetailsDataModel accountDetailsDataModel = (AccountDetailsDataModel) arrayList.get(position);
+//                Log.e(TAG,"UserId "+accountDetailsDataModel.getUserId());
                 ((ItemViewHolder) holder).textViewBankName.setText(accountDetailsDataModel.getBankName());
                 ((ItemViewHolder) holder).textViewBankOwner.setText(accountDetailsDataModel.getAccountHolderName());
 
@@ -188,12 +187,6 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         return super.getItemViewType(position);
-    }
-
-    // Decrypt Data
-    public String dTD(String data)
-    {
-        return CommonMethods.getInstance().decrypt(context, data);
     }
 
     public void addData(ArrayList<T> arrayList)

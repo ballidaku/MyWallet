@@ -210,7 +210,7 @@ public class CommonMethods<D>
     public boolean isValidMobile(String phone)
     {
         boolean check = false;
-        check = !Pattern.matches("[a-zA-Z]+", phone) && phone.length() == 10;
+        check = !Pattern.matches("[a-zA-Z]+", phone) && phone.length() >= 6;
         return check;
     }
 
@@ -344,24 +344,16 @@ public class CommonMethods<D>
     public void getAllDatabaseData(final Context context)
     {
         final Gson gson = new Gson();
-        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data ->
         {
-            @Override
-            public void OnCompleted(D data)
+
+            final String bankDetails = gson.toJson(data);
+
+            new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data1 ->
             {
-
-                final String bankDetails = gson.toJson(data);
-
-                new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, new OnResultInterface<D>()
-                {
-                    @Override
-                    public void OnCompleted(D data)
-                    {
-                        String otherDetails = gson.toJson(data);
-                        writeToFile(context, bankDetails + MyConstant.SEPRATER + otherDetails);
-                    }
-                });
-            }
+                String otherDetails = gson.toJson(data1);
+                writeToFile(context, bankDetails + MyConstant.SEPRATER + otherDetails);
+            });
         });
 
     }
@@ -408,15 +400,10 @@ public class CommonMethods<D>
 
     public void readDataFromExternalFile(Context context, Uri uri)
     {
-//        Log.e(TAG, "URI FILE PATH : " + uri.getPath());
-        // File file = new File(uri.getPath());
         String myData = "";
         try
         {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
-
-//            FileInputStream fis = new FileInputStream(file);
-//            DataInputStream in = new DataInputStream(fis);
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String strLine;
             while ((strLine = br.readLine()) != null)
@@ -430,7 +417,15 @@ public class CommonMethods<D>
         }
 
         String decryptedData = CommonMethods.getInstance().decrypt(context, myData);
-        saveStringDataToDatabase(context, decryptedData);
+//        Log.e(TAG, "decryptedData : " + decryptedData);
+        if(!decryptedData.isEmpty())
+        {
+            saveStringDataToDatabase(context, decryptedData);
+        }
+        else
+        {
+            CommonDialogs.getInstance().showMessageDialog(context,context.getString(R.string.not_relevant_data));
+        }
     }
 
     /**********************************************************************************************/
@@ -444,25 +439,17 @@ public class CommonMethods<D>
 
         /*Delete all account details*/
         AccountDetailsDataModel accountDetailsDataModelEmpty = new AccountDetailsDataModel();
-        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModelEmpty, MyConstant.DELETE_ALL, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, accountDetailsDataModelEmpty, MyConstant.DELETE_ALL, (OnResultInterface<D>) data1 ->
         {
-            @Override
-            public void OnCompleted(D data)
-            {
-                //Log.e(TAG, "Delete all account details : " + data);
-            }
+            //Log.e(TAG, "Delete all account details : " + data);
         });
 
 
         /*Delete all other details*/
         OtherDetailsDataModel otherDetailsValueDataModel = new OtherDetailsDataModel();
-        new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.DELETE_ALL, new OnResultInterface<D>()
+        new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.DELETE_ALL, (OnResultInterface<D>) data12 ->
         {
-            @Override
-            public void OnCompleted(D data)
-            {
-                //Log.e(TAG, "Delete all other details : " + data);
-            }
+            //Log.e(TAG, "Delete all other details : " + data);
         });
 
 
@@ -489,17 +476,14 @@ public class CommonMethods<D>
             JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
 
             AccountDetailsDataModel accountDetailsDataModel = gson.fromJson(jsonObject, AccountDetailsDataModel.class);
-
-            new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.INSERT, new OnResultInterface<D>()
+//            accountDetailsDataModel.setUserId(MySharedPreference.getInstance().getUserID(context));
+            accountDetailsDataModel.setId(0);
+            new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.INSERT, (OnResultInterface<D>) data14 ->
             {
-                @Override
-                public void OnCompleted(D data)
+                dataCopiedSize++;
+                if (dataCopiedSize == totalSize)
                 {
-                    dataCopiedSize++;
-                    if (dataCopiedSize == totalSize)
-                    {
-                        CommonMethods.getInstance().showToast(context, context.getString(R.string.data_copied_successfully));
-                    }
+                    CommonMethods.getInstance().showToast(context, context.getString(R.string.data_copied_successfully));
                 }
             });
         }
@@ -508,17 +492,14 @@ public class CommonMethods<D>
         {
             JsonObject jsonObject = jsonArray2.get(i).getAsJsonObject();
             OtherDetailsDataModel otherDetailsDataModel = gson.fromJson(jsonObject, OtherDetailsDataModel.class);
-
-            new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.INSERT, new OnResultInterface<D>()
+//            otherDetailsDataModel.setUserId(MySharedPreference.getInstance().getUserID(context));
+            otherDetailsDataModel.setId(0);
+            new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.INSERT, (OnResultInterface<D>) data13 ->
             {
-                @Override
-                public void OnCompleted(D data)
+                dataCopiedSize++;
+                if (dataCopiedSize == totalSize)
                 {
-                    dataCopiedSize++;
-                    if (dataCopiedSize == totalSize)
-                    {
-                        CommonMethods.getInstance().showToast(context, context.getString(R.string.data_copied_successfully));
-                    }
+                    CommonMethods.getInstance().showToast(context, context.getString(R.string.data_copied_successfully));
                 }
             });
         }

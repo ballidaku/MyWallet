@@ -18,16 +18,13 @@ import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 @Dao
 public interface AccountDetailsDataModelDao
 {
-/* @Query("SELECT * FROM user WHERE uid IN (:userIds)")
-    List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE first_name LIKE :first AND "
-           + "last_name LIKE :last LIMIT 1")
-    User findByName(String first, String last);
-*/
+//    @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS )
+//    List<AccountDetailsDataModel> getAllData();
 
-    @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS)
-    List<AccountDetailsDataModel> getAllData();
+
+    @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE user_id = :userId")
+    List<AccountDetailsDataModel> getAllData(String userId);
 
     @Query("SELECT * FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
     AccountDetailsDataModel getAccountDetailsDataModelData(int id);
@@ -39,14 +36,14 @@ public interface AccountDetailsDataModelDao
     int update(AccountDetailsDataModel accountTypeDataModel);
 
     @Delete
-    void delete(AccountDetailsDataModel accountTypeDataModel);
+    int delete(AccountDetailsDataModel accountTypeDataModel);
 
     @Query("DELETE FROM "+MyConstant.ACCOUNT_DETAILS)
     int deleteAllAccountDetail();
 
 
-    @Query("DELETE FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id")
-    int deleteAccountDetail(int id);
+    /*@Query("DELETE FROM " + MyConstant.ACCOUNT_DETAILS + " WHERE id = :id ")
+    int deleteAccountDetail(int id);*/
 
 
 

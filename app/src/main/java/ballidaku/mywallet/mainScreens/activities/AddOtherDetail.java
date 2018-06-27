@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.databinding.ActivityAddOtherDetailBinding;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
@@ -38,6 +39,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
     Context context;
 
     String fromWhere;
+    String userId;
 
     OtherDetailsDataModel otherDetailsDataModel;
 
@@ -48,6 +50,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
         activityAddOtherDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_other_detail);
 
         context = this;
+        userId= MySharedPreference.getInstance().getUserID(context);
 
         setUpViews();
     }
@@ -254,6 +257,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
         OtherDetailsDataModel otherDetailsValueDataModel = new OtherDetailsDataModel();
         otherDetailsValueDataModel.setHeading(headingName);
         otherDetailsValueDataModel.setData(jsonArray.toString());
+        otherDetailsValueDataModel.setUserId(userId);
         if (fromWhere.equals(MyConstant.EDIT))
         {
             otherDetailsValueDataModel.setId(otherDetailsDataModel.getId());

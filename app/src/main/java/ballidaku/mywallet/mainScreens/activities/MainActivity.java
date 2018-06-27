@@ -124,15 +124,14 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.PICKFILE_REQUEST_CODE)
         {
             Uri selectedFileUri = data.getData();
-//            System.out.println(CommonMethods.getInstance().getFileName(context,selectedImageUri));
-            if (CommonMethods.getInstance().getFileName(context, selectedFileUri).equals(CommonMethods.getInstance().getDataFileName(context)))
-            {
+           /* if (CommonMethods.getInstance().getFileName(context, selectedFileUri).equals(CommonMethods.getInstance().getDataFileName(context)))
+            {*/
                 CommonMethods.getInstance().readDataFromExternalFile(context, selectedFileUri);
-            }
+            /*}
             else
             {
                 CommonMethods.getInstance().showToast(context, getString(R.string.not_valid_file));
-            }
+            }*/
         }
     }
 

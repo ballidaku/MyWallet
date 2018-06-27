@@ -23,6 +23,7 @@ import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.FourDigitsCardTextWatcher;
 import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.commonClasses.TwoDigitsCardTextWatcher;
 import ballidaku.mywallet.databinding.ActivityAddBankDetailsBinding;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
@@ -40,6 +41,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
 
     ActivityAddBankDetailsBinding activityAddBankDetailsBinding;
     String[] typeArray;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +50,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         activityAddBankDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_bank_details);
 
         context = this;
+        userId= MySharedPreference.getInstance().getUserID(context);
 
         setUpViews();
     }
@@ -282,6 +285,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         accountTypeLocalDataModel.setValidThru(validThru);
         accountTypeLocalDataModel.setNetBankingId(netBankingId);
         accountTypeLocalDataModel.setAdditionalData(jsonArray.toString());
+        accountTypeLocalDataModel.setUserId(userId);
 
         if (fromWhere.equals(MyConstant.EDIT))  /*When we have to update the data*/
         {
@@ -311,7 +315,6 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                     CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
                     CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
                     finish();
-
                 }
             });
         }
@@ -360,18 +363,4 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
 
         return super.onOptionsItemSelected(item);
     }
-
-    // Decrypt Data
-    public String dTD(String data)
-    {
-        return CommonMethods.getInstance().decrypt(context, data);
-    }
-
-    // Encrypt Data
-    public String dTE(String data)
-
-    {
-        return CommonMethods.getInstance().encrypt(context, data);
-    }
-
 }

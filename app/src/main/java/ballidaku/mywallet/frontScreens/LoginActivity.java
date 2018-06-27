@@ -4,14 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ballidaku.mywallet.R;
@@ -119,24 +115,16 @@ public class LoginActivity extends AppCompatActivity
             CommonMethods.getInstance().hideKeypad(this);
             CommonDialogs.getInstance().progressDialog(context);
 
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task ->
             {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task)
+                if (task.isSuccessful())
                 {
-
-                    if (task.isSuccessful())
-                    {
-                        // Log.e(TAG, "signInWithEmail:success");
-                        MyFirebase.getInstance().logInUser(context, email);
-                    }
-                    else
-                    {
-                        CommonDialogs.getInstance().dialog.dismiss();
-                        // If sign in fails, display a message to the user.
-                        //Log.e(TAG, "createUserWithEmail:failure  ", task.getException());
-                        CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
-                    }
+                    MyFirebase.getInstance().logInUser(context, email);
+                }
+                else
+                {
+                    CommonDialogs.getInstance().dialog.dismiss();
+                    CommonMethods.getInstance().showSnackbar(activityLoginBinding.getRoot(), context, task.getException().getMessage());
                 }
             });
         }
@@ -147,19 +135,15 @@ public class LoginActivity extends AppCompatActivity
     {
 
         mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>()
+                .addOnCompleteListener(task ->
                 {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
+                    if (task.isSuccessful())
                     {
-                        if (task.isSuccessful())
-                        {
-                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.email_reset));
-                        }
-                        else
-                        {
-                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.retry_again));
-                        }
+                        CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.email_reset));
+                    }
+                    else
+                    {
+                        CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.retry_again));
                     }
                 });
     }

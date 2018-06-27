@@ -8,6 +8,7 @@ import android.databinding.BaseObservable;
 import java.io.Serializable;
 
 import ballidaku.mywallet.commonClasses.MyConstant;
+
 /**
  * Created by sharanpalsingh on 20/02/18.
  */
@@ -17,6 +18,9 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
 {
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    @ColumnInfo(name = MyConstant.USER_ID)
+    public String userId;
 
     @ColumnInfo(name = MyConstant.BANK_NAME)
     public String bankName;
@@ -172,4 +176,13 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
         this.netBankingId = netBankingId;
     }
 
+    public String getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
+    }
 }

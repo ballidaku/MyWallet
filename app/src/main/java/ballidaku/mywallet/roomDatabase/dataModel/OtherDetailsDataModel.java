@@ -19,6 +19,9 @@ public class OtherDetailsDataModel extends BaseObservable implements Serializabl
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    @ColumnInfo(name = MyConstant.USER_ID)
+    public String userId;
+
     @ColumnInfo(name = MyConstant.HEADING)
     public String heading;
 
@@ -67,4 +70,13 @@ public class OtherDetailsDataModel extends BaseObservable implements Serializabl
         this.data = data;
     }
 
+    public String getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
+    }
 }
