@@ -87,6 +87,8 @@ public class MyConstant {
     public static final String CONFIRM_PIN_AFTER_CHANGE="confirm_pin_after_change";
 
     public static final String GET_ALL = "get_all";
+    public static final String EXPORT_TO_OTHER_APPS = "export_to_other_apps";
+    public static final String EXPORT_TO_EXTERNAL_STORAGE = "export_to_external_storage";
 
 
     public static final int ADD_DETAILS_RESPONSE = 3316;
@@ -94,4 +96,6 @@ public class MyConstant {
     public static final int UPDATE_OTHER_DETAILS_RESPONSE = 3318;
     public static final int PICKFILE_REQUEST_CODE = 3319;
     public static final int READ_FILE_REQUEST = 3320;
+    public static final int WRITE_FILE_REQUEST = 3321;
+    public static final int REQUEST_CODE_OPEN_DIRECTORY = 3322;
 }

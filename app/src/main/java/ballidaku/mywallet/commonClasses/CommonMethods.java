@@ -4,14 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.OpenableColumns;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,6 +22,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +35,12 @@ import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -94,7 +96,7 @@ public class CommonMethods<D>
 
         snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
-        TextView tv =  snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView tv = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
         tv.setTypeface(tv.getTypeface(), Typeface.BOLD);
         snackbar.show();
@@ -162,7 +164,7 @@ public class CommonMethods<D>
 
     }
 
-    public String encrypt(Context context, String message)
+    private String encrypt(Context context, String message)
     {
         return encrypt(message, MySharedPreference.getInstance().getUserEmail(context));
     }
@@ -173,7 +175,8 @@ public class CommonMethods<D>
         try
         {
             encryptedMsg = AESCrypt.encrypt(password, message);
-        } catch (GeneralSecurityException e)
+        }
+        catch (GeneralSecurityException e)
         {
             //handle error
         }
@@ -182,7 +185,7 @@ public class CommonMethods<D>
     }
 
 
-    public String decrypt(Context context, String message)
+    private String decrypt(Context context, String message)
     {
         return decrypt(message, MySharedPreference.getInstance().getUserEmail(context));
     }
@@ -194,7 +197,8 @@ public class CommonMethods<D>
         try
         {
             messageAfterDecrypt = AESCrypt.decrypt(password, encryptedMsg);
-        } catch (GeneralSecurityException e)
+        }
+        catch (GeneralSecurityException e)
         {
             //handle error - could be due to incorrect password or tampered encryptedMsg
         }
@@ -341,7 +345,7 @@ public class CommonMethods<D>
     /*Get all database in json format*/
 
     /**********************************************************************************************/
-    public void getAllDatabaseData(final Context context)
+    public void getAllDatabaseData(final Context context, String fromWhere, Uri uri)
     {
         final Gson gson = new Gson();
         new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data ->
@@ -352,7 +356,16 @@ public class CommonMethods<D>
             new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data1 ->
             {
                 String otherDetails = gson.toJson(data1);
-                writeToFile(context, bankDetails + MyConstant.SEPRATER + otherDetails);
+                String concatData = bankDetails + MyConstant.SEPRATER + otherDetails;
+
+                if (fromWhere.equalsIgnoreCase(MyConstant.EXPORT_TO_OTHER_APPS))
+                {
+                    writeToFile(context, concatData);
+                }
+                else if (fromWhere.equalsIgnoreCase(MyConstant.EXPORT_TO_EXTERNAL_STORAGE))
+                {
+                    writeDataToPredefinedPath(context, concatData, uri);
+                }
             });
         });
 
@@ -387,11 +400,40 @@ public class CommonMethods<D>
             File file = new File(directory, fileName);
 //            Log.e(TAG, "" + file.getAbsolutePath());
             shareFileToOtherDrive(context, file);
-        } catch (IOException e)
+
+        }
+        catch (IOException e)
         {
             Log.e(TAG, "Exception File write failed: " + e.toString());
         }
     }
+
+    /**********************************************************************************************/
+    /*Write  data to predefined .txt file */
+
+    /**********************************************************************************************/
+    private void writeDataToPredefinedPath(Context context, String concatData, Uri uri)
+    {
+        String encyptedData = CommonMethods.getInstance().encrypt(context, concatData);
+        try
+        {
+            //String path = getRealPathFromURI(context, uri);
+            String path = PathUtil.getPath(context, uri);
+
+            FileOutputStream fos = new FileOutputStream(path);
+            fos.write(encyptedData.getBytes());
+            fos.close();
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (URISyntaxException ignored)
+        {
+        }
+    }
+
 
     /**********************************************************************************************/
     /*Read json data from external file*/
@@ -404,6 +446,7 @@ public class CommonMethods<D>
         try
         {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            assert inputStream != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String strLine;
             while ((strLine = br.readLine()) != null)
@@ -411,20 +454,21 @@ public class CommonMethods<D>
                 myData = myData + strLine;
             }
             inputStream.close();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
 
         String decryptedData = CommonMethods.getInstance().decrypt(context, myData);
 //        Log.e(TAG, "decryptedData : " + decryptedData);
-        if(!decryptedData.isEmpty())
+        if (!decryptedData.isEmpty())
         {
             saveStringDataToDatabase(context, decryptedData);
         }
         else
         {
-            CommonDialogs.getInstance().showMessageDialog(context,context.getString(R.string.not_relevant_data));
+            CommonDialogs.getInstance().showMessageDialog(context, context.getString(R.string.not_relevant_data));
         }
     }
 
@@ -515,7 +559,7 @@ public class CommonMethods<D>
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
         if (path.exists())
         {
-            intentShareFile.setType("text/*");
+            intentShareFile.setType("text/plain");
             Uri fileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, path);
             intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -523,6 +567,19 @@ public class CommonMethods<D>
         }
     }
 
+    /**********************************************************************************************/
+    /*Share file to Storage access framework*/
+
+    /**********************************************************************************************/
+
+    public void shareFileToLocalStorage(Context context)
+    {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, getDataFileName(context));
+        ((MainActivity) context).startActivityForResult(intent, MyConstant.REQUEST_CODE_OPEN_DIRECTORY);
+    }
     /**********************************************************************************************/
     /*Get file from Device*/
 
@@ -535,37 +592,26 @@ public class CommonMethods<D>
     }
 
     /**********************************************************************************************/
-    /*Get file Name*/
+    /*Get file extenstion*/
 
     /**********************************************************************************************/
-    public String getFileName(Context context, Uri uri)
+    public String getMimeType(Context context, Uri uri)
     {
-        String result = null;
-        if (uri.getScheme().equals("content"))
+        String extension;
+        //Check uri format to avoid null
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
         {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try
-            {
-                if (cursor != null && cursor.moveToFirst())
-                {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally
-            {
-                assert cursor != null;
-                cursor.close();
-            }
+            //If scheme is a content
+            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
         }
-        if (result == null)
+        else
         {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1)
-            {
-                result = result.substring(cut + 1);
-            }
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
         }
-        return result;
+        return extension;
     }
 
 

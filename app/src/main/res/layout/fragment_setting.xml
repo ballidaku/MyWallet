@@ -9,6 +9,12 @@
         <variable
             name="temp"
             type="ballidaku.mywallet.mainScreens.fragments.SettingFragment"/>
+
+        <variable
+            name="handlers"
+            type="ballidaku.mywallet.mainScreens.fragments.SettingFragment.MyClickHandlers" />
+
+
     </data>
 
     <LinearLayout
@@ -20,7 +26,6 @@
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cardViewChangeMPIN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5sdp"
@@ -29,6 +34,30 @@
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
+            android:onClick="@{handlers::onChangeLoginPasswordClicked}"
+            app:cardBackgroundColor="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/change_login_password"
+                android:textSize="@dimen/heading"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="25dp"
+            android:onClick="@{handlers::onChangePasscodeClicked}"
             app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
@@ -44,12 +73,12 @@
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cardViewExportData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
+            android:onClick="@{handlers::onExportDataToOtherClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">
@@ -58,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_10sdp"
-                android:text="@string/export_data"
+                android:text="@string/export_data_to_other_apps"
                 android:textSize="@dimen/heading"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -66,12 +95,34 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cardViewImportData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
+            android:onClick="@{handlers::onExportDataToLocalStorageClicked}"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/export_data_to_local"
+                android:textSize="@dimen/heading"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:cardElevation="2dp"
+            android:onClick="@{handlers::onImportDataClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">
@@ -89,12 +140,12 @@
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cardViewSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
+            android:onClick="@{handlers::onSignOutClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">

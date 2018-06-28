@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
 
         activityLoginBinding.imageViewPasswordShowHide.setTag(false);
-        MyClickHandlers handlers = new MyClickHandlers(this);
+        MyClickHandlers handlers = new MyClickHandlers(context);
         activityLoginBinding.setHandlers(handlers);
     }
 

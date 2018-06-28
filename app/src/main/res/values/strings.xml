@@ -60,10 +60,12 @@
 
     <string name="title_value_validation">Title or Value data should not be empty</string>
     <string name="change_passcode">Change Passcode</string>
+    <string name="change_login_password">Change Login Password</string>
     <string name="sign_out">Sign Out</string>
-    <string name="export_data">Export Data</string>
+    <string name="export_data_to_local">Export Data to local storage</string>
+    <string name="export_data_to_other_apps">Export Data to other apps</string>
     <string name="import_data">Import Data</string>
-    <string name="not_valid_file">This is not our valid data file</string>
+    <string name="not_valid_file">File format of this file is not valid, Use .txt file format to import data.</string>
     <string name="data_copied_successfully">Data imported successfully</string>
     <string name="delete_entry">Delete Entry</string>
     <string name="delete_confirmation">Are you sure you want to delete this entry?</string>
@@ -94,7 +96,7 @@
     <string name="title">Title</string>
     <string name="value">Value</string>
     <string name="please_wait">Please wait loading...</string>
-    <string name="email_reset">Email is sent to your mail to reset password.</string>
+    <string name="email_reset">Link is sent to your mail to reset password.</string>
     <string name="retry_again">Please retry again.</string>
     <string name="enter_forgot_password">We just need your registered Email Id to send your password reset instructions.</string>
     <string name="cancel">Cancel</string>

@@ -41,7 +41,7 @@ public class CommonDialogs
     }
 
 
-    private void dismissDialog()
+    public void dismissDialog()
     {
         if (dialog != null && dialog.isShowing())
         {

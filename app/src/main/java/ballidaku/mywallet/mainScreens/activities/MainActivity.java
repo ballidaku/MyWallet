@@ -1,12 +1,12 @@
 package ballidaku.mywallet.mainScreens.activities;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.AbsRuntimeMarshmallowPermission;
+import ballidaku.mywallet.commonClasses.CommonDialogs;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
@@ -53,7 +54,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -77,9 +77,7 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         else
         {
             int index = getSupportFragmentManager().getBackStackEntryCount() - 1;
-
             Log.e(TAG, "INDEX " + index);
-
             if (index == 0)
             {
                 finish();
@@ -98,19 +96,19 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        boolean willStoreInStack=false;
+        boolean willStoreInStack = false;
         if (id == R.id.nav_home)
         {
             toolbar.setTitle(MyConstant.HOME);
-            fragment=new MainFragment();
+            fragment = new MainFragment();
         }
         else if (id == R.id.nav_settings)
         {
             toolbar.setTitle(MyConstant.SETTINGS);
-            fragment= new SettingFragment();
+            fragment = new SettingFragment();
         }
 
-        CommonMethods.getInstance().switchfragment(context,fragment,willStoreInStack);
+        CommonMethods.getInstance().switchfragment(context, fragment, willStoreInStack);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -124,16 +122,28 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.PICKFILE_REQUEST_CODE)
         {
             Uri selectedFileUri = data.getData();
-           /* if (CommonMethods.getInstance().getFileName(context, selectedFileUri).equals(CommonMethods.getInstance().getDataFileName(context)))
-            {*/
+            assert selectedFileUri != null;
+            String type = CommonMethods.getInstance().getMimeType(context,selectedFileUri);
+            if (type.equalsIgnoreCase("txt"))
+            {
                 CommonMethods.getInstance().readDataFromExternalFile(context, selectedFileUri);
-            /*}
+            }
             else
             {
-                CommonMethods.getInstance().showToast(context, getString(R.string.not_valid_file));
-            }*/
+                CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.not_valid_file));
+            }
+        }
+        else if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.REQUEST_CODE_OPEN_DIRECTORY)
+        {
+            Uri uri = data.getData();
+            if (uri != null)
+            {
+                CommonMethods.getInstance().getAllDatabaseData(context, MyConstant.EXPORT_TO_EXTERNAL_STORAGE, uri);
+            }
         }
     }
+
+
 
     @Override
     public void onPermissionGranted(int requestCode)
@@ -141,6 +151,11 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         if (requestCode == MyConstant.READ_FILE_REQUEST)
         {
             CommonMethods.getInstance().getFileFromDevice(context);
+        }
+        else if (requestCode == MyConstant.WRITE_FILE_REQUEST)
+        {
+//
+            CommonMethods.getInstance().shareFileToLocalStorage(context);
         }
 
     }

@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonDialogs;
 import ballidaku.mywallet.commonClasses.CommonMethods;
@@ -21,7 +23,7 @@ import ballidaku.mywallet.frontScreens.LoginActivity;
 import ballidaku.mywallet.mPin.activity.MPINActivity;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
 
-public class SettingFragment extends Fragment implements View.OnClickListener
+public class SettingFragment extends Fragment
 {
 
     View view = null;
@@ -29,6 +31,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener
     Context context;
 
     FragmentSettingBinding fragmentSettingBinding;
+    FirebaseAuth mAuth;
 
 
     @Override
@@ -48,52 +51,80 @@ public class SettingFragment extends Fragment implements View.OnClickListener
 
     public void setUpViews()
     {
-        fragmentSettingBinding.cardViewChangeMPIN.setOnClickListener(this);
-        fragmentSettingBinding.cardViewExportData.setOnClickListener(this);
-        fragmentSettingBinding.cardViewImportData.setOnClickListener(this);
-        fragmentSettingBinding.cardViewSignOut.setOnClickListener(this);
+        mAuth = FirebaseAuth.getInstance();
+
+        MyClickHandlers handlers = new MyClickHandlers(context);
+        fragmentSettingBinding.setHandlers(handlers);
     }
 
-    @Override
-    public void onClick(View v)
+    public class MyClickHandlers
     {
-        switch (v.getId())
+        Context context;
+
+        MyClickHandlers(Context context)
         {
-            case R.id.cardViewChangeMPIN:
-
-                Intent intent = new Intent(context, MPINActivity.class);
-                intent.putExtra(MyConstant.MPIN, MyConstant.CHANGE_MPIN);
-                startActivity(intent);
-                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-
-                break;
-
-
-            case R.id.cardViewExportData:
-                CommonMethods.getInstance().getAllDatabaseData(context);
-                break;
-
-
-            case R.id.cardViewImportData:
-                CommonDialogs.getInstance().showImportAlertDialog(context, () ->
-                {
-                    String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                    ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.READ_FILE_REQUEST);
-                });
-                break;
-
-            case R.id.cardViewSignOut:
-
-                MySharedPreference.getInstance().clearUserID(context);
-                MySharedPreference.getInstance().clearMPIN(context);
-
-                Intent intentSignOut = new Intent(context, LoginActivity.class);
-                intentSignOut.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentSignOut);
-                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-                ((MainActivity) context).finish();
-
-                break;
+            this.context = context;
         }
+
+        public void onChangeLoginPasswordClicked(View view)
+        {
+            CommonDialogs.getInstance().progressDialog(context);
+            mAuth.sendPasswordResetEmail(MySharedPreference.getInstance().getUserEmail(context))
+                    .addOnCompleteListener(task ->
+                    {
+                        CommonDialogs.getInstance().dismissDialog();
+                        if (task.isSuccessful())
+                        {
+                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.email_reset));
+                        }
+                        else
+                        {
+                            CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.retry_again));
+                        }
+                    });
+
+        }
+
+        public void onChangePasscodeClicked(View view)
+        {
+            Intent intent = new Intent(context, MPINActivity.class);
+            intent.putExtra(MyConstant.MPIN, MyConstant.CHANGE_MPIN);
+            startActivity(intent);
+            ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        }
+
+        public void onExportDataToOtherClicked(View view)
+        {
+            CommonMethods.getInstance().getAllDatabaseData(context,MyConstant.EXPORT_TO_OTHER_APPS,null);
+        }
+
+        public void onExportDataToLocalStorageClicked(View view)
+        {
+            String[] permission = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.WRITE_FILE_REQUEST);
+        }
+
+        public void onImportDataClicked(View view)
+        {
+            CommonDialogs.getInstance().showImportAlertDialog(context, () ->
+            {
+                String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                ((MainActivity) context).requestAppPermissions(permission, R.string.permission, MyConstant.READ_FILE_REQUEST);
+            });
+        }
+
+
+        public void onSignOutClicked(View view)
+        {
+            MySharedPreference.getInstance().clearUserID(context);
+            MySharedPreference.getInstance().clearMPIN(context);
+
+            Intent intentSignOut = new Intent(context, LoginActivity.class);
+            intentSignOut.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentSignOut);
+            ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+            ((MainActivity) context).finish();
+        }
+
     }
 }
