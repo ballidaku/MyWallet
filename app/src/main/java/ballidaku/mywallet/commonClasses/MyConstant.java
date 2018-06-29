@@ -74,6 +74,8 @@ public class MyConstant {
     public static final String VISIBLE="visible";
     public static final String INVISIBLE="invisible";
     public static final String HIDDEN="hidden";
+    public static final int HIDDEN_CODE=129;
+    public static final int VISIBLE_CODE=145;
 
 
     public static final String MPIN="mpin";

@@ -133,10 +133,11 @@ public class LoginActivity extends AppCompatActivity
 
     public void forgotPassword(String email)
     {
-
+        CommonDialogs.getInstance().progressDialog(context);
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task ->
                 {
+                    CommonDialogs.getInstance().dismissDialog();
                     if (task.isSuccessful())
                     {
                         CommonDialogs.getInstance().showMessageDialog(context, getString(R.string.email_reset));

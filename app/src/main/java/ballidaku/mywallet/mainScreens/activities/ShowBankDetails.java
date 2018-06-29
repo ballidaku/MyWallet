@@ -145,7 +145,9 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     imageViewShow.setImageResource(R.drawable.ic_visibility_off);
                     imageViewShow.setTag(MyConstant.HIDDEN);
 
-                    if (type.equals(MyConstant.TEXT))
+                    boolean isVisible=type.equals(MyConstant.TEXT);
+
+                    if (isVisible)
                     {
                         imageViewShow.setVisibility(View.GONE);
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);

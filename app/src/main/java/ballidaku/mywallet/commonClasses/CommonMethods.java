@@ -289,6 +289,8 @@ public class CommonMethods<D>
             if (event.getAction() == MotionEvent.ACTION_UP)
             {
 //                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
+
+
                 if (!editText.getText().toString().trim().isEmpty())
                 {
 
@@ -306,7 +308,37 @@ public class CommonMethods<D>
                     {
                         right = unSelected;
                     }
-                    editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+
+                    Log.e(TAG, "Input Type " + editText.getInputType());
+                    int inputType = editText.getInputType();
+                /*    if (inputType == MyConstant.VISIBLE_CODE)
+                    {
+                        editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+                        return true;
+                    }
+                    else */if (inputType == MyConstant.HIDDEN_CODE || inputType == 0)
+                    {
+                        CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
+                        {
+                            @Override
+                            public void onSuccess()
+                            {
+                                editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+                            }
+
+                            @Override
+                            public void onFailure()
+                            {
+                                CommonMethods.getInstance().showToast(context, context.getString(R.string.passcode_mismatch));
+                            }
+                        });
+                    }
+                    else
+                    {
+                        editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+                    }
+
+
                     return true;
                 }
             }
