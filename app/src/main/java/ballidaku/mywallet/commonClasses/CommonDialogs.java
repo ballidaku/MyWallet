@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import ballidaku.mywallet.R;
 import ballidaku.mywallet.mPin.IndicatorDots;
 import ballidaku.mywallet.mPin.PinLockListener;
 import ballidaku.mywallet.mPin.PinLockView;
+import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
 
 
 /**
@@ -212,6 +214,35 @@ public class CommonDialogs
         TextView textViewTitle = dialog.findViewById(R.id.textViewTitle);
         textViewTitle.setText(Html.fromHtml(message));
         dialog.findViewById(R.id.textViewOk).setOnClickListener(view -> dialog.dismiss());
+    }
+
+    public void showMessageDialog(Context context, String fromWhere, View.OnClickListener onClickListener)
+    {
+        dismissDialog();
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_show_message_with_buttons);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+
+        TextView textViewTitle = dialog.findViewById(R.id.textViewTitle);
+        TextView textViewMessage = dialog.findViewById(R.id.textViewMessage);
+
+        TextView textViewNegative = dialog.findViewById(R.id.textViewNegative);
+        TextView textViewPositive = dialog.findViewById(R.id.textViewPositive);
+
+        textViewPositive.setOnClickListener(onClickListener);
+        textViewNegative.setOnClickListener(view -> dialog.dismiss());
+
+
+        if(fromWhere.equals(SettingFragment.TAG))
+        {
+            textViewTitle.setText(context.getString(R.string.logout_confirmation));
+            textViewMessage.setText(context.getString(R.string.logout_message));
+            textViewNegative.setText(context.getString(R.string.cancel));
+            textViewPositive.setText(context.getString(R.string.logout));
+        }
     }
 
 

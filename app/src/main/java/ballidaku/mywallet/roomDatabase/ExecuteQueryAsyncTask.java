@@ -16,7 +16,7 @@ public class ExecuteQueryAsyncTask<T> extends AsyncTask<Void, Void, T>
     private T data;
     private String type;
     private OnResultInterface onResultInterface;
-    String userId;
+    private String userId;
 
     public ExecuteQueryAsyncTask(Context context, T data, String type, OnResultInterface onResultInterface)
     {

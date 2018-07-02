@@ -83,7 +83,7 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
 
     public void setUpViews()
     {
-        mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
+        mainFragmentAdapter = new MainFragmentAdapter( context,mainList, fragmentMainBinding.floatingActionMenu);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);

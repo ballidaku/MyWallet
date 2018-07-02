@@ -111,6 +111,13 @@
     <string name="confirm_new_passcode">Confirm New Passcode</string>
     <string name="enter_current_passcode">Enter Current Passcode</string>
     <string name="not_relevant_data">No relevant data found in this file, Please use your last exported file.</string>
+    <string name="header_validation">Header should not be empty.</string>
+    <string name="title_validation">Title or Value data should not be empty.</string>
+    <string name="update_other_details">UPDATE OTHER DETAILS</string>
+    <string name="add_other_details">ADD OTHER DETAILS</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="logout_message">Are you sure, you want to Logout?</string>
+    <string name="logout">Logout</string>
 
 
 </resources>

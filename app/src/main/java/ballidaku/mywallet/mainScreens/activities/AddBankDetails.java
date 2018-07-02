@@ -1,5 +1,6 @@
 package ballidaku.mywallet.mainScreens.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -90,7 +91,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
 
     private void addMoreFeilds()
     {
-        final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
+        @SuppressLint("InflateParams") final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
         MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
         spinnerType.setItems(typeArray);
 

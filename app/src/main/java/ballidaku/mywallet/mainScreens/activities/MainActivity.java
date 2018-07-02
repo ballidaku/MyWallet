@@ -64,6 +64,7 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         textViewName.setText(MySharedPreference.getInstance().getUserName(context));
         textViewEmail.setText(MySharedPreference.getInstance().getUserEmail(context));
 
+        navigationView.getMenu().getItem(0).setChecked(true);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
     }
 
@@ -123,7 +124,7 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         {
             Uri selectedFileUri = data.getData();
             assert selectedFileUri != null;
-            String type = CommonMethods.getInstance().getMimeType(context,selectedFileUri);
+            String type = CommonMethods.getInstance().getMimeType(context, selectedFileUri);
             if (type.equalsIgnoreCase("txt"))
             {
                 CommonMethods.getInstance().readDataFromExternalFile(context, selectedFileUri);
@@ -142,7 +143,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
             }
         }
     }
-
 
 
     @Override

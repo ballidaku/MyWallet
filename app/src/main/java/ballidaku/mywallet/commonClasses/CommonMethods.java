@@ -61,8 +61,8 @@ public class CommonMethods<D>
 {
     private String TAG = "CommonMethods";
 
-    public static Toast toast;
-    public static Snackbar snackbar;
+    private static Toast toast;
+    private static Snackbar snackbar;
 
     private static CommonMethods instance = new CommonMethods();
 
@@ -352,25 +352,25 @@ public class CommonMethods<D>
     /**********************************************************************************************/
     public String getData(Context context, ArrayList<EditText> editTextArrayList)
     {
-        String copiedContent = "";
+        StringBuilder copiedContent = new StringBuilder();
         for (int i = 0; i < editTextArrayList.size(); i++)
         {
             if (editTextArrayList.get(i).getCompoundDrawables()[2].getConstantState().equals(context.getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
             {
                 String content = editTextArrayList.get(i).getTag().toString() + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
-                copiedContent += copiedContent.isEmpty() ? content : "\n" + content;
+                copiedContent.append((copiedContent.length() == 0) ? content : "\n" + content);
             }
         }
 
         //for copying single item
-        if (!copiedContent.isEmpty() && !copiedContent.contains("\n"))
+        if ((copiedContent.length() > 0) && !copiedContent.toString().contains("\n"))
         {
-            String[] singleContent = copiedContent.split(":");
+            String[] singleContent = copiedContent.toString().split(":");
 //            copiedContent = singleContent[1].replaceAll(" ", "");
-            copiedContent = singleContent[1];
+            copiedContent = new StringBuilder(singleContent[1]);
         }
 
-        return copiedContent.trim();
+        return copiedContent.toString().trim();
     }
 
     /**********************************************************************************************/

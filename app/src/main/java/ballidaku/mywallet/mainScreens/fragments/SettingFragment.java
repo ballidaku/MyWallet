@@ -25,6 +25,7 @@ import ballidaku.mywallet.mainScreens.activities.MainActivity;
 
 public class SettingFragment extends Fragment
 {
+    public static String TAG = SettingFragment.class.getSimpleName();
 
     View view = null;
 
@@ -95,7 +96,7 @@ public class SettingFragment extends Fragment
 
         public void onExportDataToOtherClicked(View view)
         {
-            CommonMethods.getInstance().getAllDatabaseData(context,MyConstant.EXPORT_TO_OTHER_APPS,null);
+            CommonMethods.getInstance().getAllDatabaseData(context, MyConstant.EXPORT_TO_OTHER_APPS, null);
         }
 
         public void onExportDataToLocalStorageClicked(View view)
@@ -116,15 +117,24 @@ public class SettingFragment extends Fragment
 
         public void onSignOutClicked(View view)
         {
-            MySharedPreference.getInstance().clearUserID(context);
-            MySharedPreference.getInstance().clearMPIN(context);
-
-            Intent intentSignOut = new Intent(context, LoginActivity.class);
-            intentSignOut.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intentSignOut);
-            ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-            ((MainActivity) context).finish();
+            CommonDialogs.getInstance().showMessageDialog(context, TAG,onLogoutClickListener);
         }
+
+        View.OnClickListener onLogoutClickListener=new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                MySharedPreference.getInstance().clearUserID(context);
+                MySharedPreference.getInstance().clearMPIN(context);
+
+                Intent intentSignOut = new Intent(context, LoginActivity.class);
+                intentSignOut.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentSignOut);
+                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                ((MainActivity) context).finish();
+            }
+        };
 
     }
 }

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
@@ -29,16 +31,18 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
     String TAG= MainFragmentAdapter.class.getSimpleName();
     private ArrayList<T> arrayList;
     private Context context;
+    FloatingActionMenu floatingActionMenu;
 
     public static final int TYPE_HEADER_BANK_DETAILS = 0;
     public static final int TYPE_ITEM_BANK_DETAILS = 1;
     public static final int TYPE_HEADER_OTHER_DETAILS = 2;
     public static final int TYPE_ITEM_OTHER_DETAILS = 3;
 
-    public MainFragmentAdapter(ArrayList<T> arrayList, Context context)
+    public MainFragmentAdapter(Context context, ArrayList<T> arrayList, FloatingActionMenu floatingActionMenu)
     {
         this.arrayList = arrayList;
         this.context = context;
+        this.floatingActionMenu=floatingActionMenu;
     }
 
     class HeaderViewHolder<T> extends RecyclerView.ViewHolder
@@ -118,10 +122,6 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
 
                 ((ItemViewHolder) holder).textViewAccountHeader.setVisibility(View.VISIBLE);
                 ((ItemViewHolder) holder).textViewBankOwner.setVisibility(View.VISIBLE);
-
-
-
-
             }
             else if (arrayList.get(position) instanceof OtherDetailsDataModel)
             {
@@ -134,18 +134,16 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
 
             }
 
-            holder.itemView.setOnClickListener(new View.OnClickListener()
+            holder.itemView.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    boolean isBankDetails= arrayList.get(position) instanceof AccountDetailsDataModel;
 
-                    Intent intent = new Intent(context, isBankDetails ? ShowBankDetails.class : ShowOtherDetail.class);
-                    intent.putExtra(MyConstant.LIST_ITEM_ID, isBankDetails ? ((AccountDetailsDataModel) arrayList.get(position)).getId() : ((OtherDetailsDataModel) arrayList.get(position)).getId());
-                    intent.putExtra(MyConstant.TYPE, isBankDetails ? MyConstant.BANK_DETAILS : MyConstant.OTHER_DETAILS);
-                    context.startActivity(intent);
-                }
+                floatingActionMenu.close(true);
+                boolean isBankDetails= arrayList.get(position) instanceof AccountDetailsDataModel;
+
+                Intent intent = new Intent(context, isBankDetails ? ShowBankDetails.class : ShowOtherDetail.class);
+                intent.putExtra(MyConstant.LIST_ITEM_ID, isBankDetails ? ((AccountDetailsDataModel) arrayList.get(position)).getId() : ((OtherDetailsDataModel) arrayList.get(position)).getId());
+                intent.putExtra(MyConstant.TYPE, isBankDetails ? MyConstant.BANK_DETAILS : MyConstant.OTHER_DETAILS);
+                context.startActivity(intent);
             });
         }
 

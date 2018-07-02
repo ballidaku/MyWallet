@@ -69,14 +69,14 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
         if (fromWhere.equals(MyConstant.EDIT))
         {
-            activityAddOtherDetailBinding.toolbarOther.setTitle("UPDATE OTHER DETAILS");
+            activityAddOtherDetailBinding.toolbarOther.setTitle(getString(R.string.update_other_details));
             otherDetailsDataModel = (OtherDetailsDataModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
 
             setData();
         }
         else if (fromWhere.equals(MyConstant.NEW))
         {
-            activityAddOtherDetailBinding.toolbarOther.setTitle("ADD OTHER DETAILS");
+            activityAddOtherDetailBinding.toolbarOther.setTitle(getString(R.string.add_other_details));
             addMoreFeilds();
         }
     }
@@ -212,7 +212,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
         if (headingName.isEmpty())
         {
-            CommonMethods.getInstance().showToast(context, "Header should not be empty");
+            CommonMethods.getInstance().showToast(context, getString(R.string.header_validation));
             return;
         }
 
@@ -233,7 +233,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
             if (title.isEmpty() || value.isEmpty())
             {
-                CommonMethods.getInstance().showToast(context, "Title or Value data should not be empty");
+                CommonMethods.getInstance().showToast(context, getString(R.string.title_validation));
                 return;
             }
 
