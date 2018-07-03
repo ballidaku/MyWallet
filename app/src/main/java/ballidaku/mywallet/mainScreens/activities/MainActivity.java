@@ -1,10 +1,14 @@
 package ballidaku.mywallet.mainScreens.activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -22,8 +26,10 @@ import ballidaku.mywallet.commonClasses.CommonDialogs;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
+import ballidaku.mywallet.commonClasses.NotificationHelper;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
 import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
+import ballidaku.mywallet.services.KillNotificationsService;
 
 public class MainActivity extends AbsRuntimeMarshmallowPermission implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -42,7 +48,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         context = this;
         setUpViews();
     }
-
 
     public void setUpViews()
     {
@@ -66,6 +71,27 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
 
         navigationView.getMenu().getItem(0).setChecked(true);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+
+
+        context.bindService(new Intent(context, KillNotificationsService.class), mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (getIntent() != null)
+        {
+            if (getIntent().getIntExtra(MyConstant.FROM_WHERE, 0) == MyConstant.EXIT_ID)
+            {
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                assert manager != null;
+                manager.cancel(MyConstant.NOTIFICATION_ID);
+                finishAffinity();
+            }
+        }
     }
 
     @Override
@@ -159,5 +185,32 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         }
 
     }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mConnection != null) {
+            unbindService(mConnection);
+        }
+    }
+
+    ServiceConnection mConnection = new ServiceConnection()
+    {
+        public void onServiceConnected(ComponentName className,
+                                       IBinder binder)
+        {
+            ((KillNotificationsService.KillBinder) binder).service.startService(new Intent(context, KillNotificationsService.class));
+
+            NotificationHelper.getInstance().showNotificationWithActionButton(context);
+        }
+
+        public void onServiceDisconnected(ComponentName className)
+        {
+        }
+
+    };
+
 
 }

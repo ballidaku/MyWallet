@@ -313,7 +313,7 @@ public class CommonMethods<D>
                         isPasscodeVerified = ShowOtherDetail.isPasscodeVerified;
                     }
 
-                    if (type.length==2 && type[1].equals(MyConstant.SECRET) && !isPasscodeVerified)
+                    if (type.length == 2 && type[1].equals(MyConstant.SECRET) && !isPasscodeVerified)
                     {
                         CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
                         {
@@ -363,8 +363,8 @@ public class CommonMethods<D>
         {
             if (editTextArrayList.get(i).getCompoundDrawables()[2].getConstantState().equals(context.getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
             {
-                String[] tags= ((String)editTextArrayList.get(i).getTag()).split(MyConstant.SEPRATER);
-                String content =tags[0] + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
+                String[] tags = ((String) editTextArrayList.get(i).getTag()).split(MyConstant.SEPRATER);
+                String content = tags[0] + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
                 copiedContent.append((copiedContent.length() == 0) ? content : "\n" + content);
             }
         }
@@ -652,6 +652,4 @@ public class CommonMethods<D>
         }
         return extension;
     }
-
-
 }

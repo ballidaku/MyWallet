@@ -76,6 +76,8 @@ public class MyConstant {
     public static final String HIDDEN="hidden";
     public static final int HIDDEN_CODE=129;
     public static final int VISIBLE_CODE=145;
+    public static final int NOTIFICATION_ID=3400;
+    public static final int EXIT_ID=1800;
 
 
     public static final String MPIN="mpin";

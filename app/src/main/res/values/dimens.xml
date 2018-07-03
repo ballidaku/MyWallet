@@ -19,6 +19,7 @@
     <dimen name="default_vertical_spacing">0dp</dimen>
 
 
+    <dimen name="headingHigh">@dimen/_16sdp</dimen>
     <dimen name="heading">@dimen/_14sdp</dimen>
     <dimen name="headingChild">@dimen/_13sdp</dimen>
 </resources>

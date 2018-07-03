@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">MyWallet</string>
+    <string name="app_running">MyWallet is running...</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -118,6 +120,7 @@
     <string name="logout_confirmation">Logout Confirmation</string>
     <string name="logout_message">Are you sure, you want to Logout?</string>
     <string name="logout">Logout</string>
+    <string name="exit">EXIT</string>
 
 
 </resources>
