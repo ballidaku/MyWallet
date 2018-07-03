@@ -49,6 +49,8 @@ import java.util.regex.Pattern;
 import ballidaku.mywallet.BuildConfig;
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
+import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
+import ballidaku.mywallet.mainScreens.activities.ShowOtherDetail;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
@@ -288,9 +290,6 @@ public class CommonMethods<D>
 
             if (event.getAction() == MotionEvent.ACTION_UP)
             {
-//                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-
-
                 if (!editText.getText().toString().trim().isEmpty())
                 {
 
@@ -300,23 +299,21 @@ public class CommonMethods<D>
                     Drawable alreadyRight = editText.getCompoundDrawables()[DRAWABLE_RIGHT];
                     Drawable unSelected = context.getResources().getDrawable(R.drawable.ic_check_unselected);
 
-                    if (unSelected.getConstantState().equals(alreadyRight.getConstantState()))
+                    right = unSelected.getConstantState().equals(alreadyRight.getConstantState()) ? context.getResources().getDrawable(R.drawable.ic_check_selected) : unSelected;
+
+                    String[] type = ((String) editText.getTag()).split(MyConstant.SEPRATER);
+
+                    boolean isPasscodeVerified = false;
+                    if (context instanceof ShowBankDetails)
                     {
-                        right = context.getResources().getDrawable(R.drawable.ic_check_selected);
+                        isPasscodeVerified = ShowBankDetails.isPasscodeVerified;
                     }
-                    else
+                    else if (context instanceof ShowOtherDetail)
                     {
-                        right = unSelected;
+                        isPasscodeVerified = ShowOtherDetail.isPasscodeVerified;
                     }
 
-                    Log.e(TAG, "Input Type " + editText.getInputType());
-                    int inputType = editText.getInputType();
-                /*    if (inputType == MyConstant.VISIBLE_CODE)
-                    {
-                        editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
-                        return true;
-                    }
-                    else */if (inputType == MyConstant.HIDDEN_CODE || inputType == 0)
+                    if (type.length==2 && type[1].equals(MyConstant.SECRET) && !isPasscodeVerified)
                     {
                         CommonDialogs.getInstance().showPasscodeDialog(context, new CommonInterfaces.checkPasscode()
                         {
@@ -324,6 +321,14 @@ public class CommonMethods<D>
                             public void onSuccess()
                             {
                                 editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+                                if (context instanceof ShowBankDetails)
+                                {
+                                    ShowBankDetails.isPasscodeVerified = true;
+                                }
+                                else if (context instanceof ShowOtherDetail)
+                                {
+                                    ShowOtherDetail.isPasscodeVerified = true;
+                                }
                             }
 
                             @Override
@@ -346,6 +351,7 @@ public class CommonMethods<D>
         }
     }
 
+
     /**********************************************************************************************/
     /*Content to share and copy*/
 
@@ -357,7 +363,8 @@ public class CommonMethods<D>
         {
             if (editTextArrayList.get(i).getCompoundDrawables()[2].getConstantState().equals(context.getResources().getDrawable(R.drawable.ic_check_selected).getConstantState()))
             {
-                String content = editTextArrayList.get(i).getTag().toString() + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
+                String[] tags= ((String)editTextArrayList.get(i).getTag()).split(MyConstant.SEPRATER);
+                String content =tags[0] + MyConstant.SPACE + editTextArrayList.get(i).getText().toString();
                 copiedContent.append((copiedContent.length() == 0) ? content : "\n" + content);
             }
         }

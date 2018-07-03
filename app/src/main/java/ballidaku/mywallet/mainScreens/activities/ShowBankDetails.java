@@ -8,7 +8,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
     ActivityShowBankDetailsBinding activityShowBankDetailsBinding;
 
-    boolean isPasscodeVerified;
+    public static boolean isPasscodeVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,7 +64,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
     @SuppressLint("ClickableViewAccessibility")
     private void setUpViews()
     {
-
+        isPasscodeVerified = false;
         setSupportActionBar(activityShowBankDetailsBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -145,17 +144,17 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     imageViewShow.setImageResource(R.drawable.ic_visibility_off);
                     imageViewShow.setTag(MyConstant.HIDDEN);
 
-                    boolean isVisible=type.equals(MyConstant.TEXT);
-
-                    if (isVisible)
+                    if (type.equals(MyConstant.TEXT))
                     {
                         imageViewShow.setVisibility(View.GONE);
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editTextValue.setTag(title + MyConstant.SEPRATER + MyConstant.TEXT);
                     }
                     else
                     {
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         editTextValue.setMaxLines(1);
+                        editTextValue.setTag(title + MyConstant.SEPRATER + MyConstant.SECRET);
                     }
 
                     imageViewShow.setOnClickListener(view1 ->
@@ -169,6 +168,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                                 imageViewShow.setTag(MyConstant.VISIBLE);
                                 editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                                 imageViewShow.setImageResource(R.drawable.ic_visibility_on);
+                                editTextValue.setTag(title + MyConstant.SEPRATER + MyConstant.TEXT);
                             }
                             else
                             {
@@ -181,6 +181,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                                         imageViewShow.setTag(MyConstant.VISIBLE);
                                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                                         imageViewShow.setImageResource(R.drawable.ic_visibility_on);
+                                        editTextValue.setTag(title + MyConstant.SEPRATER + MyConstant.TEXT);
                                     }
 
                                     @Override
@@ -196,6 +197,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                             imageViewShow.setTag(MyConstant.HIDDEN);
                             editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                             imageViewShow.setImageResource(R.drawable.ic_visibility_off);
+                            editTextValue.setTag(title + MyConstant.SEPRATER + MyConstant.SECRET);
                         }
                     });
 
@@ -205,7 +207,7 @@ public class ShowBankDetails<D> extends AppCompatActivity
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
-                    editTextValue.setTag(title);
+                    editTextValue.setTag(title + MyConstant.SEPRATER + type);
                     editTextList.add(editTextValue);
 
                     editTextValue.setOnTouchListener(CommonMethods.getInstance().new MyTouchListener(context, editTextValue));
@@ -307,7 +309,6 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
         new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data ->
         {
-            Log.e(TAG,"onDelete "+data);
             finish();
         });
     }

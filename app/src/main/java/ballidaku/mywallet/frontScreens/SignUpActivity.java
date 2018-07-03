@@ -24,7 +24,7 @@ import ballidaku.mywallet.commonClasses.MyFirebase;
 import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.databinding.ActivitySignUpBinding;
 
-public class SignUpActivity extends AppCompatActivity /*implements View.OnClickListener*/
+public class SignUpActivity extends AppCompatActivity
 {
     String TAG = SignUpActivity.class.getSimpleName();
     Context context;
@@ -70,28 +70,6 @@ public class SignUpActivity extends AppCompatActivity /*implements View.OnClickL
             finish();
         }
     }
-
-/*    @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.textViewSignIn:
-
-                this.finish();
-
-                break;
-
-
-            case R.id.textViewSignUp:
-
-                checkValidation();
-
-                break;
-        }
-
-
-    }*/
 
     private void checkValidation()
     {

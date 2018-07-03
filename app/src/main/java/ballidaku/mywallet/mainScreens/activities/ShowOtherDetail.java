@@ -41,7 +41,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
     ArrayList<EditText> editTextList = new ArrayList<>();
 
     int id;
-    boolean isPasscodeVerified;
+    public static boolean isPasscodeVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,6 +61,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
     private void setUpViews()
     {
+        isPasscodeVerified=false;
         setSupportActionBar(activityShowOtherDetailsBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -168,7 +169,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
-                    editTextValue.setTag(title);
+                    editTextValue.setTag(title + MyConstant.SEPRATER + type);
                     editTextList.add(editTextValue);
 
                     editTextValue.setOnTouchListener(CommonMethods.getInstance().new MyTouchListener(context, editTextValue));
