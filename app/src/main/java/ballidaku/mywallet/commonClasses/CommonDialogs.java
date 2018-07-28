@@ -23,7 +23,6 @@ import ballidaku.mywallet.R;
 import ballidaku.mywallet.mPin.IndicatorDots;
 import ballidaku.mywallet.mPin.PinLockListener;
 import ballidaku.mywallet.mPin.PinLockView;
-import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
 
 
 /**
@@ -236,12 +235,19 @@ public class CommonDialogs
         textViewNegative.setOnClickListener(view -> dialog.dismiss());
 
 
-        if(fromWhere.equals(SettingFragment.TAG))
+        if(fromWhere.equals(MyConstant.LOGOUT))
         {
             textViewTitle.setText(context.getString(R.string.logout_confirmation));
             textViewMessage.setText(context.getString(R.string.logout_message));
             textViewNegative.setText(context.getString(R.string.cancel));
             textViewPositive.setText(context.getString(R.string.logout));
+        }
+        else if(fromWhere.equals(MyConstant.CHANGE_PASSWORD))
+        {
+            textViewTitle.setText(context.getString(R.string.change_password_confirmation));
+            textViewMessage.setText(context.getString(R.string.change_password_message));
+            textViewNegative.setText(context.getString(R.string.cancel));
+            textViewPositive.setText(context.getString(R.string.yes));
         }
     }
 

@@ -7,12 +7,8 @@
     <data>
 
         <variable
-            name="temp"
-            type="ballidaku.mywallet.mainScreens.fragments.SettingFragment"/>
-
-        <variable
-            name="handlers"
-            type="ballidaku.mywallet.mainScreens.fragments.SettingFragment.MyClickHandlers" />
+            name="viewModel"
+            type="ballidaku.mywallet.viewModel.SettingFragmentViewModel" />
 
 
     </data>
@@ -34,7 +30,7 @@
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
-            android:onClick="@{handlers::onChangeLoginPasswordClicked}"
+            android:onClick="@{viewModel::onChangeLoginPasswordClicked}"
             app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
@@ -57,7 +53,7 @@
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
-            android:onClick="@{handlers::onChangePasscodeClicked}"
+            android:onClick="@{viewModel::onChangePasscodeClicked}"
             app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
@@ -78,7 +74,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
-            android:onClick="@{handlers::onExportDataToOtherClicked}"
+            android:onClick="@{viewModel::onExportDataToOtherClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">
@@ -100,7 +96,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
-            android:onClick="@{handlers::onExportDataToLocalStorageClicked}"
+            android:onClick="@{viewModel::onExportDataToLocalStorageClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">
@@ -122,7 +118,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
-            android:onClick="@{handlers::onImportDataClicked}"
+            android:onClick="@{viewModel::onImportDataClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">
@@ -145,7 +141,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             app:cardElevation="2dp"
-            android:onClick="@{handlers::onSignOutClicked}"
+            android:onClick="@{viewModel::onSignOutClicked}"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/colorPrimary">

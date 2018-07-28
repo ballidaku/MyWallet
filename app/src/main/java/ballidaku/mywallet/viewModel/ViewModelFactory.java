@@ -9,12 +9,14 @@ import ballidaku.mywallet.databinding.ActivityLoginBinding;
 import ballidaku.mywallet.databinding.ActivityMainBinding;
 import ballidaku.mywallet.databinding.ActivitySignUpBinding;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
+import ballidaku.mywallet.databinding.FragmentSettingBinding;
 import ballidaku.mywallet.frontScreens.LoginActivity;
 import ballidaku.mywallet.frontScreens.SignUpActivity;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
+import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
 
-public class ViewModelFactory<B,A,I> extends ViewModelProvider.NewInstanceFactory
+public class ViewModelFactory<B, A, I> extends ViewModelProvider.NewInstanceFactory
 {
     private Context context;
     private A activityOrFragemnt;
@@ -26,7 +28,7 @@ public class ViewModelFactory<B,A,I> extends ViewModelProvider.NewInstanceFactor
         this.context = context;
         this.activityOrFragemnt = activityOrFragemnt;
         this.binding = binding;
-        this.myInterface=myInterface;
+        this.myInterface = myInterface;
     }
 
     @NonNull
@@ -36,26 +38,29 @@ public class ViewModelFactory<B,A,I> extends ViewModelProvider.NewInstanceFactor
     {
         if (activityOrFragemnt instanceof MainActivity)
         {
-            return (T) new MainActivityViewModel(context, (ActivityMainBinding) binding,(MainActivityViewModel.MainActivityViewModelCallBack)myInterface);
-        }
-        else if (activityOrFragemnt instanceof MainFragment)
-        {
-            return (T) new MainFragmentViewModel(context, (FragmentMainBinding) binding,(MainFragmentViewModel.MainFragmentCallBack)myInterface);
+            return (T) new MainActivityViewModel(context, (ActivityMainBinding) binding, (MainActivityViewModel.MainActivityViewModelCallBack) myInterface);
         }
         else if (activityOrFragemnt instanceof LoginActivity)
         {
-            return (T) new LoginActivityViewModel(context, (ActivityLoginBinding) binding,(LoginActivityViewModel.LoginActivityViewModelCallBack)myInterface);
+            return (T) new LoginActivityViewModel(context, (ActivityLoginBinding) binding, (LoginActivityViewModel.LoginActivityViewModelCallBack) myInterface);
         }
         else if (activityOrFragemnt instanceof SignUpActivity)
         {
-            return (T) new SignUpActivityViewModel(context, (ActivitySignUpBinding) binding,(SignUpActivityViewModel.SignUpActivityViewModelCallBack)myInterface);
+            return (T) new SignUpActivityViewModel(context, (ActivitySignUpBinding) binding, (SignUpActivityViewModel.SignUpActivityViewModelCallBack) myInterface);
+        }
+        else if (activityOrFragemnt instanceof MainFragment)
+        {
+            return (T) new MainFragmentViewModel(context, (FragmentMainBinding) binding, (MainFragmentViewModel.MainFragmentViewModelCallBack) myInterface);
+        }
+        else if (activityOrFragemnt instanceof SettingFragment)
+        {
+            return (T) new SettingFragmentViewModel(context, (FragmentSettingBinding) binding, (SettingFragmentViewModel.SettingFragmentViewModelCallBack) myInterface);
         }
         else
         {
             return super.create(modelClass);
         }
     }
-
 
 
 }

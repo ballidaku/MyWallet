@@ -33,7 +33,7 @@ import ballidaku.mywallet.viewModel.ViewModelFactory;
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment<D> extends Fragment implements MainFragmentViewModel.MainFragmentCallBack
+public class MainFragment<D> extends Fragment implements MainFragmentViewModel.MainFragmentViewModelCallBack
 {
     String TAG = MainFragment.class.getSimpleName();
     View view = null;

@@ -12,7 +12,7 @@ public class SignUpActivityViewModel extends ViewModel implements SignUpActivity
     private SignUpActivityViewModelCallBack signUpActivityViewModelCallBack;
     SignUpActivityModel signUpActivityModel;
 
-    SignUpActivityViewModel(Context context, ActivitySignUpBinding binding, SignUpActivityModel.SignUpActivityModelCallBack signUpActivityModelCallBack)
+    SignUpActivityViewModel(Context context, ActivitySignUpBinding binding, SignUpActivityViewModelCallBack signUpActivityViewModelCallBack)
     {
         this.signUpActivityViewModelCallBack = signUpActivityViewModelCallBack;
         signUpActivityModel = new SignUpActivityModel(context, binding, this);

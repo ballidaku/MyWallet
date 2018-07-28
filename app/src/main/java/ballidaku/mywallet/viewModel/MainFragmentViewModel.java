@@ -13,15 +13,15 @@ public class MainFragmentViewModel<D> extends ViewModel implements MainFragmentM
 {
     private Context context;
     private FragmentMainBinding fragmentMainBinding;
-    private MainFragmentCallBack mainFragmentCallBack;
+    private MainFragmentViewModelCallBack mainFragmentViewModelCallBack;
     private MainFragmentModel mainFragmentModel;
 
 
-    MainFragmentViewModel(Context context, FragmentMainBinding binding, MainFragmentCallBack mainFragmentCallBack)
+    MainFragmentViewModel(Context context, FragmentMainBinding binding, MainFragmentViewModelCallBack mainFragmentViewModelCallBack)
     {
         this.context = context;
         this.fragmentMainBinding = binding;
-        this.mainFragmentCallBack=mainFragmentCallBack;
+        this.mainFragmentViewModelCallBack=mainFragmentViewModelCallBack;
 
         mainFragmentModel=new MainFragmentModel(this.context,this);
         mainFragmentModel.getData();
@@ -36,19 +36,19 @@ public class MainFragmentViewModel<D> extends ViewModel implements MainFragmentM
 
     public void onBankDetailsClick(View v)
     {
-        mainFragmentCallBack.clickBankDetails();
+        mainFragmentViewModelCallBack.clickBankDetails();
     }
 
     public void onOtherDetailsClick(View v)
     {
-        mainFragmentCallBack.clickOtherDetails();
+        mainFragmentViewModelCallBack.clickOtherDetails();
     }
 
 
     /***********************************************************************/
     // Interface
     /***********************************************************************/
-    public interface MainFragmentCallBack {
+    public interface MainFragmentViewModelCallBack {
 
         void setAdapter(ArrayList data);
 
@@ -67,7 +67,7 @@ public class MainFragmentViewModel<D> extends ViewModel implements MainFragmentM
     @Override
     public void onResult(ArrayList data)
     {
-        mainFragmentCallBack.setAdapter(data);
+        mainFragmentViewModelCallBack.setAdapter(data);
     }
 
 

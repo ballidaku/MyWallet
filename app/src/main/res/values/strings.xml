@@ -117,9 +117,14 @@
     <string name="title_validation">Title or Value data should not be empty.</string>
     <string name="update_other_details">UPDATE OTHER DETAILS</string>
     <string name="add_other_details">ADD OTHER DETAILS</string>
+
+    <string name="change_password_confirmation">Change Password Confirmation</string>
+    <string name="change_password_message">Are you sure, you want to change Password?</string>
     <string name="logout_confirmation">Logout Confirmation</string>
     <string name="logout_message">Are you sure, you want to Logout?</string>
+
     <string name="logout">Logout</string>
+    <string name="yes">Yes</string>
     <string name="exit">EXIT</string>
 
 

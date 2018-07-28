@@ -19,6 +19,10 @@ public class MyConstant {
 
 
 
+    public static final String LOGOUT="logout";
+    public static final String CHANGE_PASSWORD="change_password";
+
+
     public static final String HOME="Home";
     public static final String SETTINGS="Settings";
 
