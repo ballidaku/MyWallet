@@ -1,4 +1,4 @@
-package ballidaku.mywallet.dataModel;
+package ballidaku.mywallet.model;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class KeyValueModel implements Serializable
 
     String key;
 
-    UserBankDataModel userBankDataModel;
+    UserBankModel userBankDataModel;
 
 
     public String getKey()
@@ -28,12 +28,12 @@ public class KeyValueModel implements Serializable
         this.key = key;
     }
 
-    public UserBankDataModel getUserBankDataModel()
+    public UserBankModel getUserBankDataModel()
     {
         return userBankDataModel;
     }
 
-    public void setUserBankDataModel(UserBankDataModel userBankDataModel)
+    public void setUserBankDataModel(UserBankModel userBankDataModel)
     {
         this.userBankDataModel = userBankDataModel;
     }

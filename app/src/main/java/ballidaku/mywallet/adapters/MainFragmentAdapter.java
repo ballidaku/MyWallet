@@ -189,6 +189,7 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void addData(ArrayList<T> arrayList)
     {
+        this.arrayList.clear();
         this.arrayList = arrayList;
         notifyDataSetChanged();
     }

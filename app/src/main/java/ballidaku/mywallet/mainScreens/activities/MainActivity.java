@@ -2,80 +2,87 @@ package ballidaku.mywallet.mainScreens.activities;
 
 import android.app.Activity;
 import android.app.NotificationManager;
-import android.content.ComponentName;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.AbsRuntimeMarshmallowPermission;
 import ballidaku.mywallet.commonClasses.CommonDialogs;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MySharedPreference;
-import ballidaku.mywallet.commonClasses.NotificationHelper;
+import ballidaku.mywallet.databinding.ActivityMainBinding;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
 import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
-import ballidaku.mywallet.services.KillNotificationsService;
+import ballidaku.mywallet.viewModel.MainActivityViewModel;
+import ballidaku.mywallet.viewModel.ViewModelFactory;
 
-public class MainActivity extends AbsRuntimeMarshmallowPermission implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends AbsRuntimeMarshmallowPermission implements MainActivityViewModel.MainActivityViewModelCallBack
 {
-
     String TAG = MainActivity.class.getSimpleName();
     Context context;
-    DrawerLayout drawer;
-    Toolbar toolbar;
-    Fragment fragment;
+
+    ActivityMainBinding activityMainBinding;
+    private Fragment fragment;
+    ViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         context = this;
+
+
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        viewModelFactory = new ViewModelFactory<>(context, MainActivity.this, activityMainBinding, this);
+        activityMainBinding.setViewModel(ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel.class));
+
         setUpViews();
     }
 
-    public void setUpViews()
+    private void setUpViews()
     {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ((MainActivity) context).setSupportActionBar(activityMainBinding.include.toolbar);
 
-        drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle((MainActivity) context, activityMainBinding.drawerLayout, activityMainBinding.include.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        activityMainBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        View headerLayout = navigationView.getHeaderView(0);
-        TextView textViewName = headerLayout.findViewById(R.id.textViewName);
-        TextView textViewEmail = headerLayout.findViewById(R.id.textViewEmail);
-
-        textViewName.setText(MySharedPreference.getInstance().getUserName(context));
-        textViewEmail.setText(MySharedPreference.getInstance().getUserEmail(context));
-
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
-
-
-
-        context.bindService(new Intent(context, KillNotificationsService.class), mConnection, Context.BIND_AUTO_CREATE);
     }
+
+
+    void onNavigationItemSelected(MenuItem item)
+    {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        boolean willStoreInStack = false;
+        if (id == R.id.nav_home)
+        {
+            activityMainBinding.include.toolbar.setTitle(MyConstant.HOME);
+            fragment = new MainFragment();
+        }
+        else if (id == R.id.nav_settings)
+        {
+            activityMainBinding.include.toolbar.setTitle(MyConstant.SETTINGS);
+            fragment = new SettingFragment();
+        }
+
+        CommonMethods.getInstance().switchfragment(context, fragment, willStoreInStack);
+
+        activityMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -97,9 +104,9 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
     @Override
     public void onBackPressed()
     {
-        if (drawer.isDrawerOpen(GravityCompat.START))
+        if (activityMainBinding.drawerLayout.isDrawerOpen(GravityCompat.START))
         {
-            drawer.closeDrawer(GravityCompat.START);
+            activityMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
         }
         else
         {
@@ -114,32 +121,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
                 super.onBackPressed();
             }
         }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        boolean willStoreInStack = false;
-        if (id == R.id.nav_home)
-        {
-            toolbar.setTitle(MyConstant.HOME);
-            fragment = new MainFragment();
-        }
-        else if (id == R.id.nav_settings)
-        {
-            toolbar.setTitle(MyConstant.SETTINGS);
-            fragment = new SettingFragment();
-        }
-
-        CommonMethods.getInstance().switchfragment(context, fragment, willStoreInStack);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -170,7 +151,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         }
     }
 
-
     @Override
     public void onPermissionGranted(int requestCode)
     {
@@ -180,37 +160,19 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Nav
         }
         else if (requestCode == MyConstant.WRITE_FILE_REQUEST)
         {
-//
             CommonMethods.getInstance().shareFileToLocalStorage(context);
         }
-
     }
 
 
+
+    /***********************************************************************/
+    // Interface Results from ViewModel class
+
+    /***********************************************************************/
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (mConnection != null) {
-            unbindService(mConnection);
-        }
-    }
-
-    ServiceConnection mConnection = new ServiceConnection()
+    public void onNavigationClicked(MenuItem item)
     {
-        public void onServiceConnected(ComponentName className,
-                                       IBinder binder)
-        {
-            ((KillNotificationsService.KillBinder) binder).service.startService(new Intent(context, KillNotificationsService.class));
-
-            NotificationHelper.getInstance().showNotificationWithActionButton(context);
-        }
-
-        public void onServiceDisconnected(ComponentName className)
-        {
-        }
-
-    };
-
-
+        onNavigationItemSelected(item);
+    }
 }

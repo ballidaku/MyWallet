@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="temp"
-            type="ballidaku.mywallet.mainScreens.fragments.MainFragment"/>
+            name="viewModel"
+            type="ballidaku.mywallet.viewModel.MainFragmentViewModel"/>
     </data>
 
     <FrameLayout
@@ -21,27 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"/>
-
-
-        <!--  <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add" />-->
-
-        <!--<com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_add"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_colorRipple="@color/colorBlack"/>-->
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floatingActionMenu"
@@ -88,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_bank_white"
+                android:onClick="@{(v)->viewModel.onBankDetailsClick(v)}"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryLight"
                 fab:fab_label="Bank Details"
@@ -98,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_edit"
+                android:onClick="@{(v)->viewModel.onOtherDetailsClick(v)}"
                 fab:fab_label="Other Details"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryLight"

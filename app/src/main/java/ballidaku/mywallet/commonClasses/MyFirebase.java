@@ -152,7 +152,7 @@ public class MyFirebase
 //                    Log.d("User ref", child.getRef().toString());
                     Log.e("User val", child.getValue().toString());
 
-                    UserDataModel userDataModel = child.getValue(UserDataModel.class);
+                    MainActivityModel userDataModel = child.getValue(MainActivityModel.class);
 
                     //Log.e("User ID", child.getKey());
                     //Log.e("User Name", userDataModel.getUser_name());

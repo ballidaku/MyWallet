@@ -1,6 +1,7 @@
 package ballidaku.mywallet.mainScreens.fragments;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -24,24 +25,20 @@ import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
 import ballidaku.mywallet.mainScreens.activities.AddOtherDetail;
-import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
-import ballidaku.mywallet.roomDatabase.OnResultInterface;
-import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
-import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
+import ballidaku.mywallet.viewModel.MainFragmentViewModel;
+import ballidaku.mywallet.viewModel.ViewModelFactory;
 
 
 /**
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment<D> extends Fragment implements View.OnClickListener
+public class MainFragment<D> extends Fragment implements MainFragmentViewModel.MainFragmentCallBack
 {
     String TAG = MainFragment.class.getSimpleName();
     View view = null;
     Context context;
-    MainFragmentAdapter mainFragmentAdapter;
-    ArrayList<D> mainList = new ArrayList<>();
-
+    MainFragmentAdapter<D> mainFragmentAdapter;
     FragmentMainBinding fragmentMainBinding;
 
     public MainFragment()
@@ -66,6 +63,10 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
         if (view == null)
         {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+
+            MainFragmentViewModel mainFragmentViewModel = ViewModelProviders.of(this,new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding,this)).get(MainFragmentViewModel.class);
+            fragmentMainBinding.setViewModel(mainFragmentViewModel);
+
             view = fragmentMainBinding.getRoot();
             context = getActivity();
             setUpViews();
@@ -73,17 +74,10 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
         return view;
     }
 
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        refresh();
-    }
-
     public void setUpViews()
     {
-        mainFragmentAdapter = new MainFragmentAdapter( context,mainList, fragmentMainBinding.floatingActionMenu);
+        ArrayList<D> mainList = new ArrayList<>();
+        mainFragmentAdapter = new MainFragmentAdapter<>( context,mainList, fragmentMainBinding.floatingActionMenu);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
@@ -112,62 +106,36 @@ public class MainFragment<D> extends Fragment implements View.OnClickListener
             }
         });
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
-        fragmentMainBinding.floatingActionButtonBankDetails.setOnClickListener(this);
-        fragmentMainBinding.floatingActionButtonOtherDetails.setOnClickListener(this);
+
     }
 
-    @SuppressWarnings("unchecked")
-    private void refresh()
+
+    /***********************************************************************/
+    // Interface Results from ViewModel class
+    /***********************************************************************/
+
+    @Override
+    public void setAdapter(ArrayList data)
     {
-        mainList.clear();
-        new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data ->
-        {
-            if (((ArrayList<D>) data).size() > 0)
-            {
-                final AccountDetailsDataModel accountDetailsDataModel = new AccountDetailsDataModel();
-                accountDetailsDataModel.setType(getResources().getString(R.string.bank_detail));
-                ((ArrayList<D>) data).add(0, (D) accountDetailsDataModel);
-
-            }
-            mainList.addAll((ArrayList<D>) data);
-
-            new ExecuteQueryAsyncTask<>(context, new OtherDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data1 ->
-            {
-                if (((ArrayList<D>) data1).size() > 0)
-                {
-                    final OtherDetailsDataModel otherDetailsDataModel = new OtherDetailsDataModel();
-                    otherDetailsDataModel.setType(getResources().getString(R.string.other_detail));
-                    ((ArrayList<D>) data1).add(0, (D) otherDetailsDataModel);
-                }
-
-                mainList.addAll((ArrayList<D>) data1);
-                mainFragmentAdapter.addData(mainList);
-            });
-        });
+        mainFragmentAdapter.addData(data);
     }
 
     @Override
-    public void onClick(View v)
+    public void clickBankDetails()
     {
-        switch (v.getId())
-        {
-            case R.id.floatingActionButtonBankDetails:
-                fragmentMainBinding.floatingActionMenu.close(true);
+        fragmentMainBinding.floatingActionMenu.close(true);
+        Intent intent = new Intent(context, AddBankDetails.class);
+        intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
+        startActivity(intent);
+    }
 
-                Intent intent = new Intent(context, AddBankDetails.class);
-                intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-                startActivity(intent);
+    @Override
+    public void clickOtherDetails()
+    {
+        fragmentMainBinding.floatingActionMenu.close(true);
 
-                break;
-
-            case R.id.floatingActionButtonOtherDetails:
-                fragmentMainBinding.floatingActionMenu.close(true);
-
-                Intent intentOther = new Intent(context, AddOtherDetail.class);
-                intentOther.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-                startActivity(intentOther);
-
-                break;
-        }
+        Intent intentOther = new Intent(context, AddOtherDetail.class);
+        intentOther.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
+        startActivity(intentOther);
     }
 }
