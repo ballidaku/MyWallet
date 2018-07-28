@@ -97,6 +97,7 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Mai
                 assert manager != null;
                 manager.cancel(MyConstant.NOTIFICATION_ID);
                 finishAffinity();
+                System.exit(0);
             }
         }
     }
