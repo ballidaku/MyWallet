@@ -61,7 +61,7 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
     private void setUpViews()
     {
-        isPasscodeVerified=false;
+        isPasscodeVerified = false;
         setSupportActionBar(activityShowOtherDetailsBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -269,7 +269,12 @@ public class ShowOtherDetail<D> extends AppCompatActivity
 
     public void deleteData()
     {
-        new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data -> finish());
+        new ExecuteQueryAsyncTask<>(context, otherDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data ->
+        {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
+        });
     }
 
     @Override

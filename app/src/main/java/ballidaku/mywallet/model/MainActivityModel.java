@@ -20,6 +20,7 @@ import ballidaku.mywallet.services.KillNotificationsService;
  */
 public class MainActivityModel extends BaseObservable
 {
+    String TAG = String.class.getSimpleName();
     public Context context;
     private String userName;
 
@@ -33,7 +34,7 @@ public class MainActivityModel extends BaseObservable
 
         notifyChange();
 
-        ((MainActivity)context).getLifecycle().addObserver(new SomeObserver());
+        ((MainActivity) context).getLifecycle().addObserver(new SomeObserver());
 
         /*Start service which kill notification on removed from stack*/
         context.bindService(new Intent(context, KillNotificationsService.class), mConnection, Context.BIND_AUTO_CREATE);
@@ -62,7 +63,7 @@ public class MainActivityModel extends BaseObservable
     }
 
     /*Service  which kills notification on removed from stack*/
-    ServiceConnection mConnection = new ServiceConnection()
+    private ServiceConnection mConnection = new ServiceConnection()
     {
         public void onServiceConnected(ComponentName className, IBinder binder)
         {
@@ -85,8 +86,6 @@ public class MainActivityModel extends BaseObservable
     {
         void onResult();
     }*/
-
-
 
 
 }

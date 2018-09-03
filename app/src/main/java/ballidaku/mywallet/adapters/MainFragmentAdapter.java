@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.mainScreens.activities.MainActivity;
 import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
 import ballidaku.mywallet.mainScreens.activities.ShowOtherDetail;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
@@ -143,7 +144,7 @@ public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
                 Intent intent = new Intent(context, isBankDetails ? ShowBankDetails.class : ShowOtherDetail.class);
                 intent.putExtra(MyConstant.LIST_ITEM_ID, isBankDetails ? ((AccountDetailsDataModel) arrayList.get(position)).getId() : ((OtherDetailsDataModel) arrayList.get(position)).getId());
                 intent.putExtra(MyConstant.TYPE, isBankDetails ? MyConstant.BANK_DETAILS : MyConstant.OTHER_DETAILS);
-                context.startActivity(intent);
+                ((MainActivity)context).startActivityForResult(intent,MyConstant.Any_UPDATE_CODE);
             });
         }
 

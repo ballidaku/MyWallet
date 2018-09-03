@@ -309,6 +309,8 @@ public class ShowBankDetails<D> extends AppCompatActivity
 
         new ExecuteQueryAsyncTask<>(context, accountDetailsDataModel, MyConstant.DELETE, (OnResultInterface<D>) data ->
         {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
             finish();
         });
     }

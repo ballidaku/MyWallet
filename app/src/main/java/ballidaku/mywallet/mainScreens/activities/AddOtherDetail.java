@@ -50,7 +50,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
         activityAddOtherDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_other_detail);
 
         context = this;
-        userId= MySharedPreference.getInstance().getUserID(context);
+        userId = MySharedPreference.getInstance().getUserID(context);
 
         setUpViews();
     }
@@ -154,7 +154,8 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
                     activityAddOtherDetailBinding.lineraLayoutAddView.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -176,7 +177,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
             {
-                if(position==0)//Text
+                if (position == 0)//Text
                 {
                     editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                     editTextValue.setMaxLines(6);
@@ -246,7 +247,8 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
 
                 jsonArray.put(jsonObject);
 
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -275,7 +277,7 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                 }
             });
         }
-        else
+        else if (fromWhere.equals(MyConstant.NEW))
         {
             /*When we insert the data*/
             new ExecuteQueryAsyncTask<>(context, otherDetailsValueDataModel, MyConstant.INSERT, new OnResultInterface<D>()
@@ -285,6 +287,8 @@ public class AddOtherDetail<D> extends AppCompatActivity implements View.OnClick
                 {
                     CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
                     CommonMethods.getInstance().hideKeypad(AddOtherDetail.this);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
 
                 }

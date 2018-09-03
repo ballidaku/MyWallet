@@ -11,25 +11,24 @@ import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
-import ballidaku.mywallet.viewModel.MainFragmentViewModel;
 
 public class MainFragmentModel<D> extends BaseObservable
 {
 
-    private MainFragmentViewModel mainFragmentViewModel;
+    private MainFragmentModelCallBack mainFragmentModelCallBack;
     private Context context;
-    private ArrayList<D> mainList = new ArrayList<>();
 
-    public MainFragmentModel(Context context, MainFragmentViewModel mainFragmentViewModel)
+
+    public MainFragmentModel(Context context, MainFragmentModelCallBack mainFragmentModelCallBack)
     {
-        this.mainFragmentViewModel=mainFragmentViewModel;
-        this.context=context;
+        this.mainFragmentModelCallBack = mainFragmentModelCallBack;
+        this.context = context;
     }
 
     @SuppressWarnings("unchecked")
     public void getData()
     {
-        mainList.clear();
+        ArrayList<D> mainList = new ArrayList<>();
         new ExecuteQueryAsyncTask<>(context, new AccountDetailsDataModel(), MyConstant.GET_ALL, (OnResultInterface<D>) data ->
         {
             if (((ArrayList<D>) data).size() > 0)
@@ -52,7 +51,7 @@ public class MainFragmentModel<D> extends BaseObservable
 
                 mainList.addAll((ArrayList<D>) data1);
 
-                mainFragmentViewModel.onResult(mainList);
+                mainFragmentModelCallBack.onResult(mainList);
             });
         });
     }
@@ -61,10 +60,9 @@ public class MainFragmentModel<D> extends BaseObservable
     /***********************************************************************/
     // Interface
     /***********************************************************************/
-    public interface MainFragmentModelCallBack {
-
+    public interface MainFragmentModelCallBack
+    {
         void onResult(ArrayList data);
-
-
     }
+
 }

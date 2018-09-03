@@ -25,6 +25,7 @@ import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
 import ballidaku.mywallet.mainScreens.activities.AddOtherDetail;
+import ballidaku.mywallet.mainScreens.activities.MainActivity;
 import ballidaku.mywallet.viewModel.MainFragmentViewModel;
 import ballidaku.mywallet.viewModel.ViewModelFactory;
 
@@ -40,6 +41,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
     Context context;
     MainFragmentAdapter<D> mainFragmentAdapter;
     FragmentMainBinding fragmentMainBinding;
+    MainFragmentViewModel mainFragmentViewModel;
 
     public MainFragment()
     {
@@ -64,7 +66,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-            MainFragmentViewModel mainFragmentViewModel = ViewModelProviders.of(this,new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding,this)).get(MainFragmentViewModel.class);
+            mainFragmentViewModel = ViewModelProviders.of(this,new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding,this)).get(MainFragmentViewModel.class);
             fragmentMainBinding.setViewModel(mainFragmentViewModel);
 
             view = fragmentMainBinding.getRoot();
@@ -109,6 +111,11 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
 
     }
 
+    public void refreshData()
+    {
+        mainFragmentViewModel.getDataFromDatabase();
+    }
+
 
     /***********************************************************************/
     // Interface Results from ViewModel class
@@ -126,16 +133,15 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         fragmentMainBinding.floatingActionMenu.close(true);
         Intent intent = new Intent(context, AddBankDetails.class);
         intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-        startActivity(intent);
+        ((MainActivity)context).startActivityForResult(intent,MyConstant.Any_UPDATE_CODE);
     }
 
     @Override
     public void clickOtherDetails()
     {
         fragmentMainBinding.floatingActionMenu.close(true);
-
         Intent intentOther = new Intent(context, AddOtherDetail.class);
         intentOther.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-        startActivity(intentOther);
+        ((MainActivity)context).startActivityForResult(intentOther,MyConstant.Any_UPDATE_CODE);
     }
 }

@@ -3,7 +3,6 @@ package ballidaku.mywallet.roomDatabase.dataModel;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.databinding.BaseObservable;
 
 import java.io.Serializable;
 
@@ -14,7 +13,7 @@ import ballidaku.mywallet.commonClasses.MyConstant;
  */
 
 @Entity(tableName = MyConstant.ACCOUNT_DETAILS)
-public class AccountDetailsDataModel extends BaseObservable implements Serializable
+public class AccountDetailsDataModel implements Serializable
 {
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -92,7 +91,6 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     public void setBankName(String bankName)
     {
         this.bankName = bankName;
-        notifyChange();
     }
 
     public String getAccountHolderName()
@@ -103,7 +101,6 @@ public class AccountDetailsDataModel extends BaseObservable implements Serializa
     public void setAccountHolderName(String accountHolderName)
     {
         this.accountHolderName = accountHolderName;
-        notifyChange();
     }
 
     public String getAccountNumber()

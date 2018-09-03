@@ -12,7 +12,6 @@ import ballidaku.mywallet.model.MainFragmentModel;
 public class MainFragmentViewModel<D> extends ViewModel implements MainFragmentModel.MainFragmentModelCallBack
 {
     private Context context;
-    private FragmentMainBinding fragmentMainBinding;
     private MainFragmentViewModelCallBack mainFragmentViewModelCallBack;
     private MainFragmentModel mainFragmentModel;
 
@@ -20,14 +19,18 @@ public class MainFragmentViewModel<D> extends ViewModel implements MainFragmentM
     MainFragmentViewModel(Context context, FragmentMainBinding binding, MainFragmentViewModelCallBack mainFragmentViewModelCallBack)
     {
         this.context = context;
-        this.fragmentMainBinding = binding;
         this.mainFragmentViewModelCallBack=mainFragmentViewModelCallBack;
 
         mainFragmentModel=new MainFragmentModel(this.context,this);
-        mainFragmentModel.getData();
 
+        getDataFromDatabase();
     }
 
+
+    public void getDataFromDatabase()
+    {
+        mainFragmentModel.getData();
+    }
 
 
     /***********************************************************************/

@@ -150,6 +150,13 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Mai
                 CommonMethods.getInstance().getAllDatabaseData(context, MyConstant.EXPORT_TO_EXTERNAL_STORAGE, uri);
             }
         }
+        else if (resultCode == Activity.RESULT_OK && requestCode == MyConstant.Any_UPDATE_CODE) // To add bank or other details
+        {
+            if (fragment instanceof MainFragment)
+            {
+                ((MainFragment)fragment).refreshData();
+            }
+        }
     }
 
     @Override
@@ -164,7 +171,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Mai
             CommonMethods.getInstance().shareFileToLocalStorage(context);
         }
     }
-
 
 
     /***********************************************************************/

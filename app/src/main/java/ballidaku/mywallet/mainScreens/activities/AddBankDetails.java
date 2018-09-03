@@ -1,6 +1,7 @@
 package ballidaku.mywallet.mainScreens.activities;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -30,8 +31,10 @@ import ballidaku.mywallet.databinding.ActivityAddBankDetailsBinding;
 import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
 import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.viewModel.AddBankDetailsViewModel;
+import ballidaku.mywallet.viewModel.ViewModelFactory;
 
-public class AddBankDetails<D> extends AppCompatActivity implements View.OnClickListener
+public class AddBankDetails<D> extends AppCompatActivity implements AddBankDetailsViewModel.AddBankDetailsViewModelCallBack
 {
 
     String TAG = AddBankDetails.class.getSimpleName();
@@ -44,6 +47,8 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
     String[] typeArray;
     String userId;
 
+    ViewModelFactory viewModelFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,7 +56,11 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         activityAddBankDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_bank_details);
 
         context = this;
-        userId= MySharedPreference.getInstance().getUserID(context);
+
+        viewModelFactory = new ViewModelFactory<>(context, AddBankDetails.this, this);
+        activityAddBankDetailsBinding.setViewModel(ViewModelProviders.of(this, viewModelFactory).get(AddBankDetailsViewModel.class));
+
+        userId = MySharedPreference.getInstance().getUserID(context);
 
         setUpViews();
     }
@@ -78,65 +87,23 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
             activityAddBankDetailsBinding.toolbar.setTitle(getString(R.string.update_details));
             accountDetailsDataModel = (AccountDetailsDataModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
 
+            activityAddBankDetailsBinding.setAccountDetailsDataModel(accountDetailsDataModel);
+
             setData();
         }
         else
         {
             activityAddBankDetailsBinding.toolbar.setTitle(getString(R.string.add_details));
         }
-        activityAddBankDetailsBinding.cardViewAddMoreFeilds.setOnClickListener(this);
 
 
     }
 
-    private void addMoreFeilds()
-    {
-        @SuppressLint("InflateParams") final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
-        MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
-        spinnerType.setItems(typeArray);
-
-        final EditText editTextValue = child.findViewById(R.id.editTextValue);
-        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        editTextValue.setMaxLines(6);
-
-        spinnerType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
-            {
-                if(position==0)//Text
-                {
-                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    editTextValue.setMaxLines(6);
-                }
-                else
-                {
-                    editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
-                    editTextValue.getText().clear();
-                    editTextValue.setMinLines(1);
-                    editTextValue.setMaxLines(1);
-                }
-            }
-        });
-
-        ImageView imageViewCancel = child.findViewById(R.id.imageViewCancel);
-        imageViewCancel.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                activityAddBankDetailsBinding.linearLayoutAddViews.removeView(child);
-
-            }
-        });
-
-        activityAddBankDetailsBinding.linearLayoutAddViews.addView(child);
-    }
 
     private void setData()
     {
 
-        activityAddBankDetailsBinding.editTextBankName.setText(accountDetailsDataModel.getBankName());
+/*        activityAddBankDetailsBinding.editTextBankName.setText(accountDetailsDataModel.getBankName());
         activityAddBankDetailsBinding.editTextAccountHolderName.setText(accountDetailsDataModel.getAccountHolderName());
         activityAddBankDetailsBinding.editTextAccountNumber.setText(accountDetailsDataModel.getAccountNumber());
         activityAddBankDetailsBinding.editTextIfscCode.setText(accountDetailsDataModel.getIfsc());
@@ -144,7 +111,8 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         activityAddBankDetailsBinding.editTextCvv.setText(accountDetailsDataModel.getCvv());
         activityAddBankDetailsBinding.editTextValidFrom.setText(accountDetailsDataModel.getValidFrom());
         activityAddBankDetailsBinding.editTextValidThru.setText(accountDetailsDataModel.getValidThru());
-        activityAddBankDetailsBinding.editTextNetBankingId.setText(accountDetailsDataModel.getNetBankingId());
+        activityAddBankDetailsBinding.editTextNetBankingId.setText(accountDetailsDataModel.getNetBankingId());*/
+
         if (accountDetailsDataModel.getAdditionalData() != null && !accountDetailsDataModel.getAdditionalData().isEmpty())
         {
             String json = accountDetailsDataModel.getAdditionalData();
@@ -166,7 +134,7 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                     final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewCancel = view.findViewById(R.id.imageViewCancel);
 
-                    if(type.equalsIgnoreCase(MyConstant.TEXT))
+                    if (type.equalsIgnoreCase(MyConstant.TEXT))
                     {
                         editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                         editTextValue.setMaxLines(6);
@@ -185,44 +153,68 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
-                    spinnerType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener()
+                    spinnerType.setOnItemSelectedListener((view1, position, id, item) ->
                     {
-                        @Override
-                        public void onItemSelected(MaterialSpinner view, int position, long id, Object item)
+                        if (position == 0)//Text
                         {
-                            if(position==0)//Text
-                            {
-                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                                editTextValue.setMaxLines(6);
-                            }
-                            else
-                            {
-                                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
-                                editTextValue.getText().clear();
-                                editTextValue.setMinLines(1);
-                                editTextValue.setMaxLines(1);
-                            }
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                            editTextValue.setMaxLines(6);
+                        }
+                        else
+                        {
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                            editTextValue.getText().clear();
+                            editTextValue.setMinLines(1);
+                            editTextValue.setMaxLines(1);
                         }
                     });
 
-                    imageViewCancel.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View views)
-                        {
-                            activityAddBankDetailsBinding.linearLayoutAddViews.removeView(view);
-                        }
-                    });
+                    imageViewCancel.setOnClickListener(views -> activityAddBankDetailsBinding.linearLayoutAddViews.removeView(view));
 
                     activityAddBankDetailsBinding.linearLayoutAddViews.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.add_details_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+
+                finish();
+
+                break;
+
+            case R.id.action_save:
+
+//                saveData();
+                activityAddBankDetailsBinding.getViewModel().saveData();
+
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void saveData()
     {
@@ -269,7 +261,8 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
 
                 jsonArray.put(jsonObject);
 
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -292,76 +285,87 @@ public class AddBankDetails<D> extends AppCompatActivity implements View.OnClick
         {
             accountTypeLocalDataModel.setId(accountDetailsDataModel.getId());
 
-            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.UPDATE, new OnResultInterface<D>()
+            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.UPDATE, (OnResultInterface<D>) data ->
             {
-                @Override
-                public void OnCompleted(D data)
-                {
-                    CommonMethods.getInstance().showToast(context, context.getString(R.string.update_success));
-                    CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
+                CommonMethods.getInstance().showToast(context, context.getString(R.string.update_success));
+                CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
 
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-        }
-        else /*When we insert the data*/
-        {
-            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.INSERT, new OnResultInterface<D>()
-            {
-                @Override
-                public void OnCompleted(D data)
-                {
-                    CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
-                    CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
-                    finish();
-                }
-            });
-        }
-    }
-
-
-    @Override
-    public void onClick(View view)
-    {
-
-        switch (view.getId())
-        {
-            case R.id.cardViewAddMoreFeilds:
-                addMoreFeilds();
-                break;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.add_details_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 finish();
-
-                break;
-
-            case R.id.action_save:
-
-                saveData();
-
-                break;
-
-            default:
-                break;
+            });
         }
-
-        return super.onOptionsItemSelected(item);
+        else if (fromWhere.equals(MyConstant.NEW))/*When we insert the data*/
+        {
+            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.INSERT, (OnResultInterface<D>) data ->
+            {
+                CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
+                CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            });
+        }
     }
+
+
+    /***********************************************************************/
+    // Interface Results from ViewModel class
+
+    /***********************************************************************/
+
+    public void addMoreFeilds()
+    {
+        @SuppressLint("InflateParams") final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
+        MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
+        spinnerType.setItems(typeArray);
+
+        final EditText editTextValue = child.findViewById(R.id.editTextValue);
+        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editTextValue.setMaxLines(6);
+
+        spinnerType.setOnItemSelectedListener((view, position, id, item) ->
+        {
+            if (position == 0)//Text
+            {
+                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                editTextValue.setMaxLines(6);
+            }
+            else
+            {
+                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                editTextValue.getText().clear();
+                editTextValue.setMinLines(1);
+                editTextValue.setMaxLines(1);
+            }
+        });
+
+        ImageView imageViewCancel = child.findViewById(R.id.imageViewCancel);
+        imageViewCancel.setOnClickListener(view -> activityAddBankDetailsBinding.linearLayoutAddViews.removeView(child));
+
+        activityAddBankDetailsBinding.linearLayoutAddViews.addView(child);
+    }
+
+
+
+    /*private final Observable.OnPropertyChangedCallback propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+           invalidateOptionsMenu();
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        activityAddBankDetailsBinding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityAddBankDetailsBinding.getViewModel().removeOnPropertyChangedCallback(propertyChangedCallback);
+    }*/
+
+
 }

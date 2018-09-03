@@ -12,6 +12,7 @@ import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.databinding.FragmentSettingBinding;
 import ballidaku.mywallet.frontScreens.LoginActivity;
 import ballidaku.mywallet.frontScreens.SignUpActivity;
+import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
 import ballidaku.mywallet.mainScreens.activities.MainActivity;
 import ballidaku.mywallet.mainScreens.fragments.MainFragment;
 import ballidaku.mywallet.mainScreens.fragments.SettingFragment;
@@ -28,6 +29,13 @@ public class ViewModelFactory<B, A, I> extends ViewModelProvider.NewInstanceFact
         this.context = context;
         this.activityOrFragemnt = activityOrFragemnt;
         this.binding = binding;
+        this.myInterface = myInterface;
+    }
+
+    public ViewModelFactory(Context context, A activityOrFragemnt, I myInterface)
+    {
+        this.context = context;
+        this.activityOrFragemnt = activityOrFragemnt;
         this.myInterface = myInterface;
     }
 
@@ -55,6 +63,10 @@ public class ViewModelFactory<B, A, I> extends ViewModelProvider.NewInstanceFact
         else if (activityOrFragemnt instanceof SettingFragment)
         {
             return (T) new SettingFragmentViewModel(context, (FragmentSettingBinding) binding, (SettingFragmentViewModel.SettingFragmentViewModelCallBack) myInterface);
+        }
+        else if (activityOrFragemnt instanceof AddBankDetails)
+        {
+            return (T) new AddBankDetailsViewModel(context, (AddBankDetailsViewModel.AddBankDetailsViewModelCallBack) myInterface);
         }
         else
         {
