@@ -29,4 +29,3 @@ public class MyApplication extends Application
     }
 }
 
-Ballidaku
