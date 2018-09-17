@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
-            type="ballidaku.mywallet.viewModel.MainFragmentViewModel"/>
+            type="ballidaku.mywallet.viewModel.MainFragmentViewModel" />
     </data>
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,7 +22,8 @@
             android:id="@+id/recycleViewHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"/>
+
+            android:scrollbars="vertical" />
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floatingActionMenu"
@@ -66,22 +69,22 @@
                 android:id="@+id/floatingActionButtonBankDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_bank_white"
                 android:onClick="@{(v)->viewModel.onBankDetailsClick(v)}"
+                android:src="@drawable/ic_bank_white"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryLight"
                 fab:fab_label="Bank Details"
-                fab:fab_size="mini"/>
+                fab:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/floatingActionButtonOtherDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_edit"
                 android:onClick="@{(v)->viewModel.onOtherDetailsClick(v)}"
-                fab:fab_label="Other Details"
+                android:src="@drawable/ic_edit"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryLight"
+                fab:fab_label="Other Details"
                 fab:fab_size="mini" />
 
 

@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +68,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-            mainFragmentViewModel = ViewModelProviders.of(this,new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding,this)).get(MainFragmentViewModel.class);
+            mainFragmentViewModel = ViewModelProviders.of(this, new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding, this)).get(MainFragmentViewModel.class);
             fragmentMainBinding.setViewModel(mainFragmentViewModel);
 
             view = fragmentMainBinding.getRoot();
@@ -79,7 +81,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
     public void setUpViews()
     {
         ArrayList<D> mainList = new ArrayList<>();
-        mainFragmentAdapter = new MainFragmentAdapter<>( context,mainList, fragmentMainBinding.floatingActionMenu);
+        mainFragmentAdapter = new MainFragmentAdapter<>(context, mainList, fragmentMainBinding.floatingActionMenu);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
@@ -109,6 +111,38 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         });
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
 
+        fragmentMainBinding.recycleViewHome.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+
+                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+                if (totalItemCount > 0 && endHasBeenReached)
+                {
+                    fragmentMainBinding.floatingActionMenu.setVisibility(View.GONE);
+                }
+                else
+                {
+                    fragmentMainBinding.floatingActionMenu.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+//                {
+//                    fragmentMainBinding.floatingActionMenu.setVisibility(View.VISIBLE);
+//                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
     }
 
     public void refreshData()
@@ -119,6 +153,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
 
     /***********************************************************************/
     // Interface Results from ViewModel class
+
     /***********************************************************************/
 
     @Override
@@ -133,7 +168,7 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         fragmentMainBinding.floatingActionMenu.close(true);
         Intent intent = new Intent(context, AddBankDetails.class);
         intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-        ((MainActivity)context).startActivityForResult(intent,MyConstant.Any_UPDATE_CODE);
+        ((MainActivity) context).startActivityForResult(intent, MyConstant.Any_UPDATE_CODE);
     }
 
     @Override
@@ -142,6 +177,6 @@ public class MainFragment<D> extends Fragment implements MainFragmentViewModel.M
         fragmentMainBinding.floatingActionMenu.close(true);
         Intent intentOther = new Intent(context, AddOtherDetail.class);
         intentOther.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-        ((MainActivity)context).startActivityForResult(intentOther,MyConstant.Any_UPDATE_CODE);
+        ((MainActivity) context).startActivityForResult(intentOther, MyConstant.Any_UPDATE_CODE);
     }
 }
