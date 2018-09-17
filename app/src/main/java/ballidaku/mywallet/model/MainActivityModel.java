@@ -67,7 +67,7 @@ public class MainActivityModel extends BaseObservable
     {
         public void onServiceConnected(ComponentName className, IBinder binder)
         {
-            ((KillNotificationsService.KillBinder) binder).service.startService(new Intent(context, KillNotificationsService.class));
+            ((KillNotificationsService.KillBinder) binder).getService().startService(new Intent(context, KillNotificationsService.class));
 
             NotificationHelper.getInstance().showNotificationWithActionButton(context);
         }
