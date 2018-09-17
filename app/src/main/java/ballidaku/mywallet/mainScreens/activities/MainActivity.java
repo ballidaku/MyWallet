@@ -40,8 +40,6 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Mai
         super.onCreate(savedInstanceState);
 
         context = this;
-
-
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModelFactory = new ViewModelFactory<>(context, MainActivity.this, activityMainBinding, this);
         activityMainBinding.setViewModel(ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel.class));
