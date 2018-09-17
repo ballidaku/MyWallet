@@ -94,8 +94,9 @@ public class MainActivity extends AbsRuntimeMarshmallowPermission implements Mai
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 assert manager != null;
                 manager.cancel(MyConstant.NOTIFICATION_ID);
-                finishAffinity();
-                System.exit(0);
+//                finishAffinity();
+//                System.exit(0);
+                ExitActivity.exitApplicationAndRemoveFromRecent(context);
             }
         }
     }
