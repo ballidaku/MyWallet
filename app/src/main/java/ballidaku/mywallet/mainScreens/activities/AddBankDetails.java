@@ -203,8 +203,8 @@ public class AddBankDetails<D> extends AppCompatActivity implements AddBankDetai
 
             case R.id.action_save:
 
-//                saveData();
-                activityAddBankDetailsBinding.getViewModel().saveData();
+                saveData();
+//                activityAddBankDetailsBinding.getViewModel().saveData();
 
                 break;
 

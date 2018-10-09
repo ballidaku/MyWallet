@@ -76,7 +76,7 @@
                             android:background="@android:color/transparent"
                             android:hint="@string/enter_bank_name"
                             android:inputType="textCapWords"
-                            android:text="@{viewModel.bankName}"
+                            android:text="@{accountDetailsDataModel.bankName}"
                             android:textColor="@color/colorEditText"
                             android:textSize="@dimen/headingChild"
                             android:addTextChangedListener="@{viewModel.bankNameWatcher}"/>
