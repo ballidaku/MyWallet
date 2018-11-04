@@ -26,10 +26,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     String TAG = MainActivity.class.getSimpleName();
-
     Context context;
-
-
     DrawerLayout drawer;
 
     @Override
@@ -37,38 +34,35 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         context = this;
-
-        setUpIds();
-
+        setUpViews();
     }
 
 
-    public void setUpIds()
+    public void setUpViews()
     {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer =findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView =findViewById(R.id.navigationView);
+        NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerLayout =navigationView.getHeaderView(0);;
+        View headerLayout = navigationView.getHeaderView(0);
+        ;
         TextView textViewName = headerLayout.findViewById(R.id.textViewName);
-        TextView textViewEmail =headerLayout.findViewById(R.id.textViewEmail);
+        TextView textViewEmail = headerLayout.findViewById(R.id.textViewEmail);
 
 
         textViewName.setText(MySharedPreference.getInstance().getUserName(context));
         textViewEmail.setText(MySharedPreference.getInstance().getUserEmail(context));
 
         CommonMethods.getInstance().switchfragment(context, new MainFragment());
-
 
     }
 
@@ -117,7 +111,6 @@ public class MainActivity extends AppCompatActivity
         {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -153,7 +146,7 @@ public class MainActivity extends AppCompatActivity
 
         }*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

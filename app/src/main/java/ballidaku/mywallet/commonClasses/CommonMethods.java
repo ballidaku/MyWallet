@@ -159,7 +159,8 @@ public class CommonMethods
         try
         {
             messageAfterDecrypt = AESCrypt.decrypt(password, encryptedMsg);
-        } catch (GeneralSecurityException e)
+        }
+        catch (GeneralSecurityException e)
         {
             //handle error - could be due to incorrect password or tampered encryptedMsg
         }
@@ -200,6 +201,4 @@ public class CommonMethods
         }
         return check;
     }
-
-
 }

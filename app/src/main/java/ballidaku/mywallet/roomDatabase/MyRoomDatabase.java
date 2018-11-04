@@ -1,24 +1,23 @@
-package ballidaku.mywallet.commonClasses;
+package ballidaku.mywallet.roomDatabase;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import ballidaku.mywallet.dataModel.AccountTypeDataModel;
+import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 20/02/18.
  */
 
-@Database(version = 1, entities = {AccountTypeDataModel.class})
+@Database(version = 1, entities = {AccountDetailsDataModel.class},exportSchema = false)
 public abstract class MyRoomDatabase extends RoomDatabase
 {
-    private static final String DB_NAME = "MyWalletDatabase.db";
-
     private static MyRoomDatabase instance;
 
-    public abstract AccountTypeDataModelDao accountTypeDataModelDao();
+    public abstract AccountDetailsDataModelDao accountDetailsDataModelDao();
 
     public static MyRoomDatabase getInstance(Context context)
     {
@@ -27,7 +26,7 @@ public abstract class MyRoomDatabase extends RoomDatabase
             instance = Room.databaseBuilder(
                     context,
                     MyRoomDatabase.class,
-                    DB_NAME)
+                      MyConstant.DATABASE_NAME)
                     .allowMainThreadQueries().build();
         }
         return instance;
@@ -37,5 +36,5 @@ public abstract class MyRoomDatabase extends RoomDatabase
         instance = null;
     }
 
-   // public abstract RoomInterfaces.AccountTypeDataModelDao getAccountTypeDataModelDao();
+   // public abstract RoomInterfaces.AccountDetailsDataModelDao getAccountTypeDataModelDao();
 }

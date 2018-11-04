@@ -1,11 +1,10 @@
 package ballidaku.mywallet.mainScreens.activities;
 
+
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,18 +17,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.FourDigitsCardTextWatcher;
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MyFirebase;
-import ballidaku.mywallet.commonClasses.MyInterfaces;
 import ballidaku.mywallet.commonClasses.TwoDigitsCardTextWatcher;
 import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.ActivityAddBankDetailsBinding;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
 
 
 public class AddBankDetails extends AppCompatActivity
@@ -86,12 +82,10 @@ public class AddBankDetails extends AppCompatActivity
             key = keyValueModel.getKey();
 
             setData();
-//            textViewSubmitUpdate.setText("UPDATE");
         }
         else
         {
             activityAddBankDetailsBinding.toolbar.setTitle("ADD DETAILS");
-//            textViewSubmitUpdate.setText("SUBMIT");
         }
 
         activityAddBankDetailsBinding.cardViewAddMoreFeilds.setOnClickListener(new View.OnClickListener()
@@ -203,7 +197,33 @@ public class AddBankDetails extends AppCompatActivity
         String validThru = activityAddBankDetailsBinding.editTextValidThru.getText().toString().trim();
         String netBankingId = activityAddBankDetailsBinding.editTextNetBankingId.getText().toString().trim();
 
-        final HashMap<String, Object> map = new HashMap<>();
+
+
+        AccountDetailsDataModel accountTypeDataModel = new AccountDetailsDataModel();
+        accountTypeDataModel.setBankName(bankName);
+        accountTypeDataModel.setAccountHolderName(accountHolderName);
+        accountTypeDataModel.setAccountNumber(accountNumber);
+        accountTypeDataModel.setIfsc(ifsc);
+        accountTypeDataModel.setAtmNumber(atmNumber);
+        accountTypeDataModel.setCvv(cvv);
+        accountTypeDataModel.setValidFrom(validFrom);
+        accountTypeDataModel.setValidThru(validThru);
+        accountTypeDataModel.setNetBankingId(netBankingId);
+
+
+     /*    new DatabaseQueryAsyncTask(context, accountTypeDataModel,MyConstant.INSERT, new AfterQueryExecutedInterface<D>()
+         {
+
+             @Override
+             public void onCompleted(D data)
+             {
+                 Log.e(TAG,String.valueOf(data));
+             }
+         });*/
+
+        /*final HashMap<String, Object> map = new HashMap<>();
+
+>>>>>>> 902f3a6770098e0a5790f7833cf9e98ab991a95d
         map.put(MyConstant.BANK_NAME, dTE(bankName));
         map.put(MyConstant.ACCOUNT_HOLDER_NAME, dTE(accountHolderName));
         map.put(MyConstant.ACCOUNT_NUMBER, dTE(accountNumber));
@@ -285,8 +305,10 @@ public class AddBankDetails extends AppCompatActivity
             intent.putExtra("hashMap", map);
             setResult(RESULT_OK, intent);
             finish();
-        }
+
+        }*/
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

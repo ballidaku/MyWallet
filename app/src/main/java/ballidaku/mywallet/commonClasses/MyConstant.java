@@ -5,9 +5,13 @@ package ballidaku.mywallet.commonClasses;
  */
 public class MyConstant {
 
-
     public static final String SPACE=" : ";
 
+    public static final String DATABASE_NAME="MyWalletDatabase.db";
+    /*Room database TABLES*/
+    public static final String ACCOUNT_DETAILS="account_details";
+
+    public static final String INSERT="insert";
 
     public static final String USER_NAME="user_name";
     public static final String USER_EMAIL="user_email";

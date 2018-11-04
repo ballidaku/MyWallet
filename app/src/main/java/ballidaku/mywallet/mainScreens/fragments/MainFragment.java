@@ -1,11 +1,13 @@
 package ballidaku.mywallet.mainScreens.fragments;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,18 +22,20 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ballidaku.mywallet.R;
 import ballidaku.mywallet.adapters.MainFragmentAdapter;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.GridSpacingItemDecoration;
+import ballidaku.mywallet.commonClasses.MyConstant;
 import ballidaku.mywallet.commonClasses.MyFirebase;
-import ballidaku.mywallet.commonClasses.MyRoomDatabase;
-import ballidaku.mywallet.dataModel.AccountTypeDataModel;
 import ballidaku.mywallet.dataModel.KeyValueModel;
 import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
+import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
+
+import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
+
 
 /**
  * Created by sharanpalsingh on 19/02/18.
@@ -41,23 +45,23 @@ public class MainFragment extends Fragment implements View.OnClickListener
 {
 
     String TAG = MainFragment.class.getSimpleName();
-
     View view = null;
-
     Context context;
-
-
     MainFragmentAdapter mainFragmentAdapter;
-
     ArrayList<KeyValueModel> mainList = new ArrayList<>();
 
-    public static final int ADD_DETAILS_RESPONSE = 3316;
+//    public static final int ADD_DETAILS_RESPONSE = 3316;
 
     FragmentMainBinding fragmentMainBinding;
 
     public MainFragment()
     {
         // Required empty public constructor
+    }
+
+    static
+    {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
@@ -68,24 +72,24 @@ public class MainFragment extends Fragment implements View.OnClickListener
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
         {
-            fragmentMainBinding = DataBindingUtil.inflate(
-                    inflater, R.layout.fragment_main, container, false);
+            fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+
             view = fragmentMainBinding.getRoot();
 
             context = getActivity();
 
-            setUpIds();
 
-            setListener();
+            setUpViews();
+
+//            setListener();
         }
 
         return view;
     }
-
 
     // Set Listener
     public void setListener()
@@ -142,13 +146,8 @@ public class MainFragment extends Fragment implements View.OnClickListener
         mainFragmentAdapter.addItem(mainList);
     }
 
-
-    public void setUpIds()
+    public void setUpViews()
     {
-
-
-
-
         mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -177,17 +176,16 @@ public class MainFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-
-
         switch (v.getId())
         {
             case R.id.floatingActionButtonBankDetails:
 
                 fragmentMainBinding.floatingActionMenu.close(true);
 
-//                MyFirebase.getInstance().createBankDetails();
+                Intent intent = new Intent(context, AddBankDetails.class);
+                intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
+                startActivityForResult(intent, ADD_DETAILS_RESPONSE);
 
-                createType();
                 break;
 
             case R.id.floatingActionButtonOtherDetails:
@@ -198,48 +196,9 @@ public class MainFragment extends Fragment implements View.OnClickListener
     }
 
 
-    @SuppressLint("StaticFieldLeak")
-    void createType()
-    {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                AccountTypeDataModel accountTypeDataModel = new AccountTypeDataModel();
-                accountTypeDataModel.setName("Hello Details");
-
-                MyRoomDatabase.getInstance(context).accountTypeDataModelDao().insert(accountTypeDataModel);
-
-                List<AccountTypeDataModel> list= MyRoomDatabase.getInstance(context).accountTypeDataModelDao().getAllData();
-
-                for (int i = 0; i <list.size() ; i++)
-                {
-
-                    Log.e(TAG,""+list.get(i).getId() +"  "+list.get(i).getName());
-                }
-
-
-                return null;
-            }
-
-          /*  @Override
-            protected void onPostExecute(Integer agentsCount) {
-                if (agentsCount > 0) {
-                    //2: If it already exists then prompt user
-                    Toast.makeText(Activity.this, "Agent already exists!", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(Activity.this, "Agent does not exist! Hurray :)", Toast.LENGTH_LONG).show();
-                    onBackPressed();
-                }
-            }*/
-        };/*.execute();*/
 
 
 
-
-
-    }
 
 
 //    public interface BankDetails
@@ -247,7 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener
 //        public void show_bank_details(HashMap<String, Object> map);
 //    }
 
-/*    @Override
+ /*   @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -257,7 +216,8 @@ public class MainFragment extends Fragment implements View.OnClickListener
         {
             HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
 
-            MyFirebase.getInstance().createBankDetails(context, hashMap);
+//            MyFirebase.getInstance().createBankDetails(context, hashMap);
+
         }
     }*/
 

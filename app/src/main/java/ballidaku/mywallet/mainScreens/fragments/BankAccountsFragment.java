@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,16 +40,10 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
 {
 
     String TAG = BankAccountsFragment.class.getSimpleName();
-
     View view = null;
-
     Context context;
-
-
     BankAccountsAdapter homeFragmentAdapter;
-
     ArrayList<KeyValueModel> mainList = new ArrayList<>();
-
     public static final int ADD_DETAILS_RESPONSE = 3316;
 
     FragmentBankAccountsBinding fragmentBankAccountsBinding;
@@ -66,18 +61,15 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         if (view == null)
         {
             fragmentBankAccountsBinding = DataBindingUtil.inflate(
                     inflater, R.layout.fragment_bank_accounts, container, false);
             view = fragmentBankAccountsBinding.getRoot();
-
             context = getActivity();
-
-            setUpIds();
-
+            setUpViews();
             setListener();
         }
 
@@ -140,8 +132,7 @@ public class BankAccountsFragment extends Fragment implements View.OnClickListen
         homeFragmentAdapter.addItem(mainList);
     }
 
-
-    public void setUpIds()
+    public void setUpViews()
     {
         homeFragmentAdapter = new BankAccountsAdapter(mainList, getContext());
 
