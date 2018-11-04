@@ -5,21 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorWhite"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".mPin.activity.MPINActivity">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:layout_weight="0.8"
-                  android:gravity="center"
-                  android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="84dp"
             android:layout_height="84dp"
-            android:src="@drawable/ic_add"/>
+            android:src="@mipmap/ic_app_logo"/>
 
     </LinearLayout>
 
@@ -27,30 +28,51 @@
         android:id="@+id/profile_name"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-thin"
+        android:fontFamily="@font/quando"
         android:gravity="center"
         android:maxLines="1"
         android:text="Welcome"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"
-        android:textSize="20sp"/>
-
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <ballidaku.mywallet.mPin.IndicatorDots
         android:id="@+id/indicator_dots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"/>
+        android:layout_gravity="center"
+        android:layout_margin="15dp"/>
 
-    <ballidaku.mywallet.mPin.PinLockView
-        android:id="@+id/pin_lock_view"
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1.3"
-        app:keypadButtonSize="72dp"
-        app:keypadShowDeleteButton="true"
-        app:keypadTextColor="@color/colorWhite"
-        app:keypadTextSize="18dp"/>
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_weight="1.5"
+        card_view:cardBackgroundColor="@color/colorPrimary"
+        card_view:cardCornerRadius="@dimen/_8sdp"
+        card_view:contentPadding="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ballidaku.mywallet.mPin.PinLockView
+                android:id="@+id/pin_lock_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                app:keypadButtonSize="72dp"
+                app:keypadShowDeleteButton="true"
+                app:keypadTextColor="@color/colorWhite"
+                app:keypadTextSize="18dp"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

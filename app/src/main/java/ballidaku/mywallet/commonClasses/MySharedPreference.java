@@ -32,7 +32,7 @@ public class MySharedPreference
     }
 
 
-    public SharedPreferences getPreference(Context context)
+     private SharedPreferences getPreference(Context context)
     {
         return context.getSharedPreferences(PreferenceName, Activity.MODE_PRIVATE);
     }

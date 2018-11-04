@@ -26,11 +26,11 @@ import ballidaku.mywallet.mPin.activity.MPINActivity;
 public class MyFirebase
 {
 
-    String TAG = MyFirebase.class.getSimpleName();
+    private String TAG = MyFirebase.class.getSimpleName();
 
-    public static MyFirebase instance = null;
+    private static MyFirebase instance = null;
 
-    DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
 
 
 
@@ -45,7 +45,7 @@ public class MyFirebase
     }
 
 
-    void dismissDialog()
+    private void dismissDialog()
     {
         if (CommonDialogs.getInstance().dialog.isShowing())
         {
@@ -72,7 +72,7 @@ public class MyFirebase
 
                     //MySharedPreference.getInstance().saveUser(context, map);
 
-                    CommonMethods.getInstance().show_Toast(context, "User created successfully");
+                    CommonMethods.getInstance().showToast(context, "User created successfully");
 
                   /*  Intent intent = new Intent(context, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -93,18 +93,18 @@ public class MyFirebase
         root.child(MyConstant.USERS).orderByChild(MyConstant.USER_EMAIL).equalTo(email).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
 
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
-                    Log.e(TAG, "User Key " + child.getKey());
+//                    Log.e(TAG, "User Key " + child.getKey());
 
                     HashMap<String, Object> hashMap = (HashMap<String, Object>) child.getValue();
 
                     hashMap.put(MyConstant.USER_ID, child.getKey());
 
-                    Log.e(TAG, "User hashMap " + hashMap);
+//                    Log.e(TAG, "User hashMap " + hashMap);
 
                     openActivity(context, hashMap);
                 }
@@ -112,7 +112,7 @@ public class MyFirebase
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError)
+            public void onCancelled(@NonNull DatabaseError databaseError)
             {
                 Log.e(TAG, "ERROR     " + databaseError.getMessage());
             }
@@ -152,7 +152,7 @@ public class MyFirebase
 //                    Log.d("User ref", child.getRef().toString());
                     Log.e("User val", child.getValue().toString());
 
-                    UserDataModel userDataModel = child.getValue(UserDataModel.class);
+                    MainActivityModel userDataModel = child.getValue(MainActivityModel.class);
 
                     //Log.e("User ID", child.getKey());
                     //Log.e("User Name", userDataModel.getUser_name());
@@ -248,7 +248,7 @@ public class MyFirebase
         });
     }
 
-    public void updateBankDetails(final Context context, String itemID, final HashMap<String, Object> map, final MyInterfaces.UpdateDetails updateDetails)
+/*    public void updateBankDetails(final Context context, String itemID, final HashMap<String, Object> map, final MyInterfaces.UpdateDetails updateDetails)
     {
 
         String userID = MySharedPreference.getInstance().getUserID(context);
@@ -265,7 +265,7 @@ public class MyFirebase
                 }
             }
         });
-    }
+    }*/
 
     public Task<Void> deleteBankDetails(Context context, String key)
     {

@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="temp"
-            type="ballidaku.mywallet.mainScreens.activities.AddBankDetails"/>
+            name="viewModel"
+            type="ballidaku.mywallet.viewModel.AddBankDetailsViewModel" />
+
+        <variable
+            name="accountDetailsDataModel"
+            type="ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel" />
+
     </data>
 
     <LinearLayout
@@ -19,13 +23,13 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/colorPrimary"
             android:elevation="@dimen/_5sdp"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/AppTheme.AppBarOverlay"
             app:title="ADD DETAILS"
-            app:titleTextColor="@color/colorWhite"/>
+            app:titleTextColor="@color/colorWhite" />
 
 
         <ScrollView
@@ -58,10 +62,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Bank Name"
+                            android:text="@string/bank_name"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -70,10 +74,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter bank name"
+                            android:hint="@string/enter_bank_name"
                             android:inputType="textCapWords"
+                            android:text="@{accountDetailsDataModel.bankName}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild"
+                            android:addTextChangedListener="@{viewModel.bankNameWatcher}"/>
                     </LinearLayout>
 
 
@@ -118,10 +124,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Account Holder Name"
+                            android:text="@string/account_holder_name"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -130,10 +136,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter account holder name"
+                            android:hint="@string/enter_account_holder_name"
                             android:inputType="textCapWords"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:text="@{accountDetailsDataModel.accountHolderName}"
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
                     <!--<android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -177,10 +184,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Account Number"
+                            android:text="@string/account_number"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -189,10 +196,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter account number"
+                            android:hint="@string/enter_account_number"
                             android:inputType="phone"
+                            android:text="@{accountDetailsDataModel.accountNumber}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
 
                     <!-- <android.support.design.widget.TextInputLayout
@@ -237,10 +245,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="IFSC"
+                            android:text="@string/ifsc"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -249,10 +257,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter IFSC"
+                            android:hint="@string/enter_ifsc"
                             android:inputType="textCapCharacters"
+                            android:text="@{accountDetailsDataModel.ifsc}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
 
                     <!-- <android.support.design.widget.TextInputLayout
@@ -296,10 +305,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="ATM Number"
+                            android:text="@string/atm_number"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -309,10 +318,11 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
                             android:digits="0123456789 "
-                            android:hint="Enter ATM number"
+                            android:hint="@string/enter_atm_number"
                             android:inputType="phone"
+                            android:text="@{accountDetailsDataModel.atmNumber}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
 
                     <!--<android.support.design.widget.TextInputLayout
@@ -357,10 +367,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="CVV"
+                            android:text="@string/cvv"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -369,11 +379,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter CVV"
+                            android:hint="@string/enter_cvv"
                             android:inputType="phone"
                             android:maxLength="3"
+                            android:text="@{accountDetailsDataModel.cvv}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
 
                     <!--<android.support.design.widget.TextInputLayout
@@ -424,10 +435,10 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Valid From"
+                                android:text="@string/valid_from"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/heading"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
 
                             <EditText
@@ -436,10 +447,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@android:color/transparent"
-                                android:hint="Enter valid from"
+                                android:hint="@string/enter_valid_from"
                                 android:inputType="datetime"
+                                android:text="@{accountDetailsDataModel.validFrom}"
                                 android:textColor="@color/colorEditText"
-                                android:textSize="@dimen/headingChild"/>
+                                android:textSize="@dimen/headingChild" />
                         </LinearLayout>
 
                         <!-- <android.support.design.widget.TextInputLayout
@@ -483,10 +495,10 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Valid Thru"
+                                android:text="@string/valid_thru"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/heading"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
 
                             <EditText
@@ -495,10 +507,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@android:color/transparent"
-                                android:hint="Enter valid thru"
+                                android:hint="@string/enter_valid_thru"
                                 android:inputType="datetime"
+                                android:text="@{accountDetailsDataModel.validThru}"
                                 android:textColor="@color/colorEditText"
-                                android:textSize="@dimen/headingChild"/>
+                                android:textSize="@dimen/headingChild" />
                         </LinearLayout>
 
                         <!--<android.support.design.widget.TextInputLayout
@@ -543,10 +556,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Net Banking ID"
+                            android:text="@string/net_banking_id"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/heading"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <EditText
@@ -555,31 +568,32 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@android:color/transparent"
-                            android:hint="Enter net banking ID"
+                            android:hint="@string/enter_net_banking_id"
                             android:inputType="textCapSentences"
+                            android:text="@{accountDetailsDataModel.netBankingId}"
                             android:textColor="@color/colorEditText"
-                            android:textSize="@dimen/headingChild"/>
+                            android:textSize="@dimen/headingChild" />
                     </LinearLayout>
 
-                   <!-- <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_5sdp"
-                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
-                        app:theme="@style/TextAppearence.App.TextInputLayout">
+                    <!-- <android.support.design.widget.TextInputLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:padding="@dimen/_5sdp"
+                         app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                         app:theme="@style/TextAppearence.App.TextInputLayout">
 
-                        <EditText
-                            android:id="@+id/editTextNetBankingId"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_net_banking_selector"
-                            android:drawablePadding="@dimen/_8sdp"
-                            android:drawableStart="@drawable/ic_net_banking_selector"
-                            android:hint="Net Banking ID"
-                            android:inputType="textCapSentences"
-                            android:theme="@style/EditTextCustom"/>
+                         <EditText
+                             android:id="@+id/editTextNetBankingId"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:drawableLeft="@drawable/ic_net_banking_selector"
+                             android:drawablePadding="@dimen/_8sdp"
+                             android:drawableStart="@drawable/ic_net_banking_selector"
+                             android:hint="Net Banking ID"
+                             android:inputType="textCapSentences"
+                             android:theme="@style/EditTextCustom"/>
 
-                    </android.support.design.widget.TextInputLayout>-->
+                     </android.support.design.widget.TextInputLayout>-->
                 </android.support.v7.widget.CardView>
 
 
@@ -600,6 +614,7 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_20sdp"
+                    android:onClick="@{(v)->viewModel.onAddMoreFeildsClick(v,context)}"
                     card_view:cardBackgroundColor="@color/colorPrimary"
                     card_view:cardCornerRadius="@dimen/_15sdp"
                     card_view:cardElevation="@dimen/_5sdp">
@@ -610,10 +625,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/_8sdp"
-                        android:text="Add More Feilds"
+                        android:text="@string/add_more"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
 
                 </android.support.v7.widget.CardView>

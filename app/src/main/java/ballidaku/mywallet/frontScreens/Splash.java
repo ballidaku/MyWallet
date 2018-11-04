@@ -22,13 +22,12 @@ public class Splash extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         context = this;
 
-        c.start();
+        countDownTimer.start();
     }
 
-    CountDownTimer c = new CountDownTimer(2000, 1000)
+    CountDownTimer countDownTimer = new CountDownTimer(2000, 1000)
     {
 
         public void onTick(long millisUntilFinished)
@@ -46,7 +45,7 @@ public class Splash extends AppCompatActivity
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 finish();
             }
-            else /*if (MySharedPreference.getInstance().getMPIN(context).isEmpty())*/
+            else
             {
                 String mpin = MySharedPreference.getInstance().getMPIN(context);
 
@@ -56,16 +55,6 @@ public class Splash extends AppCompatActivity
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 finish();
             }
-           /*else
-            {
-                Intent intent = new Intent(context, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
-                finish();
-            }*/
-
-
         }
     };
 }

@@ -1,131 +1,206 @@
 package ballidaku.mywallet.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 
 import ballidaku.mywallet.R;
-import ballidaku.mywallet.commonClasses.CommonMethods;
-import ballidaku.mywallet.dataModel.KeyValueModel;
+import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.mainScreens.activities.MainActivity;
+import ballidaku.mywallet.mainScreens.activities.ShowBankDetails;
+import ballidaku.mywallet.mainScreens.activities.ShowOtherDetail;
+import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.roomDatabase.dataModel.OtherDetailsDataModel;
 
 /**
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapter.ViewHolder>
+public class MainFragmentAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
-    private String LOG_TAG = MainFragmentAdapter.class.getSimpleName();
-
-    private ArrayList<KeyValueModel> userBankDataModelsList;
-    // private ArrayList<Integer> iconList;
-    private BankAccountsAdapter.MyClickListener myClickListener;
-
+    String TAG= MainFragmentAdapter.class.getSimpleName();
+    private ArrayList<T> arrayList;
     private Context context;
-    int width;
+    FloatingActionMenu floatingActionMenu;
 
-    public MainFragmentAdapter(ArrayList<KeyValueModel> userBankDataModelsList, Context context)
+    public static final int TYPE_HEADER_BANK_DETAILS = 0;
+    public static final int TYPE_ITEM_BANK_DETAILS = 1;
+    public static final int TYPE_HEADER_OTHER_DETAILS = 2;
+    public static final int TYPE_ITEM_OTHER_DETAILS = 3;
+
+    public MainFragmentAdapter(Context context, ArrayList<T> arrayList, FloatingActionMenu floatingActionMenu)
     {
-
-        this.userBankDataModelsList = userBankDataModelsList;
+        this.arrayList = arrayList;
         this.context = context;
-
+        this.floatingActionMenu=floatingActionMenu;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    class HeaderViewHolder<T> extends RecyclerView.ViewHolder
     {
-        TextView textViewTitle;
-        TextView textViewTitleCount;
+        public View View;
+        private final TextView textViewHeaderName;
 
-        public ViewHolder(View itemView)
+        HeaderViewHolder(View itemView)
         {
-
             super(itemView);
-            textViewTitle =  itemView.findViewById(R.id.textViewTitle);
-            textViewTitleCount = itemView.findViewById(R.id.textViewTitleCount);
-
-
-
-            itemView.setOnClickListener(this);
+            View = itemView;
+            textViewHeaderName =  View.findViewById(R.id.textViewHeaderName);
         }
+    }
 
-        @Override
-        public void onClick(View v)
+    class ItemViewHolder<T> extends RecyclerView.ViewHolder
+    {
+        public View View;
+        private final TextView textViewBankName;
+        private final TextView textViewBankOwner;
+        private final TextView textViewBankHeader;
+        private final TextView textViewAccountHeader;
+
+        ItemViewHolder(View itemView)
         {
-            myClickListener.onItemClick(getAdapterPosition(), v);
+            super(itemView);
+            View = itemView;
+            textViewBankName = View.findViewById(R.id.textViewBankName);
+            textViewBankOwner = View.findViewById(R.id.textViewBankOwner);
+            textViewBankHeader = View.findViewById(R.id.textViewBankHeader);
+            textViewAccountHeader = View.findViewById(R.id.textViewAccountHeader);
+
         }
     }
 
-    public void setOnItemClickListener(BankAccountsAdapter.MyClickListener myClickListener)
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
 
-        this.myClickListener = myClickListener;
-    }
+        if (viewType == TYPE_HEADER_BANK_DETAILS)
+        {
+            View view = LayoutInflater.from(context).inflate(R.layout.inflater_main_fragment_header, parent, false);
+            return new HeaderViewHolder(view);
+        }
+        else if (viewType == TYPE_ITEM_BANK_DETAILS)
+        {
+            View view = LayoutInflater.from(context).inflate(R.layout.inflater_main_fragment_item, parent, false);
+            return new ItemViewHolder(view);
+        }
+        else if (viewType == TYPE_HEADER_OTHER_DETAILS)
+        {
+            View view = LayoutInflater.from(context).inflate(R.layout.inflater_main_fragment_header, parent, false);
+            return new HeaderViewHolder(view);
+        }
+        else if (viewType == TYPE_ITEM_OTHER_DETAILS)
+        {
+            View view = LayoutInflater.from(context).inflate(R.layout.inflater_main_fragment_item, parent, false);
+            return new ItemViewHolder(view);
+        }
 
+        return null;
+    }
 
     @Override
-    public MainFragmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    @SuppressLint("RecyclerView")
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position)
     {
+        if (holder instanceof ItemViewHolder)
+        {
+            if (arrayList.get(position) instanceof AccountDetailsDataModel)
+            {
+                AccountDetailsDataModel accountDetailsDataModel = (AccountDetailsDataModel) arrayList.get(position);
+//                Log.e(TAG,"UserId "+accountDetailsDataModel.getUserId());
+                ((ItemViewHolder) holder).textViewBankName.setText(accountDetailsDataModel.getBankName());
+                ((ItemViewHolder) holder).textViewBankOwner.setText(accountDetailsDataModel.getAccountHolderName());
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflater_main_fragment_item, parent, false);
+                ((ItemViewHolder) holder).textViewAccountHeader.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).textViewBankOwner.setVisibility(View.VISIBLE);
+            }
+            else if (arrayList.get(position) instanceof OtherDetailsDataModel)
+            {
+                OtherDetailsDataModel otherDetailsDataModel = (OtherDetailsDataModel) arrayList.get(position);
+                ((ItemViewHolder) holder).textViewBankName.setText(otherDetailsDataModel.getHeading());
+                ((ItemViewHolder) holder).textViewBankHeader.setText(context.getResources().getString(R.string.heading_name));
 
-        return new MainFragmentAdapter.ViewHolder(view);
+                ((ItemViewHolder) holder).textViewAccountHeader.setVisibility(View.GONE);
+                ((ItemViewHolder) holder).textViewBankOwner.setVisibility(View.GONE);
+
+            }
+
+            holder.itemView.setOnClickListener(v ->
+            {
+
+                floatingActionMenu.close(true);
+                boolean isBankDetails= arrayList.get(position) instanceof AccountDetailsDataModel;
+
+                Intent intent = new Intent(context, isBankDetails ? ShowBankDetails.class : ShowOtherDetail.class);
+                intent.putExtra(MyConstant.LIST_ITEM_ID, isBankDetails ? ((AccountDetailsDataModel) arrayList.get(position)).getId() : ((OtherDetailsDataModel) arrayList.get(position)).getId());
+                intent.putExtra(MyConstant.TYPE, isBankDetails ? MyConstant.BANK_DETAILS : MyConstant.OTHER_DETAILS);
+                ((MainActivity)context).startActivityForResult(intent,MyConstant.Any_UPDATE_CODE);
+            });
+        }
+
+        else if (holder instanceof HeaderViewHolder)
+        {
+            if (arrayList.get(position) instanceof AccountDetailsDataModel)
+            {
+                AccountDetailsDataModel accountDetailsDataModel = (AccountDetailsDataModel) arrayList.get(position);
+                ((HeaderViewHolder) holder).textViewHeaderName.setText(accountDetailsDataModel.getType());
+
+            }
+            else if (arrayList.get(position) instanceof OtherDetailsDataModel)
+            {
+                OtherDetailsDataModel otherDetailsDataModel = (OtherDetailsDataModel) arrayList.get(position);
+                ((HeaderViewHolder) holder).textViewHeaderName.setText(otherDetailsDataModel.getType());
+
+            }
+        }
     }
 
     @Override
-    public void onBindViewHolder(MainFragmentAdapter.ViewHolder holder, int position)
+    public int getItemViewType(int position)
     {
-//        holder.frameLayoutMain.setBackgroundColor(colors[position]);
+        if (arrayList.get(position) instanceof AccountDetailsDataModel && ((AccountDetailsDataModel) arrayList.get(position)).getType() != null)
+        {
+            return TYPE_HEADER_BANK_DETAILS;
+        }
+        else if (arrayList.get(position) instanceof AccountDetailsDataModel && ((AccountDetailsDataModel) arrayList.get(position)).getType() == null)
+        {
+            return TYPE_ITEM_BANK_DETAILS;
+        }
+        else if (arrayList.get(position) instanceof OtherDetailsDataModel && ((OtherDetailsDataModel) arrayList.get(position)).getType() != null)
+        {
+            return TYPE_HEADER_OTHER_DETAILS;
+        }
+        else if (arrayList.get(position) instanceof OtherDetailsDataModel && ((OtherDetailsDataModel) arrayList.get(position)).getType() == null)
+        {
+            return TYPE_ITEM_OTHER_DETAILS;
+        }
 
-//        UserBankDataModel userBankDataModel = userBankDataModelsList.get(position).getUserBankDataModel();
-//        holder.textView_BankName.setText(dTD(userBankDataModel.getBank_name()));
-//        holder.textView_BankOwner.setText(dTD(userBankDataModel.getAccount_holder_name()));
+        return super.getItemViewType(position);
     }
 
-//    public void addItem(String dataObj, int index) {
-//
-//        //userBankDataModelsList.add(index, dataObj);
-//
-//        notifyItemInserted(index);
-//    }
-
-
-    // Decrypt Data
-    public String dTD(String data)
+    public void addData(ArrayList<T> arrayList)
     {
-        return CommonMethods.getInstance().decrypt(context, data);
-    }
-
-
-    public void addItem(ArrayList<KeyValueModel> userBankDataModelsList)
-    {
-        this.userBankDataModelsList = userBankDataModelsList;
+        this.arrayList.clear();
+        this.arrayList = arrayList;
         notifyDataSetChanged();
-    }
-
-    public void deleteItem(int index)
-    {
-
-        userBankDataModelsList.remove(index);
-        notifyItemRemoved(index);
-
     }
 
     @Override
     public int getItemCount()
     {
-//        return 5;
-        return userBankDataModelsList.size();
+        return arrayList.size();
     }
 
-    public interface MyClickListener
-    {
 
-        public void onItemClick(int position, View v);
-    }
+
 }

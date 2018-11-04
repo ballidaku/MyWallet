@@ -45,7 +45,7 @@
 
 
     <style name="EditTextTheme" parent="android:Widget.EditText">
-        <item name="android:fontFamily">@font/squada_one</item>
+        <item name="android:fontFamily">@font/adamina</item>
         <item name="android:textColorHint">@color/colorGrayDark</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">@dimen/_12sdp</item>

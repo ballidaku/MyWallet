@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/abril_fatface</item>
+        <item>@font/adamina</item>
         <item>@font/alegreya_sans_thin</item>
         <item>@font/arbutus</item>
         <item>@font/archivo_black</item>
@@ -9,6 +10,7 @@
         <item>@font/faster_one</item>
         <item>@font/fredoka_one</item>
         <item>@font/paytone_one</item>
+        <item>@font/quando</item>
         <item>@font/squada_one</item>
         <item>@font/titan_one</item>
     </array>

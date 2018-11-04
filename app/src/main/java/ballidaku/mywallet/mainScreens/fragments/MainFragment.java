@@ -1,6 +1,7 @@
 package ballidaku.mywallet.mainScreens.fragments;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,16 +11,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -28,31 +24,26 @@ import ballidaku.mywallet.adapters.MainFragmentAdapter;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.GridSpacingItemDecoration;
 import ballidaku.mywallet.commonClasses.MyConstant;
-import ballidaku.mywallet.commonClasses.MyFirebase;
-import ballidaku.mywallet.dataModel.KeyValueModel;
-import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.FragmentMainBinding;
 import ballidaku.mywallet.mainScreens.activities.AddBankDetails;
-
-import static ballidaku.mywallet.mainScreens.fragments.BankAccountsFragment.ADD_DETAILS_RESPONSE;
+import ballidaku.mywallet.mainScreens.activities.AddOtherDetail;
+import ballidaku.mywallet.mainScreens.activities.MainActivity;
+import ballidaku.mywallet.viewModel.MainFragmentViewModel;
+import ballidaku.mywallet.viewModel.ViewModelFactory;
 
 
 /**
  * Created by sharanpalsingh on 19/02/18.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener
+public class MainFragment<D> extends Fragment implements MainFragmentViewModel.MainFragmentViewModelCallBack
 {
-
     String TAG = MainFragment.class.getSimpleName();
     View view = null;
     Context context;
-    MainFragmentAdapter mainFragmentAdapter;
-    ArrayList<KeyValueModel> mainList = new ArrayList<>();
-
-//    public static final int ADD_DETAILS_RESPONSE = 3316;
-
+    MainFragmentAdapter<D> mainFragmentAdapter;
     FragmentMainBinding fragmentMainBinding;
+    MainFragmentViewModel mainFragmentViewModel;
 
     public MainFragment()
     {
@@ -70,7 +61,6 @@ public class MainFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -78,148 +68,115 @@ public class MainFragment extends Fragment implements View.OnClickListener
         {
             fragmentMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
+            mainFragmentViewModel = ViewModelProviders.of(this, new ViewModelFactory<>(getActivity(), MainFragment.this, fragmentMainBinding, this)).get(MainFragmentViewModel.class);
+            fragmentMainBinding.setViewModel(mainFragmentViewModel);
+
             view = fragmentMainBinding.getRoot();
-
             context = getActivity();
-
-
             setUpViews();
-
-//            setListener();
         }
-
         return view;
-    }
-
-    // Set Listener
-    public void setListener()
-    {
-        Query query = MyFirebase.getInstance().getMyAccountDetails(context);
-
-        query.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-
-                ArrayList<KeyValueModel> userBankDataModelsList = new ArrayList<KeyValueModel>();
-
-                for (DataSnapshot child : dataSnapshot.getChildren())
-                {
-
-                    Log.e("Subscribers", "" + child.getValue());
-
-                    KeyValueModel keyValueModel = new KeyValueModel();
-                    keyValueModel.setKey(child.getKey());
-                    keyValueModel.setUserBankDataModel(child.getValue(UserBankDataModel.class));
-
-
-                    userBankDataModelsList.add(keyValueModel);
-
-//                        UserBankDataModel userBankDataModel= child.getValue(UserBankDataModel.class);
-//                        Log.e("Account_holder_name", "" +userBankDataModel.getAccountHolderName());
-//                        Log.e("getAccountNumber", "" +userBankDataModel.getAccountNumber());
-//                        Log.e("getAtmNumber", "" +userBankDataModel.getAtmNumber());
-//                        Log.e("getBankName", "" +userBankDataModel.getBankName());
-//                        Log.e("getCvv", "" +userBankDataModel.getCvv());
-//                        Log.e("getIfsc", "" +userBankDataModel.getIfsc());
-//                        Log.e("getNetBankingId", "" +userBankDataModel.getNetBankingId());
-//                        Log.e("getValidFrom", "" +userBankDataModel.getValidFrom());
-//                        Log.e("getValidThru", "" +userBankDataModel.getValidThru());
-                }
-                setData(userBankDataModelsList);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });
-    }
-
-
-    // Set Data
-    private void setData(ArrayList<KeyValueModel> userBankDataModelsList)
-    {
-        mainList = userBankDataModelsList;
-        mainFragmentAdapter.addItem(mainList);
     }
 
     public void setUpViews()
     {
-        mainFragmentAdapter = new MainFragmentAdapter(mainList, getContext());
+        ArrayList<D> mainList = new ArrayList<>();
+        mainFragmentAdapter = new MainFragmentAdapter<>(context, mainList, fragmentMainBinding.floatingActionMenu);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         fragmentMainBinding.recycleViewHome.setLayoutManager(mLayoutManager);
         fragmentMainBinding.recycleViewHome.addItemDecoration(new GridSpacingItemDecoration(2, CommonMethods.getInstance().dpToPx(context, 5), true));
         fragmentMainBinding.recycleViewHome.setItemAnimator(new DefaultItemAnimator());
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
+            @Override
+            public int getSpanSize(int position)
+            {
+                switch (mainFragmentAdapter.getItemViewType(position))
+                {
+                    case MainFragmentAdapter.TYPE_HEADER_BANK_DETAILS:
+                        return 2;
+
+                    case MainFragmentAdapter.TYPE_ITEM_BANK_DETAILS:
+                        return 1;
+                    case MainFragmentAdapter.TYPE_HEADER_OTHER_DETAILS:
+                        return 2;
+
+                    case MainFragmentAdapter.TYPE_ITEM_OTHER_DETAILS:
+                        return 1;
+                    default:
+                        return 1;
+                }
+            }
+        });
         fragmentMainBinding.recycleViewHome.setAdapter(mainFragmentAdapter);
 
+        fragmentMainBinding.recycleViewHome.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
 
-//        mainFragmentAdapter.setOnItemClickListener(new BankAccountsAdapter.MyClickListener()
-//        {
-//            @Override
-//            public void onItemClick(int position, View v)
-//            {
-//
-//                Intent intent = new Intent(getActivity(), ShowBankDetails.class);
-//                intent.putExtra(MyConstant.LIST_ITEM_DATA, mainList.get(position));
-//                startActivity(intent);
-//            }
-//        });
+                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+                if (totalItemCount > 0 && endHasBeenReached)
+                {
+                    fragmentMainBinding.floatingActionMenu.setVisibility(View.GONE);
+                }
+                else
+                {
+                    fragmentMainBinding.floatingActionMenu.setVisibility(View.VISIBLE);
+                }
+            }
 
-        fragmentMainBinding.floatingActionButtonBankDetails.setOnClickListener(this);
-        fragmentMainBinding.floatingActionButtonOtherDetails.setOnClickListener(this);
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+//                {
+//                    fragmentMainBinding.floatingActionMenu.setVisibility(View.VISIBLE);
+//                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+    }
+
+    public void refreshData()
+    {
+        mainFragmentViewModel.getDataFromDatabase();
+    }
+
+
+    /***********************************************************************/
+    // Interface Results from ViewModel class
+
+    /***********************************************************************/
+
+    @Override
+    public void setAdapter(ArrayList data)
+    {
+        mainFragmentAdapter.addData(data);
     }
 
     @Override
-    public void onClick(View v)
+    public void clickBankDetails()
     {
-        switch (v.getId())
-        {
-            case R.id.floatingActionButtonBankDetails:
-
-                fragmentMainBinding.floatingActionMenu.close(true);
-
-                Intent intent = new Intent(context, AddBankDetails.class);
-                intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
-                startActivityForResult(intent, ADD_DETAILS_RESPONSE);
-
-                break;
-
-            case R.id.floatingActionButtonOtherDetails:
-                fragmentMainBinding.floatingActionMenu.close(true);
-
-                break;
-        }
+        fragmentMainBinding.floatingActionMenu.close(true);
+        Intent intent = new Intent(context, AddBankDetails.class);
+        intent.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
+        ((MainActivity) context).startActivityForResult(intent, MyConstant.Any_UPDATE_CODE);
     }
 
-
-
-
-
-
-
-//    public interface BankDetails
-//    {
-//        public void show_bank_details(HashMap<String, Object> map);
-//    }
-
- /*   @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    @Override
+    public void clickOtherDetails()
     {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode == Activity.RESULT_OK && requestCode == ADD_DETAILS_RESPONSE)
-        {
-            HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getSerializableExtra("hashMap");
-
-//            MyFirebase.getInstance().createBankDetails(context, hashMap);
-
-        }
-    }*/
-
-
+        fragmentMainBinding.floatingActionMenu.close(true);
+        Intent intentOther = new Intent(context, AddOtherDetail.class);
+        intentOther.putExtra(MyConstant.FROM_WHERE, MyConstant.NEW);
+        ((MainActivity) context).startActivityForResult(intentOther, MyConstant.Any_UPDATE_CODE);
+    }
 }

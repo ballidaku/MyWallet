@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">MyWallet</string>
+    <string name="app_running">MyWallet is running...</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="permission">Please enable all permission</string>
 
+
+    <string-array name="type">
+        <item>Text</item>
+        <item>Secret</item>
+    </string-array>
 
     <string name="email">EMAIL</string>
     <string name="enter_email">Enter email</string>
@@ -16,17 +24,16 @@
     <string name="confirm_password_limit">Confirm password must be of 6 digits.</string>
     <string name="please_enter_name">Please enter name.</string>
     <string name="please_enter_phone_number">Please enter phone number.</string>
-    <string name="number_limit">Please enter phone number of 10 digits.</string>
+    <string name="number_limit">Please enter phone number minimum of 6 digits.</string>
     <string name="please_enter_confirm_password">Please enter confirm password.</string>
     <string name="password_confirm_not_matched">Password &amp; confirm password didn\'t match.</string>
-
 
 
     <string name="password">PASSWORD</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_confirm_password">Enter confirm password</string>
-    <string name="forgot">Forgot ?</string>
+    <string name="forgot">Forgot Password?</string>
     <string name="signin">Sign In</string>
     <string name="dont_have_account">DON\'T HAVE AN ACCOUNT?</string>
     <string name="already_have_account">ALREADY HAVE AN ACCOUNT?</string>
@@ -39,8 +46,86 @@
     <string name="phone">PHONE</string>
     <string name="enter_phone_number">Enter phone number</string>
 
-    <string-array name="type">
-        <item>Text</item>
-        <item>Secret</item>
-    </string-array>
+    <string name="saved_success">Saved Successfully</string>
+    <string name="update_success">Details updated successfully</string>
+    <string name="heading_name">Heading</string>
+    <string name="bank_detail">Bank Details</string>
+    <string name="other_detail">Other Details</string>
+    <string name="select_atleast_single">Please select atleast single item</string>
+
+    <string name="share_using">Share Using</string>
+    <string name="data_copied">Data Copied</string>
+    <string name="copied_text">Copied Text</string>
+    <string name="account_details">Account Details</string>
+    <string name="update_details">UPDATE DETAILS</string>
+    <string name="add_details">ADD DETAILS</string>
+
+    <string name="title_value_validation">Title or Value data should not be empty</string>
+    <string name="change_passcode">Change Passcode</string>
+    <string name="change_login_password">Change Login Password</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="export_data_to_local">Export Data to local storage</string>
+    <string name="export_data_to_other_apps">Export Data to other apps</string>
+    <string name="import_data">Import Data</string>
+    <string name="not_valid_file">File format of this file is not valid, Use .txt file format to import data.</string>
+    <string name="data_copied_successfully">Data imported successfully</string>
+    <string name="delete_entry">Delete Entry</string>
+    <string name="delete_confirmation">Are you sure you want to delete this entry?</string>
+    <string name="import_confirmation">Importing new data will erase your all previous data, Are you sure you want to import data?</string>
+
+    <string name="enter_heading">Enter Heading</string>
+    <string name="add_more">Add More Fields</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="enter_bank_name">Enter bank name</string>
+    <string name="account_holder_name">Account Holder Name</string>
+    <string name="enter_account_holder_name">Enter account holder name</string>
+    <string name="account_number">Account Number</string>
+    <string name="enter_account_number">Enter account number</string>
+    <string name="ifsc">IFSC</string>
+    <string name="enter_ifsc">Enter IFSC</string>
+    <string name="atm_number">ATM Number</string>
+    <string name="enter_atm_number">Enter ATM number</string>
+    <string name="cvv">CVV</string>
+    <string name="enter_cvv">Enter CVV</string>
+    <string name="valid_from">Valid From</string>
+    <string name="enter_valid_from">Enter valid from</string>
+    <string name="valid_thru">Valid Thru</string>
+    <string name="enter_valid_thru">Enter valid thru</string>
+    <string name="net_banking_id">Net Banking ID</string>
+    <string name="enter_net_banking_id">Enter net banking ID</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="title">Title</string>
+    <string name="value">Value</string>
+    <string name="please_wait">Please wait loading...</string>
+    <string name="email_reset">Link is sent to your mail to reset password.</string>
+    <string name="retry_again">Please retry again.</string>
+    <string name="enter_forgot_password">We just need your registered Email Id to send your password reset instructions.</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="enter_passcode">Enter Passcode</string>
+    <string name="passcode_mismatch">Passcode didn\'t match</string>
+    <string name="passcode_mismatch_with_old">Your passcode didn\'t match with old one</string>
+    <string name="passcode_saved">Passcode saved successfully</string>
+    <string name="passcode_changed">Passcode changed successfully</string>
+
+    <string name="enter_new_passcode">Enter New Passcode</string>
+    <string name="confirm_new_passcode">Confirm New Passcode</string>
+    <string name="enter_current_passcode">Enter Current Passcode</string>
+    <string name="not_relevant_data">No relevant data found in this file, Please use your last exported file.</string>
+    <string name="header_validation">Header should not be empty.</string>
+    <string name="title_validation">Title or Value data should not be empty.</string>
+    <string name="update_other_details">UPDATE OTHER DETAILS</string>
+    <string name="add_other_details">ADD OTHER DETAILS</string>
+
+    <string name="change_password_confirmation">Change Password Confirmation</string>
+    <string name="change_password_message">Are you sure, you want to change Password?</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="logout_message">Are you sure, you want to Logout?</string>
+
+    <string name="logout">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="exit">EXIT</string>
+
+
 </resources>

@@ -1,10 +1,14 @@
 package ballidaku.mywallet.mainScreens.activities;
 
-
+import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,28 +25,29 @@ import ballidaku.mywallet.R;
 import ballidaku.mywallet.commonClasses.CommonMethods;
 import ballidaku.mywallet.commonClasses.FourDigitsCardTextWatcher;
 import ballidaku.mywallet.commonClasses.MyConstant;
+import ballidaku.mywallet.commonClasses.MySharedPreference;
 import ballidaku.mywallet.commonClasses.TwoDigitsCardTextWatcher;
-import ballidaku.mywallet.dataModel.KeyValueModel;
-import ballidaku.mywallet.dataModel.UserBankDataModel;
 import ballidaku.mywallet.databinding.ActivityAddBankDetailsBinding;
+import ballidaku.mywallet.roomDatabase.ExecuteQueryAsyncTask;
+import ballidaku.mywallet.roomDatabase.OnResultInterface;
 import ballidaku.mywallet.roomDatabase.dataModel.AccountDetailsDataModel;
+import ballidaku.mywallet.viewModel.AddBankDetailsViewModel;
+import ballidaku.mywallet.viewModel.ViewModelFactory;
 
-
-public class AddBankDetails extends AppCompatActivity
+public class AddBankDetails<D> extends AppCompatActivity implements AddBankDetailsViewModel.AddBankDetailsViewModelCallBack
 {
 
     String TAG = AddBankDetails.class.getSimpleName();
     Context context;
 
-
     String fromWhere;
-    KeyValueModel keyValueModel;
-    UserBankDataModel userBankDataModel;
-    String key;
+    AccountDetailsDataModel accountDetailsDataModel;
 
     ActivityAddBankDetailsBinding activityAddBankDetailsBinding;
     String[] typeArray;
+    String userId;
 
+    ViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,18 +57,21 @@ public class AddBankDetails extends AppCompatActivity
 
         context = this;
 
-        setUpIds();
+        viewModelFactory = new ViewModelFactory<>(context, AddBankDetails.this, this);
+        activityAddBankDetailsBinding.setViewModel(ViewModelProviders.of(this, viewModelFactory).get(AddBankDetailsViewModel.class));
+
+        userId = MySharedPreference.getInstance().getUserID(context);
+
+        setUpViews();
     }
 
-    private void setUpIds()
+    private void setUpViews()
     {
         typeArray = getResources().getStringArray(R.array.type);
 
         setSupportActionBar(activityAddBankDetailsBinding.toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
 
         activityAddBankDetailsBinding.editTextAccountNumber.addTextChangedListener(new FourDigitsCardTextWatcher(activityAddBankDetailsBinding.editTextAccountNumber));
         activityAddBankDetailsBinding.editTextAtmNumber.addTextChangedListener(new FourDigitsCardTextWatcher(activityAddBankDetailsBinding.editTextAtmNumber));
@@ -76,67 +84,38 @@ public class AddBankDetails extends AppCompatActivity
 
         if (fromWhere.equals(MyConstant.EDIT))
         {
-            activityAddBankDetailsBinding.toolbar.setTitle("UPDATE DETAILS");
-            keyValueModel = (KeyValueModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
-            userBankDataModel = keyValueModel.getUserBankDataModel();
-            key = keyValueModel.getKey();
+            activityAddBankDetailsBinding.toolbar.setTitle(getString(R.string.update_details));
+            accountDetailsDataModel = (AccountDetailsDataModel) getIntent().getSerializableExtra(MyConstant.LIST_ITEM_DATA);
+
+            activityAddBankDetailsBinding.setAccountDetailsDataModel(accountDetailsDataModel);
 
             setData();
         }
         else
         {
-            activityAddBankDetailsBinding.toolbar.setTitle("ADD DETAILS");
+            activityAddBankDetailsBinding.toolbar.setTitle(getString(R.string.add_details));
         }
 
-        activityAddBankDetailsBinding.cardViewAddMoreFeilds.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                addMoreFeilds();
-            }
-        });
 
     }
 
-    private void addMoreFeilds()
-    {
-        final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
-        MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
-        spinnerType.setItems(typeArray);
-
-        ImageView imageViewCancel = (ImageView) child.findViewById(R.id.imageViewCancel);
-        imageViewCancel.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                activityAddBankDetailsBinding.linearLayoutAddViews.removeView(child);
-//                Log.e(TAG,"count "+linearLayoutAddViews.getChildCount());
-
-            }
-        });
-
-        activityAddBankDetailsBinding.linearLayoutAddViews.addView(child);
-    }
 
     private void setData()
     {
 
-        activityAddBankDetailsBinding.editTextBankName.setText(dTD(userBankDataModel.getBank_name()));
-        activityAddBankDetailsBinding.editTextAccountHolderName.setText(dTD(userBankDataModel.getAccount_holder_name()));
-        activityAddBankDetailsBinding.editTextAccountNumber.setText(dTD(userBankDataModel.getAccount_number()));
-        activityAddBankDetailsBinding.editTextIfscCode.setText(dTD(userBankDataModel.getIfsc()));
-        activityAddBankDetailsBinding.editTextAtmNumber.setText(dTD(userBankDataModel.getAtm_number()));
-        activityAddBankDetailsBinding.editTextCvv.setText(dTD(userBankDataModel.getCvv()));
-        activityAddBankDetailsBinding.editTextValidFrom.setText(dTD(userBankDataModel.getValid_from()));
-        activityAddBankDetailsBinding.editTextValidThru.setText(dTD(userBankDataModel.getValid_thru()));
-        activityAddBankDetailsBinding.editTextNetBankingId.setText(dTD(userBankDataModel.getNet_banking_id()));
+/*        activityAddBankDetailsBinding.editTextBankName.setText(accountDetailsDataModel.getBankName());
+        activityAddBankDetailsBinding.editTextAccountHolderName.setText(accountDetailsDataModel.getAccountHolderName());
+        activityAddBankDetailsBinding.editTextAccountNumber.setText(accountDetailsDataModel.getAccountNumber());
+        activityAddBankDetailsBinding.editTextIfscCode.setText(accountDetailsDataModel.getIfsc());
+        activityAddBankDetailsBinding.editTextAtmNumber.setText(accountDetailsDataModel.getAtmNumber());
+        activityAddBankDetailsBinding.editTextCvv.setText(accountDetailsDataModel.getCvv());
+        activityAddBankDetailsBinding.editTextValidFrom.setText(accountDetailsDataModel.getValidFrom());
+        activityAddBankDetailsBinding.editTextValidThru.setText(accountDetailsDataModel.getValidThru());
+        activityAddBankDetailsBinding.editTextNetBankingId.setText(accountDetailsDataModel.getNetBankingId());*/
 
-
-        if (userBankDataModel.getAdditional_data() != null && !userBankDataModel.getAdditional_data().isEmpty())
+        if (accountDetailsDataModel.getAdditionalData() != null && !accountDetailsDataModel.getAdditionalData().isEmpty())
         {
-            String json = dTD(userBankDataModel.getAdditional_data());
+            String json = accountDetailsDataModel.getAdditionalData();
 
             try
             {
@@ -152,161 +131,55 @@ public class AddBankDetails extends AppCompatActivity
                     final View view = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
 
                     EditText editTextTitle = view.findViewById(R.id.editTextTitle);
-                    EditText editTextValue = view.findViewById(R.id.editTextValue);
+                    final EditText editTextValue = view.findViewById(R.id.editTextValue);
                     ImageView imageViewCancel = view.findViewById(R.id.imageViewCancel);
 
+                    if (type.equalsIgnoreCase(MyConstant.TEXT))
+                    {
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editTextValue.setMaxLines(6);
+                    }
+                    else
+                    {
+                        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                        editTextValue.setMinLines(1);
+                        editTextValue.setMaxLines(1);
+                    }
+
                     MaterialSpinner spinnerType = view.findViewById(R.id.spinnerType);
-
                     spinnerType.setItems(typeArray);
-
                     spinnerType.setSelectedIndex(type.equals(typeArray[0]) ? 0 : 1);
 
                     editTextTitle.setText(title);
                     editTextValue.setText(value);
 
-
-                    imageViewCancel.setOnClickListener(new View.OnClickListener()
+                    spinnerType.setOnItemSelectedListener((view1, position, id, item) ->
                     {
-                        @Override
-                        public void onClick(View views)
+                        if (position == 0)//Text
                         {
-                            activityAddBankDetailsBinding.linearLayoutAddViews.removeView(view);
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                            editTextValue.setMaxLines(6);
+                        }
+                        else
+                        {
+                            editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                            editTextValue.getText().clear();
+                            editTextValue.setMinLines(1);
+                            editTextValue.setMaxLines(1);
                         }
                     });
 
+                    imageViewCancel.setOnClickListener(views -> activityAddBankDetailsBinding.linearLayoutAddViews.removeView(view));
 
                     activityAddBankDetailsBinding.linearLayoutAddViews.addView(view);
                 }
-            } catch (JSONException e)
+            }
+            catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
 
-    }
-
-    private void saveData()
-    {
-        String bankName = activityAddBankDetailsBinding.editTextBankName.getText().toString().trim();
-        String accountHolderName = activityAddBankDetailsBinding.editTextAccountHolderName.getText().toString().trim();
-        String accountNumber = activityAddBankDetailsBinding.editTextAccountNumber.getText().toString().trim();
-        String ifsc = activityAddBankDetailsBinding.editTextIfscCode.getText().toString().trim();
-        String atmNumber = activityAddBankDetailsBinding.editTextAtmNumber.getText().toString().trim();
-        String cvv = activityAddBankDetailsBinding.editTextCvv.getText().toString().trim();
-        String validFrom = activityAddBankDetailsBinding.editTextValidFrom.getText().toString().trim();
-        String validThru = activityAddBankDetailsBinding.editTextValidThru.getText().toString().trim();
-        String netBankingId = activityAddBankDetailsBinding.editTextNetBankingId.getText().toString().trim();
-
-
-
-        AccountDetailsDataModel accountTypeDataModel = new AccountDetailsDataModel();
-        accountTypeDataModel.setBankName(bankName);
-        accountTypeDataModel.setAccountHolderName(accountHolderName);
-        accountTypeDataModel.setAccountNumber(accountNumber);
-        accountTypeDataModel.setIfsc(ifsc);
-        accountTypeDataModel.setAtmNumber(atmNumber);
-        accountTypeDataModel.setCvv(cvv);
-        accountTypeDataModel.setValidFrom(validFrom);
-        accountTypeDataModel.setValidThru(validThru);
-        accountTypeDataModel.setNetBankingId(netBankingId);
-
-
-     /*    new DatabaseQueryAsyncTask(context, accountTypeDataModel,MyConstant.INSERT, new AfterQueryExecutedInterface<D>()
-         {
-
-             @Override
-             public void onCompleted(D data)
-             {
-                 Log.e(TAG,String.valueOf(data));
-             }
-         });*/
-
-        /*final HashMap<String, Object> map = new HashMap<>();
-
->>>>>>> 902f3a6770098e0a5790f7833cf9e98ab991a95d
-        map.put(MyConstant.BANK_NAME, dTE(bankName));
-        map.put(MyConstant.ACCOUNT_HOLDER_NAME, dTE(accountHolderName));
-        map.put(MyConstant.ACCOUNT_NUMBER, dTE(accountNumber));
-        map.put(MyConstant.IFSC, dTE(ifsc));
-        map.put(MyConstant.ATM_NUMBER, dTE(atmNumber));
-        map.put(MyConstant.CVV, dTE(cvv));
-        map.put(MyConstant.VALID_FROM, dTE(validFrom));
-        map.put(MyConstant.VALID_THRU, dTE(validThru));
-        map.put(MyConstant.NET_BANKING_ID, dTE(netBankingId));
-
-
-        Log.e(TAG, "map " + map);
-        Log.e(TAG, "child count  " + activityAddBankDetailsBinding.linearLayoutAddViews.getChildCount());
-
-        int count = activityAddBankDetailsBinding.linearLayoutAddViews.getChildCount();
-
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < count; i++)
-        {
-            View view = activityAddBankDetailsBinding.linearLayoutAddViews.getChildAt(i);
-
-            EditText editTextTitle = view.findViewById(R.id.editTextTitle);
-            EditText editTextValue = view.findViewById(R.id.editTextValue);
-
-            MaterialSpinner spinnerType = view.findViewById(R.id.spinnerType);
-//            spinnerType.setItems("Text", "Secret");
-
-
-            String title = editTextTitle.getText().toString().trim();
-            String value = editTextValue.getText().toString().trim();
-            String type = typeArray[spinnerType.getSelectedIndex()];
-
-            if (title.isEmpty() || value.isEmpty())
-            {
-                CommonMethods.getInstance().show_Toast(context, "Title or Value data should not be empty");
-                return;
-            }
-
-            JSONObject jsonObject = new JSONObject();
-            try
-            {
-                jsonObject.put(MyConstant.TITLE, title);
-                jsonObject.put(MyConstant.VALUE, value);
-                jsonObject.put(MyConstant.TYPE, type);
-
-                jsonArray.put(jsonObject);
-
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-            Log.e(TAG, "DATA  " + jsonArray);
-
-
-        }
-
-        map.put(MyConstant.ADDITIONAL_DATA, dTE(jsonArray.toString()));
-
-
-        if (fromWhere.equals(MyConstant.EDIT))
-        {
-            Log.e(TAG, "KEY " + key);
-            MyFirebase.getInstance().updateBankDetails(context, key, map, new MyInterfaces.UpdateDetails()
-            {
-                @Override
-                public void onSuccess()
-                {
-                    CommonMethods.getInstance().show_Toast(context, "Details updated successfully");
-                    Intent intent = new Intent();
-                    intent.putExtra("hashMap", map);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-        }
-        else
-        {
-            Intent intent = new Intent();
-            intent.putExtra("hashMap", map);
-            setResult(RESULT_OK, intent);
-            finish();
-
-        }*/
     }
 
 
@@ -316,7 +189,6 @@ public class AddBankDetails extends AppCompatActivity
         getMenuInflater().inflate(R.menu.add_details_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -332,9 +204,9 @@ public class AddBankDetails extends AppCompatActivity
             case R.id.action_save:
 
                 saveData();
+//                activityAddBankDetailsBinding.getViewModel().saveData();
 
                 break;
-
 
             default:
                 break;
@@ -343,17 +215,157 @@ public class AddBankDetails extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // Decrypt Data
-    public String dTD(String data)
+
+    private void saveData()
     {
-        return CommonMethods.getInstance().decrypt(context, data);
+        String bankName = activityAddBankDetailsBinding.editTextBankName.getText().toString().trim();
+        String accountHolderName = activityAddBankDetailsBinding.editTextAccountHolderName.getText().toString().trim();
+        String accountNumber = activityAddBankDetailsBinding.editTextAccountNumber.getText().toString().trim();
+        String ifsc = activityAddBankDetailsBinding.editTextIfscCode.getText().toString().trim();
+        String atmNumber = activityAddBankDetailsBinding.editTextAtmNumber.getText().toString().trim();
+        String cvv = activityAddBankDetailsBinding.editTextCvv.getText().toString().trim();
+        String validFrom = activityAddBankDetailsBinding.editTextValidFrom.getText().toString().trim();
+        String validThru = activityAddBankDetailsBinding.editTextValidThru.getText().toString().trim();
+        String netBankingId = activityAddBankDetailsBinding.editTextNetBankingId.getText().toString().trim();
+
+        Log.e(TAG, "child count  " + activityAddBankDetailsBinding.linearLayoutAddViews.getChildCount());
+
+        int count = activityAddBankDetailsBinding.linearLayoutAddViews.getChildCount();
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < count; i++)
+        {
+            View view = activityAddBankDetailsBinding.linearLayoutAddViews.getChildAt(i);
+
+            EditText editTextTitle = view.findViewById(R.id.editTextTitle);
+            EditText editTextValue = view.findViewById(R.id.editTextValue);
+
+            MaterialSpinner spinnerType = view.findViewById(R.id.spinnerType);
+//            spinnerType.setItems("Text", "Secret");
+
+            String title = editTextTitle.getText().toString().trim();
+            String value = editTextValue.getText().toString().trim();
+            String type = typeArray[spinnerType.getSelectedIndex()];
+
+            if (title.isEmpty() || value.isEmpty())
+            {
+                CommonMethods.getInstance().showToast(context, getString(R.string.title_value_validation));
+                return;
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            try
+            {
+                jsonObject.put(MyConstant.TITLE, title);
+                jsonObject.put(MyConstant.VALUE, value);
+                jsonObject.put(MyConstant.TYPE, type);
+
+                jsonArray.put(jsonObject);
+
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        AccountDetailsDataModel accountTypeLocalDataModel = new AccountDetailsDataModel();
+        accountTypeLocalDataModel.setBankName(bankName);
+        accountTypeLocalDataModel.setAccountHolderName(accountHolderName);
+        accountTypeLocalDataModel.setAccountNumber(accountNumber);
+        accountTypeLocalDataModel.setIfsc(ifsc);
+        accountTypeLocalDataModel.setAtmNumber(atmNumber);
+        accountTypeLocalDataModel.setCvv(cvv);
+        accountTypeLocalDataModel.setValidFrom(validFrom);
+        accountTypeLocalDataModel.setValidThru(validThru);
+        accountTypeLocalDataModel.setNetBankingId(netBankingId);
+        accountTypeLocalDataModel.setAdditionalData(jsonArray.toString());
+        accountTypeLocalDataModel.setUserId(userId);
+
+        if (fromWhere.equals(MyConstant.EDIT))  /*When we have to update the data*/
+        {
+            accountTypeLocalDataModel.setId(accountDetailsDataModel.getId());
+
+            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.UPDATE, (OnResultInterface<D>) data ->
+            {
+                CommonMethods.getInstance().showToast(context, context.getString(R.string.update_success));
+                CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            });
+        }
+        else if (fromWhere.equals(MyConstant.NEW))/*When we insert the data*/
+        {
+            new ExecuteQueryAsyncTask<>(context, accountTypeLocalDataModel, MyConstant.INSERT, (OnResultInterface<D>) data ->
+            {
+                CommonMethods.getInstance().showToast(context, context.getResources().getString(R.string.saved_success));
+                CommonMethods.getInstance().hideKeypad(AddBankDetails.this);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            });
+        }
     }
 
-    // Encrypt Data
-    public String dTE(String data)
+
+    /***********************************************************************/
+    // Interface Results from ViewModel class
+
+    /***********************************************************************/
+
+    public void addMoreFeilds()
     {
-        return CommonMethods.getInstance().encrypt(context, data);
+        @SuppressLint("InflateParams") final View child = getLayoutInflater().inflate(R.layout.custom_add_more_feilds, null);
+        MaterialSpinner spinnerType = child.findViewById(R.id.spinnerType);
+        spinnerType.setItems(typeArray);
+
+        final EditText editTextValue = child.findViewById(R.id.editTextValue);
+        editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editTextValue.setMaxLines(6);
+
+        spinnerType.setOnItemSelectedListener((view, position, id, item) ->
+        {
+            if (position == 0)//Text
+            {
+                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                editTextValue.setMaxLines(6);
+            }
+            else
+            {
+                editTextValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                editTextValue.getText().clear();
+                editTextValue.setMinLines(1);
+                editTextValue.setMaxLines(1);
+            }
+        });
+
+        ImageView imageViewCancel = child.findViewById(R.id.imageViewCancel);
+        imageViewCancel.setOnClickListener(view -> activityAddBankDetailsBinding.linearLayoutAddViews.removeView(child));
+
+        activityAddBankDetailsBinding.linearLayoutAddViews.addView(child);
     }
+
+
+
+    /*private final Observable.OnPropertyChangedCallback propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+           invalidateOptionsMenu();
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        activityAddBankDetailsBinding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityAddBankDetailsBinding.getViewModel().removeOnPropertyChangedCallback(propertyChangedCallback);
+    }*/
 
 
 }

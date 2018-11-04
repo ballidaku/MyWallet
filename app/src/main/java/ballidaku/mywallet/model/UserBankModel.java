@@ -1,11 +1,11 @@
-package ballidaku.mywallet.dataModel;
+package ballidaku.mywallet.model;
 
 import java.io.Serializable;
 
 /**
  * Created by sharanpalsingh on 30/03/17.
  */
-public class UserBankDataModel implements Serializable
+public class UserBankModel implements Serializable
 {
 
     String valid_thru;
@@ -18,13 +18,13 @@ public class UserBankDataModel implements Serializable
     String atm_number;
     String additional_data;
 
-    public UserBankDataModel()
+    public UserBankModel()
     {
     }
 
     String account_number;
 
-    public UserBankDataModel(String valid_thru, String account_holder_name, String valid_from, String cvv, String ifsc, String bank_name, String net_banking_id, String atm_number, String account_number,String additional_data )
+    public UserBankModel(String valid_thru, String account_holder_name, String valid_from, String cvv, String ifsc, String bank_name, String net_banking_id, String atm_number, String account_number, String additional_data )
     {
         this.valid_thru = valid_thru;
         this.account_holder_name = account_holder_name;

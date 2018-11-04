@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import ballidaku.mywallet.commonClasses.MyConstant;
 
 /**
@@ -11,11 +13,13 @@ import ballidaku.mywallet.commonClasses.MyConstant;
  */
 
 @Entity(tableName = MyConstant.ACCOUNT_DETAILS)
-public class AccountDetailsDataModel
+public class AccountDetailsDataModel implements Serializable
 {
-
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    @ColumnInfo(name = MyConstant.USER_ID)
+    public String userId;
 
     @ColumnInfo(name = MyConstant.BANK_NAME)
     public String bankName;
@@ -44,7 +48,30 @@ public class AccountDetailsDataModel
     @ColumnInfo(name = MyConstant.NET_BANKING_ID)
     public String netBankingId;
 
+    @ColumnInfo(name = MyConstant.ADDITIONAL_DATA)
+    public String additionalData;
 
+    public String type;
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getAdditionalData()
+    {
+        return additionalData;
+    }
+
+    public void setAdditionalData(String additionalData)
+    {
+        this.additionalData = additionalData;
+    }
 
     public int getId()
     {
@@ -144,5 +171,15 @@ public class AccountDetailsDataModel
     public void setNetBankingId(String netBankingId)
     {
         this.netBankingId = netBankingId;
+    }
+
+    public String getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
     }
 }

@@ -6,6 +6,7 @@
     <color name="colorAccent">@color/colorPrimary</color>
 
 
+    <color name="colorNotificationBack">#617e8c</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteLight">#d1d1d1</color>
     <color name="colorRed">#e10c0c</color>
@@ -16,5 +17,8 @@
     <color name="colorGrayDark">#9d9e9e</color>
     <color name="colorBlack">#000000</color>
     <color name="colorUnselected">#B7B7B7</color>
+    <color name="colorDivider">#cacaca</color>
+    <color name="colorText">#1e1e1e</color>
+
 
 </resources>
